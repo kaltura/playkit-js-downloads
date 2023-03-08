@@ -13,29 +13,21 @@ class DownloadService {
         return !(this.player.isLive() || this.player.getVideoElement().mediaKeys);
     }
     
-    private async isUrlSupported(url: string) {
+    private async isUrlSupported(url: string): Promise<boolean> {
         try {
             const req = await fetch(url, { method: 'HEAD' });
             if (req.ok) {
                 const headers = req.headers.get('content-type');
-                if (headers && headers.toLowerCase().includes('video')) {
-                    return true;
-                } else {
-                    //throw a player error instead... and maybe log error to analytics?
-                    throw new Error(`Download failed: Invalid content-type header: ${headers}`);
-                }
-            } else {
-                //throw a player error instead... and maybe log error to analytics?
-                throw new Error(`Download failed: Invalid response: ${req.status} ${req.statusText}`);
-            }
-        } finally {
-            return false;
-        }
+                return !!(headers && headers.toLowerCase().includes('video'));
+            } 
+        } catch(e) {}
+
+        return false;
     }
     
     private getDownloadUrl(config: DownloadConfig) {
         const {flavorId, flavorParamId} = config;
-        const {provider: {partnerId, env: {serviceUrl}}} = this.player;
+        const {provider: {partnerId, env: {cdnUrl}}} = this.player;
         const {session: {ks}, sources: {id}} = this.player.config;
         
         const partnerPart = `/p/${partnerId}`;
@@ -45,11 +37,15 @@ class DownloadService {
         const ksPart = ks ? `/ks/${ks}` : '';
         const protocolPart = `/protocol/${location.protocol.split(":")[0]}`;
         
-        return `${serviceUrl}${partnerPart}/playManifest${entryIdPart}${protocolPart}${ksPart}${flavorParamIdPart}${flavorIdPart}/format/download`;
+        return `${cdnUrl}${partnerPart}/playManifest${entryIdPart}${protocolPart}${ksPart}${flavorParamIdPart}${flavorIdPart}/format/download`;
     }
     
     async isDownloadSupported(config: DownloadConfig): Promise<boolean> {
-        return Promise.resolve(this.isPlatformSupported() && this.isEntrySupported() && this.isUrlSupported(this.getDownloadUrl(config)));
+        if (!(this.isPlatformSupported() || this.isEntrySupported())) {
+            return false;
+        }
+
+        return this.isUrlSupported(this.getDownloadUrl(config));
     }
     
     async getFilename() {
