@@ -5,6 +5,10 @@ import { DownloadConfig } from "types";
 import { DownloadOverlayButton } from 'components';
 import { OVERLAY } from 'icons/icons';
 import { DownloadService } from 'services';
+import { DownloadOverlay } from 'components/download-overlay';
+import { DownloadPluginManager } from 'download-plugin-manager';
+
+const PRESETS = ['Playback'];
 
 class Download extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: DownloadConfig = {
@@ -14,11 +18,13 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
   
   private iconId = -1;
-  private downloadService: DownloadService;
+  
+  private componentDisposers: Array<typeof Function> = [];
+  private downloadPluginManager: DownloadPluginManager;
   
   constructor(name: string, player: KalturaPlayerTypes.Player, config: DownloadConfig) {
     super(name, player, config);
-    this.downloadService = new DownloadService(player)
+    this.downloadPluginManager = new DownloadPluginManager(player, this.config);
   }
   
   static isValid(): boolean {
@@ -37,25 +43,42 @@ class Download extends KalturaPlayer.core.BasePlugin {
         path: OVERLAY
       },
       onClick: () => {
+        this.downloadPluginManager.showOverlay = !this.downloadPluginManager.showOverlay;
       },
       component: () => {
         return <DownloadOverlayButton />;
       }
     }) as number;
-  }
-  
-  async loadMedia() {
-    await this.ready;
     
-    const canDownload = await this.downloadService.isDownloadSupported(this.config);
-    if (canDownload) {
-      this.injectUIComponents();
+    this.componentDisposers.push(
+      this.player.ui.addComponent({
+        label: 'kaltura-download-overlay',
+        presets: PRESETS,
+        area: 'GuiArea',
+        get: () => {
+          return <DownloadOverlay downloadPluginManager={this.downloadPluginManager}/>;
+        }
+      }));
+    }
+    
+    async loadMedia() {
+      await this.ready;
+
+      const downloadMetadata = await this.downloadPluginManager.getDownloadMetadata();
+      
+      if (downloadMetadata) {
+        this.injectUIComponents();
+      }
+    }
+    
+    reset() {
+      this.iconId = -1;
+      
+      for (const componentDisposer of this.componentDisposers) {
+        componentDisposer();
+      }
+      this.componentDisposers = [];
     }
   }
   
-  reset() {
-    this.iconId = -1;
-  }
-}
-
-export {Download};
+  export {Download};

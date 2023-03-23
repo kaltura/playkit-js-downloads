@@ -11,7 +11,7 @@ const {Icon, Tooltip} = KalturaPlayer.ui.components;
  * @param {string} props.closeText Button label.
  */
 const DownloadOverlayButton = withText({
-  closeText: 'overlay.downloads'
+  closeText: 'download.downloads'
 })(({onClick, closeText}: {onClick: () => void; closeText: string}) => {
   return (
     <div>

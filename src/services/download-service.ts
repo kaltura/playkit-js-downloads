@@ -1,4 +1,4 @@
-import { DownloadConfig } from "types";
+import { DownloadConfig, DownloadMetadata } from "types";
 
 class DownloadService {
     constructor(private player: KalturaPlayerTypes.Player) {
@@ -10,19 +10,22 @@ class DownloadService {
     }
     
     private isEntrySupported() {
-        return !(this.player.isLive() || this.player.getVideoElement().mediaKeys);
+        //TODO update player signature
+        //@ts-ignore
+        return !(this.player.isLive() || this.player.getVideoElement().mediaKeys || this.player.isImage());
     }
-    
-    private async isUrlSupported(url: string): Promise<boolean> {
-        try {
-            const req = await fetch(url, { method: 'HEAD' });
-            if (req.ok) {
-                const headers = req.headers.get('content-type');
-                return !!(headers && headers.toLowerCase().includes('video'));
-            } 
-        } catch(e) {}
 
+    private isContentTypeSupported(response: Response) {
+        if (response.ok) {
+            const contentType = response.headers.get('content-type');
+            return !!(contentType && contentType.toLowerCase().includes('video'));
+        }
         return false;
+    }
+
+    private getFilename(response: Response) {
+        const responseUrlSplit = response.url.split("/");
+        return responseUrlSplit[responseUrlSplit.indexOf("fileName") + 1];
     }
     
     private getDownloadUrl(config: DownloadConfig) {
@@ -40,20 +43,33 @@ class DownloadService {
         return `${cdnUrl}${partnerPart}/playManifest${entryIdPart}${protocolPart}${ksPart}${flavorParamIdPart}${flavorIdPart}/format/download`;
     }
     
-    async isDownloadSupported(config: DownloadConfig): Promise<boolean> {
+    async getDownloadMetadata(config: DownloadConfig): Promise<DownloadMetadata> {
         if (!(this.isPlatformSupported() || this.isEntrySupported())) {
-            return false;
+            return null;
         }
 
-        return this.isUrlSupported(this.getDownloadUrl(config));
+        const requestUrl = this.getDownloadUrl(config);
+        const response = await fetch(requestUrl, { method: 'HEAD' });
+        const downloadUrl = response.url;
+
+        const isContentTypeSupported = this.isContentTypeSupported(response);
+        const fileName = this.getFilename(response);
+
+        if (!(isContentTypeSupported && fileName)) {
+            return null;
+        }
+
+        return {
+            downloadUrl,
+            fileName
+        };
     }
     
-    async getFilename() {
-        
-    }
-    
-    async download() {
-        
+    async downloadFile(downloadUrl: string) {
+        const aElement = document.createElement('a');
+        aElement.href = downloadUrl;
+        aElement.setAttribute('target', '_blank');
+        aElement.click();
     }
 }
 

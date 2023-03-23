@@ -1,2 +1,4 @@
 import { DownloadConfig } from "./download-config";
-export {DownloadConfig};
+import { DownloadMetadata } from "./download-metadata";
+
+export {DownloadConfig, DownloadMetadata};
