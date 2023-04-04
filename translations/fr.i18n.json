@@ -1,7 +1,11 @@
 {
   "fr": {
     "download": {
-     
+      "download": "Télécharger",
+      "downloads": "Téléchargements",
+      "download_has_started": "Le téléchargement a commencé",
+      "download_has_failed": "Le téléchargement a échoué",
+      "attachments": "Pièces jointes"
     }
   }
 }

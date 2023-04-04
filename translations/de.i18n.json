@@ -1,7 +1,11 @@
 {
   "de": {
     "download": {
-     
+      "download": "Download",
+      "downloads": "Downloads",
+      "download_has_started": "Download hat begonnen",
+      "download_has_failed": "Download fehlgeschlagen",
+      "attachments": "Anlagen"       
     }
   }
 }

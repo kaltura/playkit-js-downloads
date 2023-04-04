@@ -1,7 +1,11 @@
 {
   "en": {
     "download": {
-      
+      "download": "Download",
+      "downloads": "Downloads",
+      "download_has_started": "Download has started",
+      "download_has_failed": "Download has failed",
+      "attachments": "Attachments"
     }
   }
 }

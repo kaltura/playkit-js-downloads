@@ -1,7 +1,11 @@
 {
   "pt_br": {
     "download": {
-      
+      "download": "Baixar",
+      "downloads": "Downloads",
+      "download_has_started": "O download foi iniciado",
+      "download_has_failed": "Falha no download",
+      "attachments": "Anexos"
     }
   }
 }
