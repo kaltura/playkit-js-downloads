@@ -4,7 +4,7 @@ import {ToastSeverity} from '@playkit-js/common';
 import {Download} from 'download';
 import {DOWNLOAD, ERROR} from 'icons';
 import {DownloadService} from 'services';
-import {DownloadMetadata} from 'types';
+import {EventType, DownloadMetadata} from 'types';
 
 class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
   private _showOverlay = false;
@@ -61,13 +61,13 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
         this.downloadPlugin.player.pause();
         this.playOnClose = true;
       }
-      this.dispatchEvent(new KalturaPlayer.core.FakeEvent('showoverlay'));
+      this.dispatchEvent(new KalturaPlayer.core.FakeEvent(EventType.SHOW_OVERLAY));
     } else {
       if (this.playOnClose) {
         this.downloadPlugin.player.play();
         this.playOnClose = false;
       }
-      this.dispatchEvent(new KalturaPlayer.core.FakeEvent('hideoverlay'));
+      this.dispatchEvent(new KalturaPlayer.core.FakeEvent(EventType.HIDE_OVERLAY));
     }
   }
 

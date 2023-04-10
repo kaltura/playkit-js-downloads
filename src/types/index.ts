@@ -1,4 +1,5 @@
-import { DownloadConfig } from "./download-config";
-import { DownloadMetadata } from "./download-metadata";
+import {DownloadConfig} from './download-config';
+import {EventType} from './event-type';
+import {DownloadMetadata} from './download-metadata';
 
-export {DownloadConfig, DownloadMetadata};
+export {DownloadConfig, DownloadMetadata, EventType};

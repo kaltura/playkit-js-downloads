@@ -2,7 +2,7 @@ import {Button, ButtonType, ButtonSize} from '@playkit-js/common';
 import {DownloadPluginManager} from 'download-plugin-manager';
 
 import {useState, useEffect, useRef} from 'preact/hooks';
-import {DownloadMetadata} from 'types';
+import {EventType, DownloadMetadata} from 'types';
 
 const {withEventManager} = KalturaPlayer.ui.Event;
 const {Icon, IconType, PLAYER_SIZE} = KalturaPlayer.ui.components;
@@ -79,7 +79,7 @@ const DownloadOverlay = withText({
         const closeButtonRef = useRef<HTMLElement>(null);
 
         useEffect(() => {
-          eventManager?.listen(downloadPluginManager, 'showoverlay', () => {
+          eventManager?.listen(downloadPluginManager, EventType.SHOW_OVERLAY, () => {
             setIsVisible(true);
 
             downloadPluginManager.getDownloadMetadata().then((downloadMetadata: DownloadMetadata) => {
@@ -90,7 +90,7 @@ const DownloadOverlay = withText({
             });
           });
 
-          eventManager?.listen(downloadPluginManager, 'hideoverlay', () => {
+          eventManager?.listen(downloadPluginManager, EventType.HIDE_OVERLAY, () => {
             setIsVisible(false);
           });
         }, []);
@@ -123,7 +123,7 @@ const DownloadOverlay = withText({
                           setIsVisible(false);
                         });
                       }}
-                      tooltip={{label: downloadLabel!, type: 'bottom'}}
+                      tooltip={{label: downloadLabel!}}
                       icon={'download'}></Button>
                   </div>
                 </div>
