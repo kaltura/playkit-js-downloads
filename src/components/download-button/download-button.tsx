@@ -1,5 +1,0 @@
-const DownloadButton = () => {
-
-}
-
-export {DownloadButton};
