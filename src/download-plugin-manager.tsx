@@ -20,6 +20,10 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
   async getDownloadMetadata(refresh: boolean = false): Promise<DownloadMetadata> {
     if (!this.downloadMetadata || refresh) {
       this.downloadMetadata = await this.downloadService.getDownloadMetadata(this.downloadPlugin.config);
+
+      if (!this.downloadMetadata) {
+        this.downloadPlugin.logger.debug('Failed to get download url headers');
+      }
     }
     return this.downloadMetadata;
   }
@@ -30,7 +34,9 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
       if (typeof preDownloadHook === 'function') {
         preDownloadHook();
       }
-    } catch (e: any) {}
+    } catch (e: any) {
+      this.downloadPlugin.logger.debug('Exception in pre-download hook');
+    }
 
     this.downloadService.downloadFile(this.downloadMetadata?.downloadUrl, this.downloadMetadata?.fileName);
   }
@@ -48,7 +54,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
     this.downloadPlugin.addToast({
       title,
       text,
-      icon: <Icon id={`download-failed-toast-icon`} path={ERROR} viewBox={`0 0 32 32`} />,
+      icon: <Icon id={`download-failed-toast-icon`} path={ERROR} viewBox={`0 0 16 16`} />,
       severity: ToastSeverity.Error
     });
   }

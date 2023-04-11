@@ -15,7 +15,7 @@ const PRESETS = ['Playback'];
 class Download extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: DownloadConfig = {
     flavorId: null,
-    flavorParamId: null,
+    flavorParamId: '0', // source
     preDownloadHook: null
   };
 
@@ -84,9 +84,12 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
   async loadMedia() {
     await this.ready;
-    const downloadMetadata = await this.downloadPluginManager.getDownloadMetadata();
+
+    this.downloadPluginManager.showOverlay = false;
+    const downloadMetadata = await this.downloadPluginManager.getDownloadMetadata(true);
 
     if (downloadMetadata) {
+      this.logger.debug('Download is supported for current entry');
       this.injectOverlayComponents();
     }
   }

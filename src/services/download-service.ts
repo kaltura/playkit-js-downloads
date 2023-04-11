@@ -54,20 +54,27 @@ class DownloadService {
     }
 
     const requestUrl = this.getDownloadUrl(config);
-    const response = await fetch(requestUrl, {method: 'HEAD'});
-    const downloadUrl = response.url;
 
-    const isContentTypeSupported = this.isContentTypeSupported(response);
-    const fileName = this.getFilename(response);
+    try {
+      const response = await fetch(requestUrl, {method: 'HEAD'});
+      if (!response.ok) {
+        return null;
+      }
 
-    if (!(isContentTypeSupported && fileName)) {
-      return null;
-    }
+      const downloadUrl = response.url;
 
-    return {
-      downloadUrl,
-      fileName
-    };
+      const isContentTypeSupported = this.isContentTypeSupported(response);
+      const fileName = this.getFilename(response);
+
+      if (isContentTypeSupported && fileName) {
+        return {
+          downloadUrl,
+          fileName
+        };
+      }
+    } catch (e: any) {}
+
+    return null;
   }
 
   downloadFile(downloadUrl: string, fileName: string) {
@@ -75,7 +82,7 @@ class DownloadService {
     aElement.href = downloadUrl;
     aElement.hidden = true;
     aElement.download = fileName;
-    aElement.setAttribute('target', '_blank');
+    aElement.target = '_blank';
     aElement.rel = 'noopener noreferrer';
     aElement.click();
   }

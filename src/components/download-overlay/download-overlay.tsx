@@ -120,7 +120,7 @@ const DownloadOverlay = withText({
                           } else {
                             downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
                           }
-                          setIsVisible(false);
+                          downloadPluginManager.showOverlay = false;
                         });
                       }}
                       tooltip={{label: downloadLabel!}}
@@ -136,7 +136,6 @@ const DownloadOverlay = withText({
                   size={ButtonSize.medium}
                   disabled={false}
                   onClick={() => {
-                    setIsVisible(false);
                     downloadPluginManager.showOverlay = false;
                   }}
                   tooltip={{label: closeLabel!}}
