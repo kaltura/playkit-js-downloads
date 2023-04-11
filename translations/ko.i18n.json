@@ -1,0 +1,11 @@
+{
+  "ko": {
+    "download": {
+      "download": "다운로드",
+      "downloads": "다운로드",
+      "download_has_started": "다운로드가 시작되었습니다",
+      "download_has_failed": "다운로드에 실패했습니다.",
+      "attachments": "첨부 파일"
+    }
+  }
+}

@@ -1,0 +1,90 @@
+.download-overlay {
+    backdrop-filter: blur(16px);
+    background-color: rgba(0, 0, 0, .7);
+    color: #fff;
+    font-family: Lato;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+    
+    .header {
+        font-size: 32px;
+        font-weight: 700;
+        margin-top: 48px;
+        text-align: center;
+    }
+
+    .file-info-list {
+        margin: auto;
+        margin-top: 25px;
+
+        .file-info {
+            background-color: rgba(255, 255, 255, 0.12);
+            border-radius: 4px;
+            display: flex;
+            font-size: 14px;
+            margin: auto;
+            position: relative;
+            width: fit-content;
+
+            .icon-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                
+                &.play-icon {
+                    background-color: #444;
+                    border-radius: 4px 0 0 4px;
+                    padding: 12px;
+
+                    i {
+                        height: 24px;
+                        width: 24px;
+                    }
+                }
+
+                &.download-icon {
+                    margin-right: 4px;
+                }
+            }
+
+            .file-info-text-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                max-width: calc(100% - 88px);
+
+                .file-info-text {
+                    -webkit-line-clamp: 1;
+                    font-size: 14px;
+                    margin: 16px 8px 16px 16px;
+                    max-width: 100%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+
+            &.large {
+                max-width: 600px;
+            }
+
+            &.medium {
+                margin: 0 24px;
+                max-width: calc(100% - 48px);
+            }
+
+            &.small {
+                margin: 0 8px;
+                max-width: calc(100% - 16px);
+            }
+        }
+    }
+
+    .close-button-container {
+        position: absolute;
+        top: 36px;
+        right: 36px;
+    }
+}

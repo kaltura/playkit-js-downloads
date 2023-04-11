@@ -1,0 +1,9 @@
+{
+  "zh_cn": {
+    "download": "下载",
+        "downloads": "下载量",
+        "download_has_started": "已开始下载",
+        "download_has_failed": "下载失败",
+        "attachments": "附件"
+  }
+}

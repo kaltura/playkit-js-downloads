@@ -1,0 +1,11 @@
+{
+  "it": {
+    "download": {
+      "download": "Download",
+      "downloads": "Download",
+      "download_has_started": "Il download è iniziato",
+      "download_has_failed": "Il download non è riuscito",
+      "attachments": "Allegati"
+    }
+  }
+}
