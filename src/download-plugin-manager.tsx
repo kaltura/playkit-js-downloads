@@ -17,7 +17,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
     this.downloadService = new DownloadService(downloadPlugin.player);
   }
 
-  async getDownloadMetadata(refresh: boolean = false): Promise<DownloadMetadata> {
+  async getDownloadMetadata(refresh = false): Promise<DownloadMetadata> {
     if (!this.downloadMetadata || refresh) {
       this.downloadMetadata = await this.downloadService.getDownloadMetadata(this.downloadPlugin.config);
 

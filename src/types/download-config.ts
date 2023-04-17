@@ -1,7 +1,7 @@
 interface DownloadConfig {
-    flavorId: string | null;
-    flavorParamId: string | null;
-    preDownloadHook: (() => void) | null;
+  flavorId: string | null;
+  flavorParamId: string | null;
+  preDownloadHook: (() => void) | null;
 }
 
 export {DownloadConfig};

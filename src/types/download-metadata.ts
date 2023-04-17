@@ -1,7 +1,7 @@
 type DownloadMetadataType = {
-    downloadUrl: string,
-    fileName: string
-}
+  downloadUrl: string;
+  fileName: string;
+};
 
 type DownloadMetadata = DownloadMetadataType | null;
 

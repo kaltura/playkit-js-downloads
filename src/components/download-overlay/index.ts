@@ -1,2 +1,2 @@
-import { DownloadOverlay } from "./download-overlay";
+import {DownloadOverlay} from './download-overlay';
 export {DownloadOverlay};

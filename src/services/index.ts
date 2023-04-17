@@ -1,2 +1,2 @@
-import { DownloadService } from "./download-service";
+import {DownloadService} from './download-service';
 export {DownloadService};

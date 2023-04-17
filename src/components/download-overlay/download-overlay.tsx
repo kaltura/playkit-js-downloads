@@ -1,7 +1,7 @@
 import {Button, ButtonType, ButtonSize} from '@playkit-js/common';
 import {DownloadPluginManager} from 'download-plugin-manager';
 
-import {useState, useEffect, useRef} from 'preact/hooks';
+import {useState, useEffect} from 'preact/hooks';
 import {EventType, DownloadMetadata} from 'types';
 
 const {withEventManager} = KalturaPlayer.ui.Event;
@@ -75,8 +75,6 @@ const DownloadOverlay = withText({
       }: DownloadOverlayProps) => {
         const [isVisible, setIsVisible] = useState(false);
         const [fileName, setFileName] = useState('');
-        const [downloadUrl, setDownloadUrl] = useState('');
-        const closeButtonRef = useRef<HTMLElement>(null);
 
         useEffect(() => {
           eventManager?.listen(downloadPluginManager, EventType.SHOW_OVERLAY, () => {
@@ -85,7 +83,6 @@ const DownloadOverlay = withText({
             downloadPluginManager.getDownloadMetadata().then((downloadMetadata: DownloadMetadata) => {
               if (downloadMetadata) {
                 setFileName(downloadMetadata.fileName);
-                setDownloadUrl(downloadMetadata.downloadUrl);
               }
             });
           });
@@ -101,7 +98,7 @@ const DownloadOverlay = withText({
             <div className={styles.fileInfoList}>
               <div className={`${styles.fileInfo} ${sizeClass}`}>
                 <div className={`${styles.iconContainer} ${styles.playIcon}`}>
-                  <Icon id="download-file-play" type={IconType.Play} viewBox={`0 0 32 32`}></Icon>
+                  <Icon id="download-file-play" type={IconType.Play} viewBox={`0 0 32 32`} />
                 </div>
                 <div className={styles.fileInfoTextContainer}>
                   <div className={styles.fileInfoText}>{fileName}</div>
@@ -124,7 +121,8 @@ const DownloadOverlay = withText({
                         });
                       }}
                       tooltip={{label: downloadLabel!}}
-                      icon={'download'}></Button>
+                      icon={'download'}
+                    />
                   </div>
                 </div>
               </div>
@@ -139,12 +137,13 @@ const DownloadOverlay = withText({
                     downloadPluginManager.showOverlay = false;
                   }}
                   tooltip={{label: closeLabel!}}
-                  icon={'close'}></Button>
+                  icon={'close'}
+                />
               </div>
             </div>
           </div>
         ) : (
-          <div></div>
+          <div />
         );
       }
     )

@@ -1,4 +1,3 @@
-import {ui} from 'kaltura-player-js';
 import {UpperBarManager} from '@playkit-js/ui-managers';
 
 import {DownloadConfig} from 'types';
