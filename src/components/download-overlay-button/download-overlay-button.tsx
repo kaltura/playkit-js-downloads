@@ -8,7 +8,7 @@ const {Icon, Tooltip} = KalturaPlayer.ui.components;
  *
  * @param {object} props Component props.
  * @param {Function} props.onClick onClick event handler.
- * @param {string} props.closeText Button label.
+ * @param {string} props.downloadLabel Button label.
  */
 const DownloadOverlayButton = withText({
   downloadLabel: 'download.downloads'
