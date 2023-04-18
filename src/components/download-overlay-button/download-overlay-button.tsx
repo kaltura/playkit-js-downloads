@@ -4,7 +4,7 @@ const {withText} = KalturaPlayer.ui.preacti18n;
 const {Icon, Tooltip} = KalturaPlayer.ui.components;
 
 /**
- * Button to toggle off related list visibility.
+ * Button to toggle download overlay visibility.
  *
  * @param {object} props Component props.
  * @param {Function} props.onClick onClick event handler.
