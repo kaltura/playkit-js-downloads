@@ -1,5 +1,5 @@
 {
-  "name": "playkit-js-download",
+  "name": "@playkit-js/download",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
