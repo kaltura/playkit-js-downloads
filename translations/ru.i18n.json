@@ -1,0 +1,11 @@
+{
+  "ru": {
+    "download": {
+      "download": "Скачать",
+      "downloads": "Загрузки",
+      "download_has_started": "Скачивание началось",
+      "download_has_failed": "Скачивание не удалось",
+      "attachments": "Вложения"
+    }
+  }
+}
