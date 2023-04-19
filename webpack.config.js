@@ -14,7 +14,7 @@ const plugins = [
 module.exports = {
   context: __dirname + '/src',
   entry: {
-    'playkit-download': 'index.ts'
+    'playkit-downloads': 'index.ts'
   },
   output: {
     path: __dirname + '/dist',
