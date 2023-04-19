@@ -1,5 +1,5 @@
 {
-  "name": "@playkit-js/download",
+  "name": "@playkit-js/attachment",
   "version": "1.0.0",
   "main": "dist/playkit-download.js",
   "homepage": "https://github.com/kaltura/playkit-js-download#readme",
