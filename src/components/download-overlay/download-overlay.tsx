@@ -106,6 +106,7 @@ const DownloadOverlay = withText({
                 <div className={`${styles.iconContainer} ${styles.downloadIcon}`}>
                   <div>
                     <Button
+                      focusOnMount={true}
                       type={ButtonType.borderless}
                       size={ButtonSize.medium}
                       disabled={false}
