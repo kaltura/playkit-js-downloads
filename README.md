@@ -1,5 +1,10 @@
 # PlayKit JS Download - Download plugin for the [PlayKit JS Player]
 
+[![Build Status](https://github.com/kaltura/playkit-js-downloads/actions/workflows/run_canary_full_flow.yaml/badge.svg)](https://github.com/kaltura/playkit-js-downloads/actions/workflows/run_canary_full_flow.yaml)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![](https://img.shields.io/npm/v/@playkit-js/playkit-js-downloads/latest.svg)](https://www.npmjs.com/package/@playkit-js/playkit-js-downloads)
+[![](https://img.shields.io/npm/v/@playkit-js/playkit-js-downloads/canary.svg)](https://www.npmjs.com/package/@playkit-js/playkit-js-downloads/v/canary)
+
 PlayKit JS Download is written in [ECMAScript6], statically analysed using [Typescript] and transpiled in ECMAScript5 using [Babel].
 
 [typescript]: https://www.typescriptlang.org/
