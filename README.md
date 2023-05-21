@@ -5,11 +5,13 @@
 [![](https://img.shields.io/npm/v/@playkit-js/playkit-js-downloads/latest.svg)](https://www.npmjs.com/package/@playkit-js/playkit-js-downloads)
 [![](https://img.shields.io/npm/v/@playkit-js/playkit-js-downloads/canary.svg)](https://www.npmjs.com/package/@playkit-js/playkit-js-downloads/v/canary)
 
-This plugin enables download for a Kaltura entry - assuming it exists and you have permissions to download it.
+This plugin enables video download for a media entry which is hosted by Kaltura.
 The plugin has three configuration parameters:
-- preDownloadHook - Function callback to be called after a user has clicked the download button and before the download starts. 
-- flavorId - A specific flavor of a specific entry. Using KMC you can see the specific flavors that exist for an entry.
-- flavorParamId - The type of flavor to be downloaded, as returned by getFlavorAssetsWithParams REST api.
+- flavorId - A specific video flavor of a specific entry. You can use KMC to view the flavor ids for a specific entry. 
+- flavorParamId - The type of flavor to be downloaded. The available flavor types for an environment can be fetched using the [getFlavorAssetsWithParams] API.
+- preDownloadHook - A callback function to be called after a user has clicked the download button and before the download starts. 
+
+[getFlavorAssetsWithParams]: https://developer.kaltura.com/api-docs/service/flavorAsset/action/getFlavorAssetsWithParams
 
 You can see the available flavor ids for an entry in KMC, and their matching 
 If no flavor is selected, a default flavor would be downloaded.
