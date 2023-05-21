@@ -13,7 +13,7 @@ The plugin has three configuration parameters:
 
 #### Configuation Example
 
-* You may enable the download plugin just by adding it without any specific plugin conifg to the plugins config section or also add your own preffered config
+* You may enable the download plugin just by adding it without any specific plugin conifg to the plugins config section or also add your own preferred config
 
 ```
 plugins: {
