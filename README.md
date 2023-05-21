@@ -1,11 +1,18 @@
 # PlayKit JS Download - Download plugin for the [PlayKit JS Player]
 
-* playkit-js-downloads
-
 [![Build Status](https://github.com/kaltura/playkit-js-downloads/actions/workflows/run_canary_full_flow.yaml/badge.svg)](https://github.com/kaltura/playkit-js-downloads/actions/workflows/run_canary_full_flow.yaml)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![](https://img.shields.io/npm/v/@playkit-js/playkit-js-downloads/latest.svg)](https://www.npmjs.com/package/@playkit-js/playkit-js-downloads)
 [![](https://img.shields.io/npm/v/@playkit-js/playkit-js-downloads/canary.svg)](https://www.npmjs.com/package/@playkit-js/playkit-js-downloads/v/canary)
+
+This plugin enables download for a Kaltura entry - assuming it exists and you have permissions to download it.
+The plugin has three configuration parameters:
+- preDownloadHook - Function callback to be called after a user has clicked the download button and before the download starts. 
+- flavorId - A specific flavor of a specific entry. Using KMC you can see the specific flavors that exist for an entry.
+- flavorParamId - The type of flavor to be downloaded, as returned by getFlavorAssetsWithParams REST api.
+
+You can see the available flavor ids for an entry in KMC, and their matching 
+If no flavor is selected, a default flavor would be downloaded.
 
 PlayKit JS Download is written in [ECMAScript6], statically analysed using [Typescript] and transpiled in ECMAScript5 using [Babel].
 
