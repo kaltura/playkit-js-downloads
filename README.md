@@ -11,25 +11,6 @@ The plugin has three configuration parameters:
 - flavorParamId - The type of flavor to be downloaded. The available flavor types for an environment can be fetched using the [getFlavorAssetsWithParams] API.
 - preDownloadHook - A callback function to be called after a user has clicked the download button and before the download starts. 
 
-#### Configuation Example
-
-* You may enable the download plugin just by adding it without any specific plugin conifg to the plugins config section or also add your own preferred config
-
-```
-plugins: {
-  download: {}
-}
-```
-
-```
-plugins: {
-  download: {
-    flavorParamId: null, // id of the flavor type to be downloaded. optional.
-    flavorId: null, // id of the specific flavor type for a specific entry. optional.
-    preDownloadHook: null // function to be called before download is initiated. optional.
-  }
-}
-```
 
 [getFlavorAssetsWithParams]: https://developer.kaltura.com/api-docs/service/flavorAsset/action/getFlavorAssetsWithParams
 
@@ -114,6 +95,26 @@ Finally, add the bundle as a script tag in your page, and initialize the player
     player.loadMedia(...);
   </script>
 </div>
+```
+
+#### Configuation Example
+
+* You may enable the download plugin just by adding it without any specific plugin conifg to the plugins config section or also add your own preferred config
+
+```
+plugins: {
+  download: {}
+}
+```
+
+```
+plugins: {
+  download: {
+    flavorParamId: null, // id of the flavor type to be downloaded. optional.
+    flavorId: null, // id of the specific flavor type for a specific entry. optional.
+    preDownloadHook: null // function to be called before download is initiated. optional.
+  }
+}
 ```
 
 ### And coding style tests
