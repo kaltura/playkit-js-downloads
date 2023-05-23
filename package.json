@@ -42,7 +42,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "peerDependencies": {
-    "@playkit-js/kaltura-player-js": "latest"
+    "@playkit-js/kaltura-player-js": "3.14.4"
   },
   "kaltura": {
     "name": "downloads",
