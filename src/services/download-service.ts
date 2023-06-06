@@ -1,4 +1,4 @@
-import {DownloadConfig, DownloadMetadata} from 'types';
+import {DownloadConfig, DownloadMetadata} from '../types';
 
 class DownloadService {
   constructor(private player: KalturaPlayerTypes.Player) {}

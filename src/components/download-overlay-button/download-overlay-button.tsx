@@ -1,4 +1,4 @@
-import {DOWNLOAD} from 'icons';
+import {DOWNLOAD} from '../../icons';
 
 const {withText} = KalturaPlayer.ui.preacti18n;
 const {Icon, Tooltip} = KalturaPlayer.ui.components;

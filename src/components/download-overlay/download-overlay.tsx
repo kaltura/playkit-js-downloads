@@ -1,8 +1,8 @@
 import {Button, ButtonType, ButtonSize} from '@playkit-js/common';
-import {DownloadPluginManager} from 'download-plugin-manager';
+import {DownloadPluginManager} from '../../download-plugin-manager';
 
 import {useState, useEffect} from 'preact/hooks';
-import {EventType, DownloadMetadata} from 'types';
+import {EventType, DownloadMetadata} from '../../types';
 
 const {withEventManager} = KalturaPlayer.ui.Event;
 const {Icon, IconType, PLAYER_SIZE} = KalturaPlayer.ui.components;
