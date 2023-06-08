@@ -82,7 +82,6 @@ class DownloadService {
     aElement.href = downloadUrl;
     aElement.hidden = true;
     aElement.download = fileName;
-    aElement.target = '_blank';
     aElement.rel = 'noopener noreferrer';
     aElement.click();
   }
