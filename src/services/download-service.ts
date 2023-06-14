@@ -27,16 +27,19 @@ class DownloadService {
 
   private getDownloadUrl(config: DownloadConfig) {
     const {flavorId, flavorParamId} = config;
-    const {
-      provider: {
-        partnerId,
-        env: {cdnUrl}
-      }
-    } = this.player;
-    const {
-      session: {ks},
-      sources: {id}
-    } = this.player.config;
+    const {provider} = this.player;
+
+    const playerConfig = this.player.config;
+    const {session, sources} = playerConfig;
+
+    if (!(session && session.ks && sources && sources.id && provider.env.cdnUrl)) {
+      return '';
+    }
+
+    const {ks} = playerConfig.session;
+    const {id} = playerConfig.sources;
+    const {partnerId} = provider;
+    const {cdnUrl} = provider.env;
 
     const partnerPart = `/p/${partnerId}`;
     const entryIdPart = `/entryId/${id}`;
@@ -54,6 +57,9 @@ class DownloadService {
     }
 
     const requestUrl = this.getDownloadUrl(config);
+    if (!requestUrl) {
+      return null;
+    }
 
     try {
       const response = await fetch(requestUrl, {method: 'HEAD'});
