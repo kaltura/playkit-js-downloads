@@ -32,7 +32,7 @@ class DownloadService {
     const playerConfig = this.player.config;
     const {session, sources} = playerConfig;
 
-    if (!(session && session.ks && sources && sources.id && provider.env.cdnUrl)) {
+    if (!(session && session.ks && sources && sources.id && provider.partnerId && provider.env.cdnUrl)) {
       return '';
     }
 
