@@ -16,7 +16,7 @@
     "prettier:fix": "prettier --write .",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run --browser chrome",
-    "test:prepare": "yarn run build && yes | cp -i ./dist/playkit-downloads.js ./cypress/public/plugin.js",
+    "test:prepare": "yarn run build && yes | cp -i ./dist/playkit-downloads.js ./dist/playkit-downloads.js.map ./cypress/public",
     "test:watch": "yarn run test:prepare && cypress open",
     "test": "yarn run test:prepare && cypress run "
   },
