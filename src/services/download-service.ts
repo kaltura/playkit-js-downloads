@@ -52,7 +52,7 @@ class DownloadService {
   }
 
   async getDownloadMetadata(config: DownloadConfig): Promise<DownloadMetadata> {
-    if (!(this.isPlatformSupported() || this.isEntrySupported())) {
+    if (!(this.isPlatformSupported() && this.isEntrySupported())) {
       return null;
     }
 
