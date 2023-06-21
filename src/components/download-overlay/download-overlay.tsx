@@ -93,7 +93,7 @@ const DownloadOverlay = withText({
         }, []);
 
         return isVisible ? (
-          <div className={styles.downloadOverlay}>
+          <div data-testid="download-overlay" className={styles.downloadOverlay}>
             <div className={styles.header}>{downloadsLabel}</div>
             <div className={styles.fileInfoList}>
               <div className={`${styles.fileInfo} ${sizeClass}`}>
