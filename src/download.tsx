@@ -7,7 +7,7 @@ import {DownloadOverlay} from 'components/download-overlay';
 import {DownloadPluginManager} from 'download-plugin-manager';
 
 import {ContribServices} from '@playkit-js/common/dist/ui-common/contrib-services';
-import {ToastSeverity} from '@playkit-js/common';
+import {OnClickEvent, ToastSeverity} from '@playkit-js/common';
 
 const PRESETS = ['Playback'];
 
@@ -24,6 +24,8 @@ class Download extends KalturaPlayer.core.BasePlugin {
   private componentDisposers: Array<typeof Function> = [];
   private downloadPluginManager: DownloadPluginManager;
   private contribServices: ContribServices;
+  private _pluginButtonRef: HTMLButtonElement | null = null;
+  public triggeredByKeyboard = false;
 
   constructor(name: string, player: KalturaPlayerTypes.Player, config: DownloadConfig) {
     super(name, player, config);
@@ -54,6 +56,21 @@ class Download extends KalturaPlayer.core.BasePlugin {
     return this.contribServices.register();
   }
 
+  private _setPluginButtonRef = (ref: HTMLButtonElement) => {
+    this._pluginButtonRef = ref;
+  };
+
+  private _handleClick = (event: OnClickEvent, byKeyboard: boolean) => {
+    this.triggeredByKeyboard = byKeyboard;
+    this.downloadPluginManager.showOverlay = !this.downloadPluginManager.showOverlay;
+  };
+
+  private _focusPluginButton = () => {
+    setTimeout(() => {
+      this._pluginButtonRef?.focus();
+    });
+  };
+
   private injectOverlayComponents() {
     this.iconId = this.upperBarManager.add({
       label: 'Download',
@@ -61,11 +78,9 @@ class Download extends KalturaPlayer.core.BasePlugin {
         viewBox: '0 0 32 32',
         path: DOWNLOAD
       },
-      onClick: () => {
-        this.downloadPluginManager.showOverlay = !this.downloadPluginManager.showOverlay;
-      },
+      onClick: this._handleClick as any,
       component: () => {
-        return <DownloadOverlayButton />;
+        return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
       }
     }) as number;
 
@@ -75,7 +90,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
         presets: PRESETS,
         area: 'GuiArea',
         get: () => {
-          return <DownloadOverlay downloadPluginManager={this.downloadPluginManager} />;
+          return <DownloadOverlay downloadPluginManager={this.downloadPluginManager} setFocus={this._focusPluginButton} />;
         }
       })
     );
@@ -96,6 +111,8 @@ class Download extends KalturaPlayer.core.BasePlugin {
   reset() {
     this.upperBarManager?.remove(this.iconId);
     this.iconId = -1;
+    this._pluginButtonRef = null;
+    this.triggeredByKeyboard = false;
 
     for (const componentDisposer of this.componentDisposers) {
       componentDisposer();

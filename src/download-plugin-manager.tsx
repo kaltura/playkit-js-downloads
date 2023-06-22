@@ -67,7 +67,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
         this.downloadPlugin.player.pause();
         this.playOnClose = true;
       }
-      this.dispatchEvent(new KalturaPlayer.core.FakeEvent(EventType.SHOW_OVERLAY));
+      this.dispatchEvent(new KalturaPlayer.core.FakeEvent(EventType.SHOW_OVERLAY, {byKeyboard: this.downloadPlugin.triggeredByKeyboard}));
     } else {
       if (this.playOnClose) {
         this.downloadPlugin.player.play();

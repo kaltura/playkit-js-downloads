@@ -26,9 +26,8 @@
             font-size: 14px;
             margin: auto;
             position: relative;
-            width: -webkit-fit-content;
-            width: -moz-fit-content;
-            width: fit-content;
+            width: 100%;
+            cursor: pointer;
 
             .icon-container {
                 display: flex;
@@ -47,7 +46,8 @@
                 }
 
                 &.download-icon {
-                    margin-right: 4px;
+                    margin-right: 16px;
+                    margin-left: auto;
                 }
             }
 
