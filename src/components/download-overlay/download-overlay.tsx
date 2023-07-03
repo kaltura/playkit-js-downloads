@@ -1,11 +1,12 @@
-import {Button, ButtonType, ButtonSize} from '@playkit-js/common';
-import {DownloadPluginManager} from '../../download-plugin-manager';
-
-import {useState, useEffect} from 'preact/hooks';
-import {EventType, DownloadMetadata} from '../../types';
+import {Button, ButtonType, ButtonSize, A11yWrapper, OnClickEvent} from '@playkit-js/common';
+import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
+import {DownloadPluginManager} from 'download-plugin-manager';
+import {createRef} from 'preact';
+import {useState, useEffect, useRef} from 'preact/hooks';
+import {EventType, DownloadMetadata} from 'types';
 
 const {withEventManager} = KalturaPlayer.ui.Event;
-const {Icon, IconType, PLAYER_SIZE} = KalturaPlayer.ui.components;
+const {Icon, IconType, Tooltip, PLAYER_SIZE} = KalturaPlayer.ui.components;
 const {connect} = KalturaPlayer.ui.redux;
 
 const {withText} = KalturaPlayer.ui.preacti18n;
@@ -21,6 +22,7 @@ interface DownloadOverlayProps {
   downloadStartedLabel?: string;
   downloadFailedLabel?: string;
   closeLabel?: string;
+  setFocus: () => void;
 }
 
 const mapStateToProps = (state: any) => {
@@ -71,13 +73,16 @@ const DownloadOverlay = withText({
         downloadsLabel,
         downloadStartedLabel,
         downloadFailedLabel,
-        closeLabel
+        closeLabel,
+        setFocus
       }: DownloadOverlayProps) => {
         const [isVisible, setIsVisible] = useState(false);
         const [fileName, setFileName] = useState('');
-
+        const downloadRef = createRef<HTMLDivElement>();
+        const closeButtonRef = createRef<HTMLButtonElement>();
+        const byKeyboard = useRef(false);
         useEffect(() => {
-          eventManager?.listen(downloadPluginManager, EventType.SHOW_OVERLAY, () => {
+          eventManager?.listen(downloadPluginManager, EventType.SHOW_OVERLAY, ({payload}: {payload: {byKeyboard: boolean}}) => {
             setIsVisible(true);
 
             downloadPluginManager.getDownloadMetadata().then((downloadMetadata: DownloadMetadata) => {
@@ -85,6 +90,7 @@ const DownloadOverlay = withText({
                 setFileName(downloadMetadata.fileName);
               }
             });
+            byKeyboard.current = payload.byKeyboard;
           });
 
           eventManager?.listen(downloadPluginManager, EventType.HIDE_OVERLAY, () => {
@@ -92,54 +98,75 @@ const DownloadOverlay = withText({
           });
         }, []);
 
+        useEffect(() => {
+          if (isVisible && byKeyboard.current) {
+            downloadRef.current?.focus();
+          }
+        }, [isVisible]);
+
         return isVisible ? (
           <div data-testid="download-overlay" className={styles.downloadOverlay}>
             <div className={styles.header}>{downloadsLabel}</div>
             <div className={styles.fileInfoList}>
-              <div className={`${styles.fileInfo} ${sizeClass}`}>
-                <div className={`${styles.iconContainer} ${styles.playIcon}`}>
-                  <Icon id="download-file-play" type={IconType.Play} viewBox={`0 0 32 32`} />
-                </div>
-                <div className={styles.fileInfoTextContainer}>
-                  <div className={styles.fileInfoText}>{fileName}</div>
-                </div>
-                <div className={`${styles.iconContainer} ${styles.downloadIcon}`}>
-                  <div data-testid="download-overlay-download-button">
-                    <Button
-                      focusOnMount={true}
-                      type={ButtonType.borderless}
-                      size={ButtonSize.medium}
-                      disabled={false}
-                      onClick={() => {
-                        downloadPluginManager.getDownloadMetadata(true).then((downloadMetadata: DownloadMetadata) => {
-                          if (downloadMetadata) {
-                            downloadPluginManager.downloadFile();
-                            downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
-                          } else {
-                            downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
-                          }
-                          downloadPluginManager.showOverlay = false;
-                        });
-                      }}
-                      tooltip={{label: downloadLabel!}}
-                      icon={'download'}
-                    />
+              <Tooltip label={downloadLabel!}>
+                <A11yWrapper
+                  onClick={() => {
+                    downloadPluginManager.getDownloadMetadata(true).then((downloadMetadata: DownloadMetadata) => {
+                      if (downloadMetadata) {
+                        downloadPluginManager.downloadFile();
+                        downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
+                      } else {
+                        downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
+                      }
+                      downloadPluginManager.showOverlay = false;
+                    });
+                  }}>
+                  <div
+                    className={`${styles.fileInfo} ${sizeClass}`}
+                    tabIndex={0}
+                    ref={downloadRef}
+                    onBlur={() => {
+                      if (isVisible) {
+                        closeButtonRef.current?.focus();
+                      }
+                    }}>
+                    <div className={`${styles.iconContainer} ${styles.playIcon}`}>
+                      <Icon id="download-file-play" type={IconType.Play} viewBox={`0 0 32 32`} />
+                    </div>
+                    <div className={styles.fileInfoTextContainer}>
+                      <div className={styles.fileInfoText}>{fileName}</div>
+                    </div>
+                    <div className={`${styles.iconContainer} ${styles.downloadIcon}`}>
+                      <CommonIcon name={'download'} />
+                    </div>
                   </div>
-                </div>
-              </div>
+                </A11yWrapper>
+              </Tooltip>
             </div>
             <div>
-              <div data-testid="download-overlay-close-button" className={styles.closeButtonContainer}>
-                <Button
-                  type={ButtonType.borderless}
-                  size={ButtonSize.medium}
-                  disabled={false}
-                  onClick={() => {
+              <div className={styles.closeButtonContainer}>
+                <A11yWrapper
+                  onClick={(e: OnClickEvent, byKeyboard: boolean) => {
                     downloadPluginManager.showOverlay = false;
-                  }}
-                  tooltip={{label: closeLabel!}}
-                  icon={'close'}
-                />
+                    if (byKeyboard) {
+                      setFocus();
+                    }
+                  }}>
+                  <Button
+                    type={ButtonType.borderless}
+                    size={ButtonSize.medium}
+                    tooltip={{label: closeLabel!}}
+                    icon={'close'}
+                    setRef={ref => {
+                      closeButtonRef.current = ref;
+                    }}
+                    onBlur={() => {
+                      if (isVisible) {
+                        downloadRef.current?.focus();
+                      }
+                    }}
+                  />
+                </A11yWrapper>
               </div>
             </div>
           </div>

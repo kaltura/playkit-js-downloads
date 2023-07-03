@@ -12,16 +12,11 @@ const {Icon, Tooltip} = KalturaPlayer.ui.components;
  */
 const DownloadOverlayButton = withText({
   downloadLabel: 'download.download'
-})(({onClick, downloadLabel}: {onClick: () => void; downloadLabel: string}) => {
+})(({downloadLabel, setRef}: {setRef: (ref: HTMLButtonElement | null) => void; downloadLabel: string}) => {
   return (
     <div>
       <Tooltip label={downloadLabel}>
-        <button
-          data-testid="download-overlay-button"
-          aria-label={downloadLabel}
-          tabIndex={0}
-          className={`${KalturaPlayer.ui.style.upperBarIcon}`}
-          onClick={onClick}>
+        <button aria-label={downloadLabel} tabIndex={0} className={`${KalturaPlayer.ui.style.upperBarIcon}`} ref={setRef}>
           <Icon id={`download-overlay-icon`} path={DOWNLOAD} viewBox={`0 0 32 32`} />
         </button>
       </Tooltip>
