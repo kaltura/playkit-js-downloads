@@ -18,7 +18,7 @@
     "cypress:run": "cypress run --browser chrome",
     "test:prepare": "yarn run build && yes | cp -i ./dist/playkit-downloads.js ./dist/playkit-downloads.js.map ./cypress/public",
     "test:watch": "yarn run test:prepare && cypress open",
-    "test": "yarn run test:prepare && cypress run "
+    "test": "yarn run test:prepare && cypress run"
   },
   "devDependencies": {
     "@playkit-js/common": "1.2.3",
@@ -32,6 +32,7 @@
     "eslint": "^8.42.0",
     "eslint-config-preact": "^1.3.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-cypress": "^2.13.3",
     "eslint-plugin-jsdoc": "^41.1.2",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.4",

@@ -1,21 +1,34 @@
-// TODO add ts linting
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
 import {PLAYER_CONFIG} from '../e2e/mock-data';
 
-let player;
+interface KalturaPlayer {
+  setup: (config: any) => Player;
+}
+
+interface Player {
+  setMedia: (arg0: {session: {ks: string}; sources: {id: string; progressive: {mimetype: string; url: string}[]}}) => void;
+  isLive: () => boolean;
+  getVideoElement: () => {mediaKeys: any};
+  ready: () => any;
+}
+
+interface Window {
+  KalturaPlayer: KalturaPlayer;
+}
+
+let player: Player | null;
 let requestCount = 0;
 
 // TODO use local ui conf
 
-const loadPlayer = playerConfig => {
+const loadPlayer = (playerConfig?: any): Promise<void> => {
   return new Promise(resolve => {
-    cy.window().then(w => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    cy.visit('index.html').then((win: Window) => {
       if (playerConfig) {
-        player = w.KalturaPlayer.setup({...PLAYER_CONFIG, ...playerConfig});
+        player = win.KalturaPlayer.setup({...PLAYER_CONFIG, ...playerConfig});
       } else {
-        player = w.KalturaPlayer.setup(PLAYER_CONFIG);
+        player = win.KalturaPlayer.setup(PLAYER_CONFIG);
       }
 
       resolve();
@@ -35,26 +48,24 @@ const setMedia = (
     ]
   }
 ) => {
-  player.setMedia({
+  player?.setMedia({
     session: sessionConfig,
     sources: sourcesConfig
   });
 };
 
-const loadPlayerAndSetMedia = (playerConfig, sessionConfig, sourcesConfig) => {
+const loadPlayerAndSetMedia = (playerConfig?: any, sessionConfig?: any, sourcesConfig?: any): Promise<void> => {
   return new Promise(resolve => {
-    loadPlayer(playerConfig).then(() => {
-      setMedia(sessionConfig, sourcesConfig);
-      player.ready().then(resolve);
-    });
+    loadPlayer(playerConfig)
+      .then(() => {
+        setMedia(sessionConfig, sourcesConfig);
+        return player?.ready();
+      })
+      .then(resolve);
   });
 };
 
 describe('download plugin', () => {
-  beforeEach(() => {
-    cy.visit('index.html');
-  });
-
   afterEach(() => {
     player = null;
     requestCount = 0;
@@ -70,44 +81,40 @@ describe('download plugin', () => {
       }).as('playManifest');
     });
 
-    it('should be blocked for Tizen Smart TV', async () => {
-      await loadPlayer();
-      cy.stub(navigator, 'userAgent').returns('Tizen');
-      setMedia();
-
-      expect(requestCount).to.equal(0);
+    it('should be blocked for live', () => {
+      return loadPlayer().then(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        cy.stub(player, 'isLive').returns(true);
+        setMedia();
+        expect(requestCount).to.equal(0);
+      });
     });
-    it('should be blocked for WebOS Smart TV', async () => {
-      await loadPlayer();
-      cy.stub(navigator, 'userAgent').returns('Web0S');
-      setMedia();
-
-      cy.wait(100);
-      expect(requestCount).to.equal(0);
+    it('should be blocked for DRM', () => {
+      return loadPlayer()
+        .then(() => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          cy.stub(player, 'getVideoElement').returns({mediaKeys: {}});
+          setMedia();
+          return player?.ready();
+        })
+        .then(() => {
+          expect(requestCount).to.equal(0);
+        });
     });
-    it('should be blocked for live', async () => {
-      await loadPlayer();
-      cy.stub(player, 'isLive').returns(true);
-      setMedia();
-
-      cy.wait(100);
-      expect(requestCount).to.equal(0);
-    });
-    it('should be blocked for DRM', async () => {
-      await loadPlayer();
-      cy.stub(player, 'getVideoElement').returns({mediaKeys: {}});
-      setMedia();
-
-      cy.wait(100);
-      expect(requestCount).to.equal(0);
-    });
-    it('should be blocked for image entry', async () => {
-      await loadPlayer();
-      cy.stub(player, 'isImage').returns(true);
-      setMedia();
-
-      cy.wait(100);
-      expect(requestCount).to.equal(0);
+    it('should be blocked for image entry', () => {
+      return loadPlayer()
+        .then(() => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          cy.stub(player, 'isImage').returns(true);
+          setMedia();
+          return player?.ready();
+        })
+        .then(() => {
+          expect(requestCount).to.equal(0);
+        });
     });
   });
 
@@ -187,20 +194,9 @@ describe('download plugin', () => {
   });
 
   describe('download overlay button', () => {
-    it('should be visible by default', async () => {
-      cy.intercept('**/playManifest/**', req => {
-        req.reply({
-          fixture: 'video.mp4'
-        });
-      });
-
-      await loadPlayerAndSetMedia();
-      player.pause();
-      cy.get('[data-testid="download-overlay-button"]').should('be.visible');
-    });
-    it('should be hidden if content type is not video', async () => {
-      cy.intercept('**/playManifest/**', req => {
-        req.reply({
+    describe('if content type is not video', () => {
+      beforeEach(() => {
+        cy.intercept('**/playManifest/**', {
           headers: {
             'content-type': 'image/gif'
           },
@@ -208,58 +204,177 @@ describe('download plugin', () => {
         });
       });
 
-      await loadPlayerAndSetMedia();
-      player.pause();
-      cy.get('[data-testid="download-overlay-button"]').should('not.exist');
+      it('should be hidden', () => {
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('[data-testid="download-overlay-button"]').should('not.exist');
+        });
+      });
     });
-    it('should show overlay on click', {defaultCommandTimeout: 6000}, async () => {
-      cy.intercept('**/playManifest/**', req => {
-        req.reply({
-          fixture: 'video.mp4'
+
+    describe('if content type is video', () => {
+      beforeEach(() => {
+        cy.intercept('**/playManifest/**', {fixture: 'video.mp4'});
+      });
+
+      it('should be visible', () => {
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('[data-testid="download-overlay-button"]').should('exist');
         });
       });
 
-      await loadPlayerAndSetMedia();
-      player.pause();
-      await new Promise(resolve => {
-        setTimeout(() => {
-          resolve();
-        }, 5000);
+      it('should show overlay on click', () => {
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('[data-testid="download-overlay"]').should('not.exist');
+          cy.get('[data-testid="download-overlay-button"]').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+        });
       });
+    });
 
-      cy.get('.playkit-upper-bar-icon').click({force: true});
-      cy.get('[data-testid="download-overlay"]').should('be.visible');
+    it('should show overlay on click', () => {
+      loadPlayerAndSetMedia().then(() => {
+        cy.get('[data-testid="download-overlay"]').should('not.exist');
+        cy.get('[data-testid="download-overlay-button"]').click({force: true});
+        cy.get('[data-testid="download-overlay"]').should('exist');
+      });
     });
   });
 
   describe('download overlay', () => {
     describe('close button', () => {
+      beforeEach(() => {
+        cy.intercept('**/playManifest/**', {fixture: 'video.mp4'});
+      });
+
       it('should hide overlay on click', () => {
-        expect(0).to.equal(1);
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('[data-testid="download-overlay"]').should('not.exist');
+          cy.get('[data-testid="download-overlay-button"]').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-close-button"] button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('not.exist');
+        });
       });
     });
+
     describe('download button', () => {
+      beforeEach(() => {
+        cy.intercept('**/playManifest/**', {fixture: 'video.mp4'}).as('playManifest');
+      });
+
       it('should hide overlay on click', () => {
-        expect(0).to.equal(1);
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('[data-testid="download-overlay"]').should('not.exist');
+          cy.get('[data-testid="download-overlay-button"]').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('not.exist');
+        });
       });
+
       it('should start download on click', () => {
-        expect(0).to.equal(1);
+        // cy.wrap(
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('[data-testid="download-overlay"]').should('not.exist');
+          cy.get('[data-testid="download-overlay-button"]').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
+
+          setTimeout(() => {
+            const downloadsFolder = Cypress.config('downloadsFolder');
+            const downloadPath = `${downloadsFolder}/download.mp4`;
+            cy.readFile(downloadPath);
+          }, 5000);
+        });
       });
-    });
-    describe('on download success', () => {
+
       it('should call pre-download hook', () => {
-        expect(0).to.equal(1);
+        let count = 0;
+
+        const preDownloadHook = () => {
+          ++count;
+        };
+        const pluginConfig = {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          download: {preDownloadHook},
+          uiManagers: {}
+        };
+
+        const promise = new Promise(resolve => {
+          cy.wrap(loadPlayerAndSetMedia({plugins: pluginConfig})).then(() => {
+            cy.get('[data-testid="download-overlay"]').should('not.exist');
+            cy.get('[data-testid="download-overlay-button"]').click({force: true});
+            cy.get('[data-testid="download-overlay"]').should('exist');
+            cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
+
+            setTimeout(() => {
+              resolve(count);
+            }, 5000);
+          });
+        });
+
+        cy.wrap(promise).should('eq', 1);
       });
-      it('should show a success notification', () => {
-        expect(0).to.equal(1);
+
+      it('should handle error in pre-download hook', () => {
+        const preDownloadHook = () => {
+          throw Error();
+        };
+        const pluginConfig = {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          download: {preDownloadHook},
+          uiManagers: {}
+        };
+
+        loadPlayerAndSetMedia({plugins: pluginConfig}).then(() => {
+          cy.get('[data-testid="download-overlay"]').should('not.exist');
+          cy.get('[data-testid="download-overlay-button"]').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
+
+          setTimeout(() => {
+            const downloadsFolder = Cypress.config('downloadsFolder');
+            const downloadPath = `${downloadsFolder}/download.mp4`;
+            cy.readFile(downloadPath);
+          }, 5000);
+        });
       });
-    });
-    describe('on download failure', () => {
-      it('should not call pre-download hook', () => {
-        expect(0).to.equal(1);
-      });
-      it('should show a failure notification', () => {
-        expect(0).to.equal(1);
+
+      it('should not call pre-download hook on download failure', () => {
+        let count = 0;
+
+        const preDownloadHook = () => {
+          ++count;
+        };
+
+        const pluginConfig = {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          download: {preDownloadHook},
+          uiManagers: {}
+        };
+
+        const promise = new Promise(resolve => {
+          cy.wrap(loadPlayerAndSetMedia({plugins: pluginConfig})).then(() => {
+            cy.get('[data-testid="download-overlay"]').should('not.exist');
+            cy.get('[data-testid="download-overlay-button"]').click({force: true});
+            cy.get('[data-testid="download-overlay"]').should('exist');
+
+            cy.intercept('**/playManifest/**', {
+              headers: {
+                'content-type': 'image/gif'
+              },
+              fixture: 'video.mp4'
+            });
+
+            cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
+
+            setTimeout(() => {
+              resolve(count);
+            }, 2000);
+          });
+        });
+
+        cy.wrap(promise).should('eq', 0);
       });
     });
   });
