@@ -104,7 +104,7 @@ const DownloadOverlay = withText({
                   <div className={styles.fileInfoText}>{fileName}</div>
                 </div>
                 <div className={`${styles.iconContainer} ${styles.downloadIcon}`}>
-                  <div>
+                  <div data-testid="download-overlay-download-button">
                     <Button
                       focusOnMount={true}
                       type={ButtonType.borderless}
@@ -129,7 +129,7 @@ const DownloadOverlay = withText({
               </div>
             </div>
             <div>
-              <div className={styles.closeButtonContainer}>
+              <div data-testid="download-overlay-close-button" className={styles.closeButtonContainer}>
                 <Button
                   type={ButtonType.borderless}
                   size={ButtonSize.medium}
