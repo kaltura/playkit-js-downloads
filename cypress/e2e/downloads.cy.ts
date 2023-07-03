@@ -246,6 +246,7 @@ describe('download plugin', () => {
         cy.intercept('**/playManifest/**', {fixture: 'video.mp4'});
       });
 
+      // TODO test
       it('should hide overlay on click', () => {
         loadPlayerAndSetMedia().then(() => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
@@ -273,7 +274,6 @@ describe('download plugin', () => {
       });
 
       it('should start download on click', () => {
-        // cy.wrap(
         loadPlayerAndSetMedia().then(() => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
@@ -284,7 +284,7 @@ describe('download plugin', () => {
             const downloadsFolder = Cypress.config('downloadsFolder');
             const downloadPath = `${downloadsFolder}/download.mp4`;
             cy.readFile(downloadPath);
-          }, 5000);
+          }, 2000);
         });
       });
 
@@ -295,25 +295,20 @@ describe('download plugin', () => {
           ++count;
         };
         const pluginConfig = {
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
           download: {preDownloadHook},
           uiManagers: {}
         };
 
-        const promise = new Promise(resolve => {
-          cy.wrap(loadPlayerAndSetMedia({plugins: pluginConfig})).then(() => {
-            cy.get('[data-testid="download-overlay"]').should('not.exist');
-            cy.get('[data-testid="download-overlay-button"]').click({force: true});
-            cy.get('[data-testid="download-overlay"]').should('exist');
-            cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
+        return loadPlayerAndSetMedia({plugins: pluginConfig}).then(() => {
+          cy.get('[data-testid="download-overlay"]').should('not.exist');
+          cy.get('[data-testid="download-overlay-button"]').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
 
-            setTimeout(() => {
-              resolve(count);
-            }, 5000);
-          });
+          setTimeout(() => {
+            expect(count).to.equal(1);
+          }, 2000);
         });
-
-        cy.wrap(promise).should('eq', 1);
       });
 
       it('should handle error in pre-download hook', () => {
@@ -326,17 +321,17 @@ describe('download plugin', () => {
           uiManagers: {}
         };
 
-        loadPlayerAndSetMedia({plugins: pluginConfig}).then(() => {
+        return loadPlayerAndSetMedia({plugins: pluginConfig}).then(() => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
-          cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
 
           setTimeout(() => {
             const downloadsFolder = Cypress.config('downloadsFolder');
             const downloadPath = `${downloadsFolder}/download.mp4`;
             cy.readFile(downloadPath);
-          }, 5000);
+          }, 2000);
         });
       });
 
@@ -353,28 +348,24 @@ describe('download plugin', () => {
           uiManagers: {}
         };
 
-        const promise = new Promise(resolve => {
-          cy.wrap(loadPlayerAndSetMedia({plugins: pluginConfig})).then(() => {
-            cy.get('[data-testid="download-overlay"]').should('not.exist');
-            cy.get('[data-testid="download-overlay-button"]').click({force: true});
-            cy.get('[data-testid="download-overlay"]').should('exist');
+        return loadPlayerAndSetMedia({plugins: pluginConfig}).then(() => {
+          cy.get('[data-testid="download-overlay"]').should('not.exist');
+          cy.get('[data-testid="download-overlay-button"]').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
 
-            cy.intercept('**/playManifest/**', {
-              headers: {
-                'content-type': 'image/gif'
-              },
-              fixture: 'video.mp4'
-            });
-
-            cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
-
-            setTimeout(() => {
-              resolve(count);
-            }, 2000);
+          cy.intercept('**/playManifest/**', {
+            headers: {
+              'content-type': 'image/gif'
+            },
+            fixture: 'video.mp4'
           });
-        });
 
-        cy.wrap(promise).should('eq', 0);
+          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
+
+          setTimeout(() => {
+            expect(count).to.equal(0);
+          }, 2000);
+        });
       });
     });
   });
