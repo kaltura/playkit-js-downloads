@@ -251,7 +251,7 @@ describe('download plugin', () => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
-          cy.get('[data-testid="download-overlay-close-button"] button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-close-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('not.exist');
         });
       });
@@ -267,7 +267,7 @@ describe('download plugin', () => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
-          cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('not.exist');
         });
       });
@@ -277,7 +277,7 @@ describe('download plugin', () => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
-          cy.get('[data-testid="download-overlay-download-button"] button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
 
           setTimeout(() => {
             const downloadsFolder = Cypress.config('downloadsFolder');
