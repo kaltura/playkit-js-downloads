@@ -205,7 +205,7 @@ describe('download plugin', () => {
       });
 
       it('should be hidden', () => {
-        loadPlayerAndSetMedia().then(() => {
+        return loadPlayerAndSetMedia().then(() => {
           cy.get('[data-testid="download-overlay-button"]').should('not.exist');
         });
       });
@@ -217,13 +217,13 @@ describe('download plugin', () => {
       });
 
       it('should be visible', () => {
-        loadPlayerAndSetMedia().then(() => {
+        return loadPlayerAndSetMedia().then(() => {
           cy.get('[data-testid="download-overlay-button"]').should('exist');
         });
       });
 
       it('should show overlay on click', () => {
-        loadPlayerAndSetMedia().then(() => {
+        return loadPlayerAndSetMedia().then(() => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
@@ -232,7 +232,7 @@ describe('download plugin', () => {
     });
 
     it('should show overlay on click', () => {
-      loadPlayerAndSetMedia().then(() => {
+      return loadPlayerAndSetMedia().then(() => {
         cy.get('[data-testid="download-overlay"]').should('not.exist');
         cy.get('[data-testid="download-overlay-button"]').click({force: true});
         cy.get('[data-testid="download-overlay"]').should('exist');
@@ -246,7 +246,6 @@ describe('download plugin', () => {
         cy.intercept('**/playManifest/**', {fixture: 'video.mp4'});
       });
 
-      // TODO test
       it('should hide overlay on click', () => {
         loadPlayerAndSetMedia().then(() => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
@@ -264,7 +263,7 @@ describe('download plugin', () => {
       });
 
       it('should hide overlay on click', () => {
-        loadPlayerAndSetMedia().then(() => {
+        return loadPlayerAndSetMedia().then(() => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
