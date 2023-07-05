@@ -74,8 +74,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
   private injectOverlayComponents() {
     this.iconId = this.upperBarManager.add({
-      //@ts-ignore
-      label: <Text id="download.download">Download</Text>,
+      label: <Text id="download.download">Download</Text> as any,
       svgIcon: {
         viewBox: '0 0 32 32',
         path: DOWNLOAD
