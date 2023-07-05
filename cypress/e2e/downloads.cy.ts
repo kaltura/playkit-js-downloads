@@ -247,7 +247,7 @@ describe('download plugin', () => {
       });
 
       it('should hide overlay on click', () => {
-        loadPlayerAndSetMedia().then(() => {
+        return loadPlayerAndSetMedia().then(() => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
@@ -273,7 +273,7 @@ describe('download plugin', () => {
       });
 
       it('should start download on click', () => {
-        loadPlayerAndSetMedia().then(() => {
+        return loadPlayerAndSetMedia().then(() => {
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
