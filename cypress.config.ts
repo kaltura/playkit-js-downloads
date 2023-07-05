@@ -6,6 +6,7 @@ export default defineConfig({
   defaultCommandTimeout: 30000,
   fileServerFolder: 'cypress/public',
   e2e: {
+    supportFile: false,
     watchForFileChanges: false
   }
 });
