@@ -8,7 +8,7 @@ import {DownloadPluginManager} from 'download-plugin-manager';
 
 import {ContribServices} from '@playkit-js/common/dist/ui-common/contrib-services';
 import {OnClickEvent, ToastSeverity} from '@playkit-js/common';
-import {ui} from "@playkit-js/kaltura-player-js";
+import {ui} from '@playkit-js/kaltura-player-js';
 const {Text} = ui.preacti18n;
 const PRESETS = ['Playback'];
 
