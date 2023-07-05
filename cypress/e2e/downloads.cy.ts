@@ -18,8 +18,6 @@ interface Window {
 let player: Player | null;
 let requestCount = 0;
 
-// TODO use local ui conf
-
 const loadPlayer = (playerConfig?: any): Promise<void> => {
   return new Promise(resolve => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
