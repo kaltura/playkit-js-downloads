@@ -8,7 +8,8 @@ import {DownloadPluginManager} from 'download-plugin-manager';
 
 import {ContribServices} from '@playkit-js/common/dist/ui-common/contrib-services';
 import {OnClickEvent, ToastSeverity} from '@playkit-js/common';
-
+import {ui} from '@playkit-js/kaltura-player-js';
+const {Text} = ui.preacti18n;
 const PRESETS = ['Playback'];
 
 class Download extends KalturaPlayer.core.BasePlugin {
@@ -73,7 +74,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
   private injectOverlayComponents() {
     this.iconId = this.upperBarManager.add({
-      label: 'Download',
+      label: (<Text id="download.download">Download</Text>) as never,
       svgIcon: {
         viewBox: '0 0 32 32',
         path: DOWNLOAD

@@ -39,8 +39,8 @@ First, clone and run [yarn] to install dependencies:
 [yarn]: https://yarnpkg.com/lang/en/
 
 ```
-git clone https://github.com/kaltura/playkit-js-download.git
-cd playkit-js-download
+git clone https://github.com/kaltura/playkit-js-downloads.git
+cd playkit-js-downloads
 yarn install
 ```
 
@@ -62,7 +62,7 @@ Finally, add the bundle as a script tag in your page, and initialize the player
 <!--Playkit ui managers plugin -->
 <script type="text/javascript" src="/PATH/TO/FILE/playkit-ui-manager.js"></script>
 <!--PlayKit download plugin-->
-<script type="text/javascript" src="/PATH/TO/FILE/playkit-download.js"></script>
+<script type="text/javascript" src="/PATH/TO/FILE/playkit-downloads.js"></script>
 <div id="player-placeholder" style="height:360px; width:640px">
   <script type="text/javascript">
     var playerContainer = document.querySelector("#player-placeholder");
