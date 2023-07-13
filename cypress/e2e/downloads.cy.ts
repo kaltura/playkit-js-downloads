@@ -18,17 +18,12 @@ interface Window {
 let player: Player | null;
 let requestCount = 0;
 
-const loadPlayer = (playerConfig?: any): Promise<void> => {
+const loadPlayer = (playerConfig: any = {}): Promise<void> => {
   return new Promise(resolve => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     cy.visit('index.html').then((win: Window) => {
-      if (playerConfig) {
-        player = win.KalturaPlayer.setup({...PLAYER_CONFIG, ...playerConfig});
-      } else {
-        player = win.KalturaPlayer.setup(PLAYER_CONFIG);
-      }
-
+      player = win.KalturaPlayer.setup({...PLAYER_CONFIG, ...playerConfig});
       resolve();
     });
   });
