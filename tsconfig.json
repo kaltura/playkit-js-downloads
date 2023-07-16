@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
       "allowJs": false,
-      "baseUrl": "./src",
+      "baseUrl": "..",
       "experimentalDecorators": true,
       "jsx": "react-jsx",
       "jsxImportSource": "preact",
@@ -12,8 +12,11 @@
       "sourceMap": true,
       "strict": true,
       "target": "ES5",
-      "types": ["node"]
+      "types": ["cypress", "node"],
+      "paths": {
+        "*": ["./src/*", "./node_modules/*", "cypress.config.ts"]
+      },
+      "lib": ["es2015", "dom"],
     },
-    "lib": ["dom"],
-    "include": ["src/**/*.tsx", "src/**/*.ts", "node_modules/@playkit-js/kaltura-player-js/ts-typed"]
+    "include": ["src/**/*.tsx", "src/**/*.ts", "node_modules/@playkit-js/kaltura-player-js/ts-typed", "cypress/e2e/*.ts"]
 }

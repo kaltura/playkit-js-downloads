@@ -1,10 +1,10 @@
 const {Icon} = KalturaPlayer.ui.components;
 
 import {ToastSeverity} from '@playkit-js/common';
-import {Download} from 'download';
-import {DOWNLOAD, ERROR} from 'icons';
-import {DownloadService} from 'services';
-import {EventType, DownloadMetadata} from 'types';
+import {Download} from './download';
+import {DOWNLOAD, ERROR} from './icons';
+import {DownloadService} from './services';
+import {EventType, DownloadMetadata} from './types';
 
 class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
   private _showOverlay = false;

@@ -1,4 +1,4 @@
-import {DOWNLOAD} from 'icons';
+import {DOWNLOAD} from '../../icons';
 
 const {withText} = KalturaPlayer.ui.preacti18n;
 const {Icon, Tooltip} = KalturaPlayer.ui.components;
@@ -14,7 +14,7 @@ const DownloadOverlayButton = withText({
   downloadLabel: 'download.download'
 })(({downloadLabel, setRef}: {setRef: (ref: HTMLButtonElement | null) => void; downloadLabel: string}) => {
   return (
-    <div>
+    <div data-testid="download-overlay-button">
       <Tooltip label={downloadLabel}>
         <button aria-label={downloadLabel} tabIndex={0} className={`${KalturaPlayer.ui.style.upperBarIcon}`} ref={setRef}>
           <Icon id={`download-overlay-icon`} path={DOWNLOAD} viewBox={`0 0 32 32`} />

@@ -1,5 +1,3 @@
-'use strict';
-
 const webpack = require('webpack');
 const path = require('path');
 const packageData = require('./package.json');
@@ -12,17 +10,17 @@ const plugins = [
 ];
 
 module.exports = {
-  context: __dirname + '/src',
+  context: `${__dirname}/src`,
   entry: {
     'playkit-downloads': 'index.ts'
   },
   output: {
-    path: __dirname + '/dist',
+    path: `${__dirname}/dist`,
     filename: '[name].js',
     library: ['KalturaPlayer', 'plugins', 'download']
   },
   devtool: 'source-map',
-  plugins: plugins,
+  plugins,
   module: {
     rules: [
       {
@@ -57,7 +55,7 @@ module.exports = {
     ]
   },
   devServer: {
-    static: __dirname + '/src'
+    static: `${__dirname}/src`
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -67,5 +65,5 @@ module.exports = {
     preact: 'root KalturaPlayer.ui.preact',
     'preact/hooks': 'root KalturaPlayer.ui.preactHooks',
     '@playkit-js/kaltura-player-js': ['KalturaPlayer']
-  },
+  }
 };

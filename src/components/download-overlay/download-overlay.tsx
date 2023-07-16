@@ -1,9 +1,9 @@
 import {Button, ButtonType, ButtonSize, A11yWrapper, OnClickEvent} from '@playkit-js/common';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
-import {DownloadPluginManager} from 'download-plugin-manager';
+import {DownloadPluginManager} from '../../download-plugin-manager';
 import {createRef} from 'preact';
 import {useState, useEffect, useRef} from 'preact/hooks';
-import {EventType, DownloadMetadata} from 'types';
+import {EventType, DownloadMetadata} from '../../types';
 
 const {withEventManager} = KalturaPlayer.ui.Event;
 const {Icon, IconType, Tooltip, PLAYER_SIZE} = KalturaPlayer.ui.components;
@@ -105,7 +105,7 @@ const DownloadOverlay = withText({
         }, [isVisible]);
 
         return isVisible ? (
-          <div className={styles.downloadOverlay}>
+          <div data-testid="download-overlay" className={styles.downloadOverlay}>
             <div className={styles.header}>{downloadsLabel}</div>
             <div className={styles.fileInfoList}>
               <Tooltip label={downloadLabel!}>
@@ -122,6 +122,7 @@ const DownloadOverlay = withText({
                     });
                   }}>
                   <div
+                    data-testid="download-overlay-download-button"
                     className={`${styles.fileInfo} ${sizeClass}`}
                     tabIndex={0}
                     ref={downloadRef}
@@ -144,7 +145,7 @@ const DownloadOverlay = withText({
               </Tooltip>
             </div>
             <div>
-              <div className={styles.closeButtonContainer}>
+              <div data-testid="download-overlay-close-button" className={styles.closeButtonContainer}>
                 <A11yWrapper
                   onClick={(e: OnClickEvent, byKeyboard: boolean) => {
                     downloadPluginManager.showOverlay = false;

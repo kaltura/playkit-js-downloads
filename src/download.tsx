@@ -1,10 +1,10 @@
 import {UpperBarManager} from '@playkit-js/ui-managers';
 
-import {DownloadConfig} from 'types';
-import {DownloadOverlayButton} from 'components';
-import {DOWNLOAD} from 'icons';
-import {DownloadOverlay} from 'components/download-overlay';
-import {DownloadPluginManager} from 'download-plugin-manager';
+import {DownloadConfig} from './types';
+import {DownloadOverlayButton} from './components';
+import {DOWNLOAD} from './icons';
+import {DownloadOverlay} from './components/download-overlay';
+import {DownloadPluginManager} from './download-plugin-manager';
 
 import {ContribServices} from '@playkit-js/common/dist/ui-common/contrib-services';
 import {OnClickEvent, ToastSeverity} from '@playkit-js/common';
