@@ -22,6 +22,7 @@ interface DownloadOverlayProps {
   downloadStartedLabel?: string;
   downloadFailedLabel?: string;
   closeLabel?: string;
+  downloadButtonLabel?: string;
   setFocus: () => void;
 }
 
@@ -61,7 +62,8 @@ const DownloadOverlay = withText({
   downloadsLabel: 'download.downloads',
   downloadStartedLabel: 'download.download_has_started',
   downloadFailedLabel: 'download.download_has_failed',
-  closeLabel: 'overlay.close'
+  closeLabel: 'overlay.close',
+  downloadButtonLabel: 'download.download_button_label'
 })(
   connect(mapStateToProps)(
     withEventManager(
@@ -74,6 +76,7 @@ const DownloadOverlay = withText({
         downloadStartedLabel,
         downloadFailedLabel,
         closeLabel,
+        downloadButtonLabel,
         setFocus
       }: DownloadOverlayProps) => {
         const [isVisible, setIsVisible] = useState(false);
@@ -125,6 +128,7 @@ const DownloadOverlay = withText({
                     data-testid="download-overlay-download-button"
                     className={`${styles.fileInfo} ${sizeClass}`}
                     tabIndex={0}
+                    aria-label={downloadButtonLabel}
                     ref={downloadRef}
                     onBlur={() => {
                       if (isVisible) {
