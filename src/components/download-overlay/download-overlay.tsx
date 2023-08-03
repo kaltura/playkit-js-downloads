@@ -157,6 +157,7 @@ const DownloadOverlay = withText({
                     type={ButtonType.borderless}
                     size={ButtonSize.medium}
                     tooltip={{label: closeLabel!}}
+                    ariaLabel={closeLabel}
                     icon={'close'}
                     setRef={ref => {
                       closeButtonRef.current = ref;
