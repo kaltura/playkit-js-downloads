@@ -5,7 +5,8 @@
       "downloads": "Downloads",
       "download_has_started": "Download has started",
       "download_has_failed": "Download has failed",
-      "attachments": "Attachments"
+      "attachments": "Attachments",
+      "download_button_label": "Click to download the video"
     }
   }
 }
