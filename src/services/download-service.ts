@@ -9,13 +9,13 @@ class DownloadService {
   }
 
   private isEntrySupported() {
-    return !(this.player.isLive() || this.player.getVideoElement().mediaKeys || this.player.isImage());
+    return !(this.player.isLive() || this.player.getVideoElement().mediaKeys);
   }
 
-  private isContentTypeSupported(response: Response) {
+  private isContentTypeSupported(response: Response, typeToCheck = 'video') {
     if (response.ok) {
       const contentType = response.headers.get('content-type');
-      return !!(contentType && contentType.toLowerCase().includes('video'));
+      return !!(contentType && contentType.toLowerCase().includes(typeToCheck));
     }
     return false;
   }
@@ -56,7 +56,7 @@ class DownloadService {
       return null;
     }
 
-    const requestUrl = this.getDownloadUrl(config);
+    const requestUrl = this.player.isImage() && this.player.sources.downloadUrl ? this.player.sources.downloadUrl : this.getDownloadUrl(config);
     if (!requestUrl) {
       return null;
     }
@@ -69,8 +69,8 @@ class DownloadService {
 
       const downloadUrl = response.url;
 
-      const isContentTypeSupported = this.isContentTypeSupported(response);
-      const fileName = this.getFilename(response);
+      const isContentTypeSupported = this.isContentTypeSupported(response, this.player.isImage() ? 'image' : 'video');
+      const fileName = this.player.isImage() ? this.player.sources?.metadata?.name || 'Image' : this.getFilename(response);
 
       if (isContentTypeSupported && fileName) {
         return {
