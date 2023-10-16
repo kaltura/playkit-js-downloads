@@ -10,7 +10,7 @@ import {ContribServices} from '@playkit-js/common/dist/ui-common/contrib-service
 import {OnClickEvent, ToastSeverity} from '@playkit-js/common';
 import {ui} from '@playkit-js/kaltura-player-js';
 const {Text} = ui.preacti18n;
-const PRESETS = ['Playback'];
+const PRESETS = ['Playback', 'Img'];
 
 class Download extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: DownloadConfig = {
@@ -63,7 +63,11 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
   private _handleClick = (event: OnClickEvent, byKeyboard: boolean) => {
     this.triggeredByKeyboard = byKeyboard;
-    this.downloadPluginManager.showOverlay = !this.downloadPluginManager.showOverlay;
+    if (this.player.isImage()) {
+      this.downloadPluginManager.downloadFile();
+    } else {
+      this.downloadPluginManager.showOverlay = !this.downloadPluginManager.showOverlay;
+    }
   };
 
   private _focusPluginButton = () => {

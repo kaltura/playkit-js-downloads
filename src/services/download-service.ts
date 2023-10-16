@@ -9,7 +9,7 @@ class DownloadService {
   }
 
   private isEntrySupported() {
-    return !(this.player.isLive() || this.player.getVideoElement().mediaKeys || this.player.isImage());
+    return !(this.player.isLive() || this.player.getVideoElement().mediaKeys);
   }
 
   private isContentTypeSupported(response: Response) {
@@ -54,6 +54,15 @@ class DownloadService {
   async getDownloadMetadata(config: DownloadConfig): Promise<DownloadMetadata> {
     if (!(this.isPlatformSupported() && this.isEntrySupported())) {
       return null;
+    }
+
+    if (this.player.isImage()) {
+      const url = this.player.sources.downloadUrl;
+      if (!url) return null;
+      return {
+        downloadUrl: url,
+        fileName: this.player.sources?.metadata?.name || 'Image'
+      };
     }
 
     const requestUrl = this.getDownloadUrl(config);
