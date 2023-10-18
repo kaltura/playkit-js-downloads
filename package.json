@@ -27,7 +27,7 @@
   "devDependencies": {
     "@playkit-js/common": "^1.2.11",
     "@playkit-js/kaltura-player-js": "3.17.0-canary.0-634f42e",
-    "@playkit-js/ui-managers": "1.4.0-canary.0-96ebad5",
+    "@playkit-js/ui-managers": "1.4.0-canary.0-3a74f8a",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
     "conventional-github-releaser": "3.1.3",
@@ -56,7 +56,7 @@
   "kaltura": {
     "name": "downloads",
     "dependencies": {
-      "playkit-ui-managers": "1.4.0-canary.0-96ebad5"
+      "playkit-ui-managers": "1.4.0-canary.0-3a74f8a"
     }
   },
   "publishConfig": {

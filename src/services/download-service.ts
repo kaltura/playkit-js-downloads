@@ -12,10 +12,10 @@ class DownloadService {
     return !(this.player.isLive() || this.player.getVideoElement().mediaKeys);
   }
 
-  private isContentTypeSupported(response: Response, typeToCheck = 'video') {
+  private isContentTypeSupported(response: Response) {
     if (response.ok) {
       const contentType = response.headers.get('content-type');
-      return !!(contentType && contentType.toLowerCase().includes(typeToCheck));
+      return !!(contentType && contentType.toLowerCase().includes('video'));
     }
     return false;
   }
@@ -69,7 +69,7 @@ class DownloadService {
 
       const downloadUrl = response.url;
 
-      const isContentTypeSupported = this.isContentTypeSupported(response, this.player.isImage() ? 'image' : 'video');
+      const isContentTypeSupported = this.player.isImage() || this.isContentTypeSupported(response);
       const fileName = this.player.isImage() ? this.player.sources?.metadata?.name || 'Image' : this.getFilename(response);
 
       if (isContentTypeSupported && fileName) {
