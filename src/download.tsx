@@ -11,7 +11,7 @@ import {OnClickEvent, ToastSeverity} from '@playkit-js/common';
 import {ui} from '@playkit-js/kaltura-player-js';
 const {Text} = ui.preacti18n;
 const {ReservedPresetNames} = ui;
-const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Live, ReservedPresetNames.Img];
+const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img];
 
 class Download extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: DownloadConfig = {
