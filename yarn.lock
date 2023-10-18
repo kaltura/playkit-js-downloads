@@ -550,10 +550,10 @@
     js-logger "^1.6.0"
     ua-parser-js "1.0.2"
 
-"@playkit-js/ui-managers@1.4.0-canary.0-96ebad5":
-  version "1.4.0-canary.0-96ebad5"
-  resolved "https://registry.yarnpkg.com/@playkit-js/ui-managers/-/ui-managers-1.4.0-canary.0-96ebad5.tgz#4a5c3233253644091b0c09808d46c7484c5bad8b"
-  integrity sha512-k+EgDa0QPF+fGuqsj+h7w6bJCaNNZOdoJEc4XbM6JyF0RawH9dE2RBUqBjwo8dUWBtjpoIxamcJVTs5h7yMTrg==
+"@playkit-js/ui-managers@1.4.0-canary.0-3a74f8a":
+  version "1.4.0-canary.0-3a74f8a"
+  resolved "https://registry.yarnpkg.com/@playkit-js/ui-managers/-/ui-managers-1.4.0-canary.0-3a74f8a.tgz#5e582b9ef72629bf1c8f7d26333a4e426f18f499"
+  integrity sha512-35g+wZSYPO8KrbBfngIzwLUBTC582Bgkf0Dq00wONn2Q80EKIe7cDVOR695HZBIz5ozwmFHecJakOzbamnitWA==
   dependencies:
     "@playkit-js/common" "^1.2.10"
 
