@@ -69,7 +69,7 @@ class DownloadService {
 
       const downloadUrl = response.url;
 
-      const isContentTypeSupported = this.player.isImage() ? true : this.isContentTypeSupported(response);
+      const isContentTypeSupported = this.player.isImage() || this.isContentTypeSupported(response);
       const fileName = this.player.isImage() ? this.player.sources?.metadata?.name || 'Image' : this.getFilename(response);
 
       if (isContentTypeSupported && fileName) {
