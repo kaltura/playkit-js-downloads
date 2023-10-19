@@ -56,7 +56,7 @@ class DownloadService {
       return null;
     }
 
-    const requestUrl = this.player.isImage() && this.player.sources.downloadUrl ? this.player.sources.downloadUrl : this.getDownloadUrl(config);
+    const requestUrl = this.getRequestUrl(config);
     if (!requestUrl) {
       return null;
     }
@@ -81,6 +81,16 @@ class DownloadService {
     } catch (e: any) {}
 
     return null;
+  }
+
+  getRequestUrl(config: DownloadConfig): string {
+    if (this.player.isImage()) {
+      const requestUrl = this.player.sources.downloadUrl;
+      if (!requestUrl) return '';
+      const ks = this.player.config.session.ks;
+      return ks ? `${requestUrl}/ks/${ks}` : requestUrl;
+    }
+    return this.getDownloadUrl(config);
   }
 
   downloadFile(downloadUrl: string, fileName: string) {
