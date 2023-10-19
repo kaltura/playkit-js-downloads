@@ -86,9 +86,9 @@ class DownloadService {
   getRequestUrl(config: DownloadConfig): string {
     if (this.player.isImage()) {
       const requestUrl = this.player.sources.downloadUrl;
+      if (!requestUrl) return '';
       const ks = this.player.config.session.ks;
-      if (!(requestUrl && ks)) return '';
-      return `${requestUrl}/ks/${ks}`;
+      return ks ? `${requestUrl}/ks/${ks}` : requestUrl;
     }
     return this.getDownloadUrl(config);
   }
