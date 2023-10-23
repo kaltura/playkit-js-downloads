@@ -14,7 +14,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
 
   constructor(private downloadPlugin: Download) {
     super();
-    this.downloadService = new DownloadService(downloadPlugin.player);
+    this.downloadService = new DownloadService(downloadPlugin.player, downloadPlugin.logger);
   }
 
   async getDownloadMetadata(refresh = false): Promise<DownloadMetadata> {
