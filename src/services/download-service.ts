@@ -1,7 +1,7 @@
 import {DownloadConfig, DownloadMetadata} from '../types';
 
 class DownloadService {
-  constructor(private player: KalturaPlayerTypes.Player) {}
+  constructor(private player: KalturaPlayerTypes.Player, private logger: KalturaPlayerTypes.Logger) {}
 
   private isPlatformSupported() {
     const userAgent = navigator.userAgent || '';
@@ -82,6 +82,7 @@ class DownloadService {
         };
       }
     } catch (e: any) {
+      this.logger.warn('Failed to get file from url: ', requestUrl);
       // in case HEAD request failed for raw service (image use-case), retry to get the image download metadata using thumbnail service
       if (this.player.isImage()) {
         return await this.getImageDownloadMetadata();
@@ -109,7 +110,9 @@ class DownloadService {
         downloadUrl: href,
         fileName: this.player.sources?.metadata?.name || 'image'
       };
-    } catch (e: any) {}
+    } catch (e: any) {
+      this.logger.warn('Failed to get image from url: ', requestUrl);
+    }
     return null;
   }
 
