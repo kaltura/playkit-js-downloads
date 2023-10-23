@@ -97,7 +97,7 @@ class DownloadService {
     const imageSource = this.player.config.sources.image;
     let requestUrl = imageSource && imageSource.length > 0 ? imageSource[0].url : '';
     if (!requestUrl) return null;
-    if (!requestUrl.includes('ks')) {
+    if (!requestUrl.includes('/ks/')) {
       const ks = this.player.config.session.ks;
       requestUrl = ks ? `${requestUrl}/ks/${ks}` : requestUrl;
     }
