@@ -21,6 +21,9 @@ class DownloadService {
   }
 
   private getFilename(response: Response) {
+    if (this.player.isImage()) {
+      return this.player.sources?.metadata?.name || 'image';
+    }
     const responseUrlSplit = response.url.split('/');
     return responseUrlSplit[responseUrlSplit.indexOf('fileName') + 1];
   }
@@ -70,7 +73,7 @@ class DownloadService {
       const downloadUrl = response.url;
 
       const isContentTypeSupported = this.player.isImage() || this.isContentTypeSupported(response);
-      const fileName = this.player.isImage() ? this.player.sources?.metadata?.name || 'Image' : this.getFilename(response);
+      const fileName = this.getFilename(response);
 
       if (isContentTypeSupported && fileName) {
         return {
@@ -78,12 +81,39 @@ class DownloadService {
           fileName
         };
       }
-    } catch (e: any) {}
+    } catch (e: any) {
+      // in case HEAD request failed for raw service (image use-case), retry to get the image download metadata using thumbnail service
+      if (this.player.isImage()) {
+        return await this.getImageDownloadMetadata();
+      }
+    }
 
     return null;
   }
 
-  getRequestUrl(config: DownloadConfig): string {
+  private async getImageDownloadMetadata(): Promise<DownloadMetadata> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const imageSource = this.player.config.sources.image;
+    let requestUrl = imageSource && imageSource.length > 0 ? imageSource[0].url : '';
+    if (!requestUrl) return null;
+    if (!requestUrl.includes('ks')) {
+      const ks = this.player.config.session.ks;
+      requestUrl = ks ? `${requestUrl}/ks/${ks}` : requestUrl;
+    }
+    try {
+      const response = await fetch(requestUrl);
+      const blobImage = await response.blob();
+      const href = URL.createObjectURL(blobImage);
+      return {
+        downloadUrl: href,
+        fileName: this.player.sources?.metadata?.name || 'image'
+      };
+    } catch (e: any) {}
+    return null;
+  }
+
+  private getRequestUrl(config: DownloadConfig): string {
     if (this.player.isImage()) {
       const requestUrl = this.player.sources.downloadUrl;
       if (!requestUrl) return '';
