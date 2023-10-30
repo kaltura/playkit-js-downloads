@@ -5,11 +5,14 @@
 [![](https://img.shields.io/npm/v/@playkit-js/playkit-js-downloads/latest.svg)](https://www.npmjs.com/package/@playkit-js/playkit-js-downloads)
 [![](https://img.shields.io/npm/v/@playkit-js/playkit-js-downloads/canary.svg)](https://www.npmjs.com/package/@playkit-js/playkit-js-downloads/v/canary)
 
-This plugin enables video download for a media entry which is hosted by Kaltura.
-The plugin has three configuration parameters:
-- flavorId - A specific video flavor of a specific entry. You can use KMC to view the flavor ids for a specific entry. 
-- flavorParamId - The type of flavor to be downloaded. The available flavor types for an environment can be fetched using the [getFlavorAssetsWithParams] API.
-- preDownloadHook - A callback function to be called after a user has clicked the download button and before the download starts. 
+This plugin enables video, image and files download for a media entry which is hosted by Kaltura.
+The plugin has the following configuration parameters:
+- **flavorId** - A specific video flavor of a specific entry. You can use KMC to view the flavor ids for a specific entry. 
+- **flavorParamId** - The type of flavor to be downloaded. The available flavor types for an environment can be fetched using the [getFlavorAssetsWithParams] API.
+- **preDownloadHook** - A callback function to be called after a user has clicked the download button and before the download starts.
+- **displayFlavors** - A flag indicating whether to display flavors to download. optional- default is true. if set to false then only the configured/default source will be available for download.
+- **displayCaptions** - A flag indicating whether to display captions of the media to download. optional- default is true. 
+- **displayAttachments** - A flag indicating whether to display attachments of the media to download. optional- default is true.
 
 
 [getFlavorAssetsWithParams]: https://developer.kaltura.com/api-docs/service/flavorAsset/action/getFlavorAssetsWithParams
@@ -99,7 +102,7 @@ Finally, add the bundle as a script tag in your page, and initialize the player
 
 #### Configuation Example
 
-* You may enable the download plugin just by adding it without any specific plugin conifg to the plugins config section or also add your own preferred config
+* You may enable the download plugin just by adding it without any specific plugin config to the plugins config section or also add your own preferred config
 
 ```
 plugins: {
@@ -112,7 +115,10 @@ plugins: {
   download: {
     flavorParamId: null, // id of the flavor type to be downloaded. optional.
     flavorId: null, // id of the specific flavor type for a specific entry. optional.
-    preDownloadHook: null // function to be called before download is initiated. optional.
+    preDownloadHook: null, // function to be called before download is initiated. optional.
+    displayFlavors: boolean, // a flag indicating whether to display flavors to download. optional. default is true.
+    displayCaptions: boolean, // a flag indicating whether to display captions to download. optional. default is true.
+    displayAttachments: boolean // a flag indicating whether to display attachments to download. optional. default is true.
   }
 }
 ```
