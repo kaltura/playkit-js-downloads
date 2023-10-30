@@ -1,4 +1,5 @@
-import {DownloadConfig, DownloadMetadata} from '../types';
+import {DownloadMetadata} from '../types';
+import {AttachmentsLoader, CaptionsLoader, DownloadUrlLoader, FlavorsLoader} from '../providers';
 
 class DownloadService {
   constructor(private player: KalturaPlayerTypes.Player, private logger: KalturaPlayerTypes.Logger) {}
@@ -12,92 +13,123 @@ class DownloadService {
     return !(this.player.isLive() || this.player.getVideoElement().mediaKeys);
   }
 
-  private isContentTypeSupported(response: Response) {
-    if (response.ok) {
-      const contentType = response.headers.get('content-type');
-      return !!(contentType && contentType.toLowerCase().includes('video'));
-    }
-    return false;
-  }
-
-  private getFilename(response: Response) {
-    if (this.player.isImage()) {
-      return this.player.sources?.metadata?.name || 'image';
-    }
-    const responseUrlSplit = response.url.split('/');
+  private getFilename(metadata: DownloadMetadata) {
+    if (this.player.sources.metadata?.name) return this.player.sources.metadata?.name;
+    if (this.player.isImage()) return 'image';
+    const responseUrlSplit = metadata!.flavors[0].downloadUrl.split('/');
     return responseUrlSplit[responseUrlSplit.indexOf('fileName') + 1];
   }
 
-  private getDownloadUrl(config: DownloadConfig) {
-    const {flavorId, flavorParamId} = config;
-    const {provider} = this.player;
-
-    const playerConfig = this.player.config;
-    const {session, sources} = playerConfig;
-
-    if (!(session && session.ks && sources && sources.id && provider.partnerId && provider.env.cdnUrl)) {
-      return '';
-    }
-
-    const {ks} = playerConfig.session;
-    const {id} = playerConfig.sources;
-    const {partnerId} = provider;
-    const {cdnUrl} = provider.env;
-
-    const partnerPart = `/p/${partnerId}`;
-    const entryIdPart = `/entryId/${id}`;
-    const flavorParamIdPart = flavorParamId !== null ? `/flavorParamId/${flavorParamId}` : '';
-    const flavorIdPart = flavorId !== null ? `/flavorId/${flavorId}` : '';
-    const ksPart = ks ? `/ks/${ks}` : '';
-    const protocolPart = `/protocol/${location.protocol.split(':')[0]}`;
-
-    return `${cdnUrl}${partnerPart}/playManifest${entryIdPart}${protocolPart}${ksPart}${flavorParamIdPart}${flavorIdPart}/format/download`;
-  }
-
-  async getDownloadMetadata(config: DownloadConfig): Promise<DownloadMetadata> {
+  async getDownloadMetadata(): Promise<DownloadMetadata> {
     if (!(this.isPlatformSupported() && this.isEntrySupported())) {
       return null;
     }
 
-    const requestUrl = this.getRequestUrl(config);
-    if (!requestUrl) {
-      return null;
-    }
+    const metadata: DownloadMetadata = {
+      fileName: '',
+      captions: [],
+      flavors: [],
+      attachments: [],
+      imageDownloadUrl: ''
+    };
 
-    try {
-      const response = await fetch(requestUrl, {method: 'HEAD'});
-      if (!response.ok) {
-        return null;
-      }
+    const assets = await this.getKalturaAssets();
+    Object.assign(metadata, assets);
+    metadata!.imageDownloadUrl = await this.handleImageDownload();
+    const downloadUrls: Map<string, string> = await this.getDownloadUrls(metadata);
 
-      const downloadUrl = response.url;
+    // assign the download urls to the assets by id
+    metadata?.captions.forEach(captionAsset => (captionAsset.downloadUrl = downloadUrls.get(captionAsset.id)!));
+    metadata?.flavors.forEach(flavorAsset => (flavorAsset.downloadUrl = downloadUrls.get(flavorAsset.id)!));
+    metadata?.attachments.forEach(attachmentAsset => (attachmentAsset.downloadUrl = downloadUrls.get(attachmentAsset.id)!));
 
-      const isContentTypeSupported = this.player.isImage() || this.isContentTypeSupported(response);
-      const fileName = this.getFilename(response);
-
-      if (isContentTypeSupported && fileName) {
-        return {
-          downloadUrl,
-          fileName
-        };
-      }
-    } catch (e: any) {
-      this.logger.warn('Failed to get file from url: ', requestUrl);
-      // in case HEAD request failed for raw service (image use-case), retry to get the image download metadata using thumbnail service
-      if (this.player.isImage()) {
-        return await this.getImageDownloadMetadata();
-      }
-    }
-
-    return null;
+    metadata!.fileName = this.getFilename(metadata);
+    return metadata;
   }
 
-  private async getImageDownloadMetadata(): Promise<DownloadMetadata> {
+  private async getDownloadUrls(metadata: DownloadMetadata): Promise<Map<string, string>> {
+    const ks = this.player.config.session?.ks || '';
+    let urls = new Map<string, string>();
+
+    const data = await this.player.provider.doRequest(
+      [{loader: DownloadUrlLoader, params: {flavors: metadata?.flavors, captions: metadata?.captions, attachments: metadata?.attachments}}],
+      ks
+    );
+    if (data && data.has(DownloadUrlLoader.id)) {
+      const urlsLoader = data.get(DownloadUrlLoader.id);
+      urls = urlsLoader?.response?.urls;
+    }
+
+    return urls;
+  }
+
+  private async handleImageDownload(): Promise<string> {
+    if (!this.player.isImage()) return '';
+    let imageRequestUrl = this.player.sources.downloadUrl;
+    if (!imageRequestUrl) {
+      return await this.getImageDownloadMetadata();
+    }
+    if (!imageRequestUrl.includes('/ks/')) {
+      const ks = this.player.config.session?.ks;
+      imageRequestUrl = ks ? `${imageRequestUrl}/ks/${ks}` : imageRequestUrl;
+    }
+    try {
+      const response = await fetch(imageRequestUrl, {method: 'HEAD'});
+      return response.url;
+    } catch (e: any) {
+      this.logger.warn('Failed to get image file from url: ', imageRequestUrl);
+      // in case HEAD request failed for raw service, retry to get the image download metadata using thumbnail service
+      return await this.getImageDownloadMetadata();
+    }
+  }
+
+  private async getKalturaAssets(): Promise<object> {
+    const entryId = this.player.config.sources.id;
+    const ks = this.player.config.session?.ks || '';
+
+    const data: Map<string, any> = await this.player.provider.doRequest(
+      [
+        {loader: CaptionsLoader, params: {entryId}},
+        {loader: FlavorsLoader, params: {entryId}},
+        {loader: AttachmentsLoader, params: {entryId}}
+      ],
+      ks
+    );
+
+    return this.parseDataFromResponse(data);
+  }
+
+  private parseDataFromResponse(data: Map<string, any>): object {
+    const kalturaAssets = {
+      captions: [],
+      flavors: [],
+      attachments: []
+    };
+
+    if (data) {
+      if (data.has(CaptionsLoader.id)) {
+        const captionsLoader = data.get(CaptionsLoader.id);
+        kalturaAssets.captions = captionsLoader?.response?.captions;
+      }
+      if (data.has(FlavorsLoader.id)) {
+        const flavorsLoader = data.get(FlavorsLoader.id);
+        kalturaAssets.flavors = flavorsLoader?.response?.flavors;
+      }
+      if (data.has(AttachmentsLoader.id)) {
+        const attachmentsLoader = data.get(AttachmentsLoader.id);
+        kalturaAssets.attachments = attachmentsLoader?.response?.attachments;
+      }
+    }
+
+    return kalturaAssets;
+  }
+
+  private async getImageDownloadMetadata(): Promise<string> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const imageSource = this.player.config.sources.image;
     let requestUrl = imageSource && imageSource.length > 0 ? imageSource[0].url : '';
-    if (!requestUrl) return null;
+    if (!requestUrl) return '';
     if (!requestUrl.includes('/ks/')) {
       const ks = this.player.config.session.ks;
       requestUrl = ks ? `${requestUrl}/ks/${ks}` : requestUrl;
@@ -105,30 +137,29 @@ class DownloadService {
     try {
       const response = await fetch(requestUrl);
       const blobImage = await response.blob();
-      const href = URL.createObjectURL(blobImage);
-      return {
-        downloadUrl: href,
-        fileName: this.player.sources?.metadata?.name || 'image'
-      };
+      return URL.createObjectURL(blobImage);
     } catch (e: any) {
       this.logger.warn('Failed to get image from url: ', requestUrl);
     }
-    return null;
+    return '';
   }
 
-  private getRequestUrl(config: DownloadConfig): string {
-    if (this.player.isImage()) {
-      const requestUrl = this.player.sources.downloadUrl;
-      if (!requestUrl) return '';
-      const ks = this.player.config.session.ks;
-      return ks ? `${requestUrl}/ks/${ks}` : requestUrl;
+  private async _getDownloadUrl(downloadUrl: string): Promise<string> {
+    if (downloadUrl.includes('caption_captionAsset')) {
+      try {
+        const response = await fetch(downloadUrl);
+        const blobCaption = await response.blob();
+        return URL.createObjectURL(blobCaption);
+      } catch (e: any) {
+        this.logger.warn('Failed to get captions from url: ', downloadUrl);
+      }
     }
-    return this.getDownloadUrl(config);
+    return downloadUrl;
   }
 
-  downloadFile(downloadUrl: string, fileName: string) {
+  async downloadFile(downloadUrl: string, fileName: string) {
     const aElement = document.createElement('a');
-    aElement.href = downloadUrl;
+    aElement.href = await this._getDownloadUrl(downloadUrl);
     aElement.hidden = true;
     aElement.download = fileName;
     aElement.rel = 'noopener noreferrer';

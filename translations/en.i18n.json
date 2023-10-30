@@ -6,7 +6,13 @@
       "download_has_started": "Download has started",
       "download_has_failed": "Download has failed",
       "attachments": "Attachments",
-      "download_button_label": "Click to download the video"
+      "download_button_label": "Click to download the video",
+      "more_flavors_label": "More flavors",
+      "less_flavors_label": "Less flavors",
+      "source_label": "Source",
+      "more_captions_label": "More captions",
+      "less_captions_label": "Less captions",
+      "attachments_label": "Attachments"
     }
   }
 }
