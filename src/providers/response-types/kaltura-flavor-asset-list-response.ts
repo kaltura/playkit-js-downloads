@@ -11,7 +11,6 @@ export class KalturaFlavorAssetListResponse extends BaseServiceResult {
       this.totalCount = responseObj.totalCount;
       if (this.totalCount! > 0) {
         this.data = this.setDataWithoutDuplicates(responseObj.objects);
-        //responseObj.objects.map((flavorAsset: KalturaFlavorAssetArgs) => this.data.push(new KalturaFlavorAsset(flavorAsset)));
       }
     }
   }
