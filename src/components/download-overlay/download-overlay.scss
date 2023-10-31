@@ -17,6 +17,10 @@
         font-weight: 700;
         margin-top: 48px;
         text-align: center;
+
+        &.small {
+            font-size: 18px;
+        }
     }
 
     .file-info-list {

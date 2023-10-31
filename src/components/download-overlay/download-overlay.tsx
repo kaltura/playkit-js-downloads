@@ -101,7 +101,7 @@ const DownloadOverlay = withText({
 
         return isVisible ? (
           <div data-testid="download-overlay" className={styles.downloadOverlay}>
-            <div className={styles.header}>{downloadsLabel}</div>
+            <div className={`${styles.header} ${sizeClass}`}>{downloadsLabel}</div>
             <div className={`${styles.fileInfoList} ${sizeClass}`}>
               <div className={styles.sourcesCaptionsContainer}>
                 {renderSources()}
