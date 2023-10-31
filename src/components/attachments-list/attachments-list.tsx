@@ -10,15 +10,14 @@ const {withText} = KalturaPlayer.ui.preacti18n;
 interface AttachmentsListProps {
   attachments: Array<KalturaAttachmentAsset>;
   downloadPluginManager: DownloadPluginManager;
-  fileName: string;
   attachmentsLabel?: string;
 }
 
 export const AttachmentsList = withText({
   attachmentsLabel: 'download.attachments_label'
-})(({attachments, downloadPluginManager, fileName, attachmentsLabel}: AttachmentsListProps) => {
+})(({attachments, downloadPluginManager, attachmentsLabel}: AttachmentsListProps) => {
   const _buildFileName = (attachment: KalturaAttachmentAsset) => {
-    return attachment.title || `${fileName}.${attachment.fileExt}`;
+    return attachment.title || attachment.fileName;
   };
 
   const _renderDownloadItem = (key: string, fileName: string, downloadUrl: string, icon: ComponentChildren) => {

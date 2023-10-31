@@ -96,13 +96,7 @@ const DownloadOverlay = withText({
         };
 
         const renderAttachments = () => {
-          return (
-            <AttachmentsList
-              attachments={downloadMetadata!.attachments}
-              downloadPluginManager={downloadPluginManager}
-              fileName={downloadMetadata!.fileName}
-            />
-          );
+          return <AttachmentsList attachments={downloadMetadata!.attachments} downloadPluginManager={downloadPluginManager} />;
         };
 
         return isVisible ? (
