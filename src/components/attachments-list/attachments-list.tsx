@@ -32,7 +32,7 @@ export const AttachmentsList = withText({
   };
 
   return (
-    <div className={styles.attachmentsContainer}>
+    <div className={styles.attachmentsContainer} data-testid={'download-overlay-attachments-container'}>
       <div className={styles.attachmentsLabel}>{attachmentsLabel}</div>
       {_renderAttachments(attachments)}
     </div>

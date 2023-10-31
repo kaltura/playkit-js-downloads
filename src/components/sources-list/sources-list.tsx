@@ -139,7 +139,7 @@ export const SourcesList = withText({
     };
 
     return (
-      <div className={styles.sourcesContainer}>
+      <div className={styles.sourcesContainer} data-testid={'download-overlay-sources-container'}>
         {flavors.length > 0 ? _renderExpandableFlavors() : _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true)}
       </div>
     );

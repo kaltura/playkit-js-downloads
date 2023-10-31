@@ -39,12 +39,21 @@ class DownloadService {
     const downloadUrls: Map<string, string> = await this.getDownloadUrls(metadata);
 
     // assign the download urls to the assets by id
-    metadata?.captions.forEach(captionAsset => (captionAsset.downloadUrl = downloadUrls.get(captionAsset.id)!));
-    metadata?.flavors.forEach(flavorAsset => (flavorAsset.downloadUrl = downloadUrls.get(flavorAsset.id)!));
-    metadata?.attachments.forEach(attachmentAsset => (attachmentAsset.downloadUrl = downloadUrls.get(attachmentAsset.id)!));
+    metadata.flavors = this.setDownloadUrls(metadata?.flavors, downloadUrls);
+    metadata.captions = this.setDownloadUrls(metadata?.captions, downloadUrls);
+    metadata.attachments = this.setDownloadUrls(metadata?.attachments, downloadUrls);
 
     metadata!.fileName = this.getFilename(metadata);
     return metadata;
+  }
+
+  private setDownloadUrls(assets: any[], downloadUrls: Map<string, string>): any[] {
+    return assets.map(asset => {
+      return {
+        ...asset,
+        downloadUrl: downloadUrls.get(asset.id)!
+      };
+    });
   }
 
   private async getDownloadUrls(metadata: DownloadMetadata): Promise<Map<string, string>> {
@@ -151,7 +160,7 @@ class DownloadService {
         const blobCaption = await response.blob();
         return URL.createObjectURL(blobCaption);
       } catch (e: any) {
-        this.logger.warn('Failed to get captions from url: ', downloadUrl);
+        this.logger.warn('Failed to get captions from url while trying to download captions: ', downloadUrl);
       }
     }
     return downloadUrl;

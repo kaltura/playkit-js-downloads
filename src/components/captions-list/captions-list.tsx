@@ -71,5 +71,9 @@ export const CaptionsList = withText({
     );
   };
 
-  return <div className={`${styles.captionsContainer}`}>{_renderExpandableCaptions()}</div>;
+  return (
+    <div className={styles.captionsContainer} data-testid={'download-overlay-captions-container'}>
+      {_renderExpandableCaptions()}
+    </div>
+  );
 });
