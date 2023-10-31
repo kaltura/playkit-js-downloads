@@ -1,6 +1,6 @@
 import {UpperBarManager} from '@playkit-js/ui-managers';
 
-import {DownloadConfig} from './types';
+import {DownloadConfig, DownloadMetadata} from './types';
 import {DownloadOverlayButton} from './components';
 import {DOWNLOAD} from './icons';
 import {DownloadOverlay} from './components/download-overlay';
@@ -17,7 +17,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: DownloadConfig = {
     flavorId: null,
     flavorParamId: '0', // source
-    preDownloadHook: null
+    preDownloadHook: null,
+    displayAttachments: true,
+    displayFlavors: true,
+    displayCaptions: true
   };
 
   private iconId = -1;
@@ -64,11 +67,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
   private _handleClick = (event: OnClickEvent, byKeyboard: boolean) => {
     this.triggeredByKeyboard = byKeyboard;
-    if (this.player.isImage()) {
-      this.downloadPluginManager.downloadFile();
-    } else {
-      this.downloadPluginManager.showOverlay = !this.downloadPluginManager.showOverlay;
-    }
+    this.downloadPluginManager.showOverlay = !this.downloadPluginManager.showOverlay;
   };
 
   private _focusPluginButton = () => {
@@ -77,7 +76,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
     });
   };
 
-  private injectOverlayComponents() {
+  private injectOverlayComponents(downloadMetadata: DownloadMetadata) {
     this.iconId = this.upperBarManager.add({
       label: (<Text id="download.download">Download</Text>) as never,
       svgIcon: {
@@ -97,7 +96,13 @@ class Download extends KalturaPlayer.core.BasePlugin {
         presets: PRESETS,
         area: 'GuiArea',
         get: () => {
-          return <DownloadOverlay downloadPluginManager={this.downloadPluginManager} setFocus={this._focusPluginButton} />;
+          return (
+            <DownloadOverlay
+              downloadPluginManager={this.downloadPluginManager}
+              setFocus={this._focusPluginButton}
+              downloadMetadata={downloadMetadata}
+            />
+          );
         }
       })
     );
@@ -111,7 +116,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
     if (downloadMetadata) {
       this.logger.debug('Download is supported for current entry');
-      this.injectOverlayComponents();
+      this.injectOverlayComponents(downloadMetadata);
     }
   }
 

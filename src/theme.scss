@@ -1,0 +1,19 @@
+@import '~@playkit-js/playkit-js-ui';
+
+// border radius
+$roundness-1: 4px;
+$roundness-2: 8px;
+
+@mixin download-scrollbar {
+  &::-webkit-scrollbar {
+    width: 11px;
+    visibility: hidden;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: $roundness-2;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    visibility: hidden;
+  }
+}

@@ -1,0 +1,60 @@
+@import '../../theme.scss';
+
+.file-info {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: $roundness-1;
+  display: flex;
+  font-size: 14px;
+  margin: auto;
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 16px;
+
+  .icon-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &.file-icon {
+      background-color: #444;
+      border-radius: 4px 0 0 4px;
+      padding: 12px;
+
+      i {
+        height: 24px;
+        width: 24px;
+      }
+    }
+
+    &.download-icon {
+      margin-right: 16px;
+      margin-left: auto;
+    }
+  }
+
+  .file-info-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: calc(100% - 110px);
+    margin-left: 16px;
+    font-size: 14px;
+
+    .file-info-text {
+      -webkit-line-clamp: 1;
+      margin-bottom: 4px;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: $tone-1-color;
+      font-weight: 700;
+    }
+
+    .file-description-text {
+      color: $tone-2-color;
+      font-weight: 400;
+    }
+  }
+}

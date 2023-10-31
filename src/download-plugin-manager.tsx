@@ -12,7 +12,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
   private downloadMetadata: DownloadMetadata = null;
   private playOnClose = false;
 
-  constructor(private downloadPlugin: Download) {
+  constructor(public downloadPlugin: Download) {
     super();
     this.downloadService = new DownloadService(downloadPlugin.player, downloadPlugin.logger);
   }
@@ -28,7 +28,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
     return this.downloadMetadata;
   }
 
-  downloadFile() {
+  downloadFile(downloadUrl: string, fileName: string) {
     try {
       const {preDownloadHook} = this.downloadPlugin.config;
       if (typeof preDownloadHook === 'function') {
@@ -38,7 +38,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
       this.downloadPlugin.logger.debug('Exception in pre-download hook');
     }
 
-    this.downloadService.downloadFile(this.downloadMetadata?.downloadUrl, this.downloadMetadata?.fileName);
+    this.downloadService.downloadFile(downloadUrl, fileName);
   }
 
   notifyDownloadStarted(title: string, text: string) {
