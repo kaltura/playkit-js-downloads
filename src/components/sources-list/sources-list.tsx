@@ -56,7 +56,7 @@ export const SourcesList = withText({
         });
         if (!defaultFlavor) {
           flavors.find(flavor => {
-            return flavor.flavorParamsId === 0 || flavor.isOriginal;
+            return flavor.isOriginal || flavor.flavorParamsId === 0;
           });
         }
         if (!defaultFlavor) {
