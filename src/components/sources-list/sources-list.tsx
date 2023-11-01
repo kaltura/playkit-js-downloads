@@ -51,12 +51,16 @@ export const SourcesList = withText({
     const _setDefaultFlavor = () => {
       if (flavors.length > 0) {
         const {flavorId, flavorParamId} = downloadConfig;
-        defaultFlavor = flavors.find(flavor => flavor.id === flavorId);
+        defaultFlavor = flavors.find(flavor => {
+          return flavor.id === flavorId || flavor.flavorParamsId.toString() === flavorParamId;
+        });
         if (!defaultFlavor) {
-          defaultFlavor = flavors.find(flavor => flavor.flavorParamsId.toString() === flavorParamId);
+          flavors.find(flavor => {
+            return flavor.isOriginal || flavor.flavorParamsId === 0;
+          });
         }
         if (!defaultFlavor) {
-          defaultFlavor = flavors.find(flavor => flavor.id === '0');
+          defaultFlavor = flavors[0];
         }
       }
     };
@@ -70,7 +74,7 @@ export const SourcesList = withText({
       } else if (flavor.height >= HeightResolution.HD) {
         flavorDescription += ` ${RESOLUTION_HD}`;
       }
-      if (flavor.isOriginal) {
+      if (flavor.isOriginal || flavor.flavorParamsId === 0) {
         return `${sourceLabel} (${flavorDescription})`;
       }
       return flavorDescription;

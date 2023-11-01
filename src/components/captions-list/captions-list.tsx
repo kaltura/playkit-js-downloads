@@ -24,8 +24,9 @@ export const CaptionsList = withText({
   const _setDefaultCaption = () => {
     if (captions.length > 0) {
       defaultCaptions = captions.find(captions => captions.isDefault);
-    } else {
-      defaultCaptions = captions[0];
+      if (!defaultCaptions) {
+        defaultCaptions = captions[0];
+      }
     }
   };
 
@@ -73,7 +74,7 @@ export const CaptionsList = withText({
 
   return (
     <div className={styles.captionsContainer} data-testid={'download-overlay-captions-container'}>
-      {_renderExpandableCaptions()}
+      {captions.length > 1 ? _renderExpandableCaptions() : _renderCaption(defaultCaptions!)}
     </div>
   );
 });
