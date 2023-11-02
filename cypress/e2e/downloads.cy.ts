@@ -61,7 +61,7 @@ describe('download plugin', () => {
       cy.intercept('GET', '**/fixture/ocean.jpeg/**', {fixture: 'ocean.jpeg'});
     });
 
-    it('should make HEAD for the image download url', done => {
+    it('should make HEAD call for the image download url', done => {
       mockKalturaBe('base-entry.json', 'kaltura-assets-image-entry.json');
       const imageSourcesConfig = {
         id: '1234',
@@ -89,7 +89,7 @@ describe('download plugin', () => {
           });
       });
     });
-    it('should fallback to thumbnail service request', done => {
+    it('should fallback to thumbnail service request in case sources.metadata.downloadUrl is empty', done => {
       mockKalturaBe('base-entry.json', 'kaltura-assets-image-entry.json');
       const imageSourcesConfig = {
         id: '1234',
@@ -120,13 +120,10 @@ describe('download plugin', () => {
 
   describe('download overlay', () => {
     describe('download overlay configuration', () => {
-      it('should display all kinds of assets', () => {
+      it('should display all kinds of assets - flavors, captions and attachments', () => {
         mockKalturaBe();
         loadPlayerAndSetMedia().then(() => {
           cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
-          // cy.get('.playkit-pre-playback-play-button').should('exist');
-          // player!.play();
-          // cy.get('.playkit-spinner').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
           cy.get('[data-testid="download-overlay-sources-container"]').should('exist');
@@ -138,7 +135,6 @@ describe('download plugin', () => {
         mockKalturaBe();
         loadPlayerAndSetMedia({displayFlavors: false}).then(() => {
           cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
-          // cy.get('.playkit-spinner').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
           cy.get('[data-testid="download-overlay-sources-container"]').should('exist').children().should('have.length', 1);
@@ -148,7 +144,6 @@ describe('download plugin', () => {
         mockKalturaBe();
         loadPlayerAndSetMedia({displayCaptions: false}).then(() => {
           cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
-          // cy.get('.playkit-spinner').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
           cy.get('[data-testid="download-overlay-captions-container"]').should('not.exist');
@@ -158,7 +153,6 @@ describe('download plugin', () => {
         mockKalturaBe();
         loadPlayerAndSetMedia({displayAttachments: false}).then(() => {
           cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
-          // cy.get('.playkit-spinner').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
           cy.get('[data-testid="download-overlay-attachments-container"]').should('not.exist');
@@ -171,7 +165,6 @@ describe('download plugin', () => {
         mockKalturaBe();
         loadPlayerAndSetMedia().then(() => {
           cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
-          // cy.get('.playkit-spinner').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
           cy.get(sourcesContainerSelector).should('exist').children().should('have.length', 2);
@@ -186,7 +179,6 @@ describe('download plugin', () => {
         mockKalturaBe();
         loadPlayerAndSetMedia().then(() => {
           cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
-          // cy.get('.playkit-spinner').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
           cy.get(captionsContainerSelector).should('exist').children().should('have.length', 2);
@@ -202,7 +194,6 @@ describe('download plugin', () => {
         mockKalturaBe();
         loadPlayerAndSetMedia().then(() => {
           cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
-          // cy.get('.playkit-spinner').should('not.exist');
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
@@ -221,7 +212,6 @@ describe('download plugin', () => {
         mockKalturaBe('', 'kaltura-assets-only-source-file.json');
         loadPlayerAndSetMedia().then(() => {
           cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
-          // cy.get('.playkit-spinner').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
           cy.get(sourcesContainerSelector).should('exist').children().should('have.length', 1);
