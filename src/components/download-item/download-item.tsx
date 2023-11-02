@@ -61,8 +61,8 @@ export const DownloadItem = withText({
           }}>
           <div
             key={key}
-            data-testid="download-overlay-download-button"
-            className={`${styles.fileInfo}`}
+            data-testid="download-item-download-button"
+            className={styles.fileInfo}
             tabIndex={0}
             aria-label={downloadButtonLabel}
             ref={downloadItemRef}>

@@ -1,354 +1,299 @@
-import {PLAYER_CONFIG} from '../e2e/mock-data';
-
-interface KalturaPlayer {
-  setup: (config: any) => Player;
-}
-
-interface Player {
-  setMedia: (arg0: {session: {ks: string}; sources: {id: string; progressive: {mimetype: string; url: string}[]}}) => void;
-  isLive: () => boolean;
-  getVideoElement: () => {mediaKeys: any};
-  ready: () => any;
-}
-
-interface Window {
-  KalturaPlayer: KalturaPlayer;
-}
-
-let player: Player | null;
-let requestCount = 0;
-
-const loadPlayer = (playerConfig: any = {}): Promise<void> => {
-  return new Promise(resolve => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    cy.visit('index.html').then((win: Window) => {
-      player = win.KalturaPlayer.setup({...PLAYER_CONFIG, ...playerConfig});
-      resolve();
-    });
-  });
-};
-
-const setMedia = (
-  sessionConfig = {ks: '5678'},
-  sourcesConfig = {
-    id: '1234',
-    progressive: [
-      {
-        mimetype: 'video/mp4',
-        url: './media/video.mp4'
-      }
-    ]
-  }
-) => {
-  player?.setMedia({
-    session: sessionConfig,
-    sources: sourcesConfig
-  });
-};
-
-const loadPlayerAndSetMedia = (playerConfig?: any, sessionConfig?: any, sourcesConfig?: any): Promise<void> => {
-  return new Promise(resolve => {
-    loadPlayer(playerConfig)
-      .then(() => {
-        setMedia(sessionConfig, sourcesConfig);
-        return player?.ready();
-      })
-      .then(resolve);
-  });
-};
+import {mockKalturaBe, setMedia, loadPlayerAndSetMedia, loadPlayer} from './utils/env';
 
 describe('download plugin', () => {
-  afterEach(() => {
-    player = null;
-    requestCount = 0;
-  });
-
-  describe('download capabilities', () => {
-    beforeEach(() => {
-      cy.intercept('**/playManifest/**', req => {
-        ++requestCount;
-        req.reply({
-          fixture: 'video.mp4'
-        });
-      }).as('playManifest');
-    });
-
-    it('should be blocked for live', () => {
-      return loadPlayer().then(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        cy.stub(player, 'isLive').returns(true);
-        setMedia();
-        expect(requestCount).to.equal(0);
-      });
-    });
-    it('should be blocked for DRM', () => {
-      return loadPlayer()
-        .then(() => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          cy.stub(player, 'getVideoElement').returns({mediaKeys: {}});
-          setMedia();
-          return player?.ready();
-        })
-        .then(() => {
-          expect(requestCount).to.equal(0);
-        });
-    });
-    it.skip('should be blocked for image entry', () => {
-      return loadPlayer()
-        .then(() => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          cy.stub(player, 'isImage').returns(true);
-          setMedia();
-          return player?.ready();
-        })
-        .then(() => {
-          expect(requestCount).to.equal(0);
-        });
-    });
-  });
-
-  describe('download xhr call', () => {
-    let requestUrl = '';
-
-    beforeEach(() => {
-      cy.intercept('**/playManifest/**', req => {
-        ++requestCount;
-        requestUrl = req.url;
-        req.reply({
-          fixture: 'video.mp4'
-        });
-      }).as('playManifest');
-    });
-
-    afterEach(() => {
-      requestUrl = '';
-    });
-
-    describe('cdn url', () => {
-      it('should use cdn url from config if cdn url is set', async () => {
-        await loadPlayerAndSetMedia();
-        expect(requestUrl.indexOf(PLAYER_CONFIG.provider.env.cdnUrl)).to.not.equal(-1);
-      });
-      it('should not make download xhr call if cdn url is not set', async () => {
-        await loadPlayerAndSetMedia({provider: {env: {cdnUrl: ''}}});
-        expect(requestCount).to.equal(0);
-      });
-    });
-    describe('partner id', () => {
-      it('should contain partner id from config if partner id is set', async () => {
-        await loadPlayerAndSetMedia();
-        expect(requestUrl.indexOf(`p/${PLAYER_CONFIG.provider.partnerId}`)).to.not.equal(-1);
-      });
-      it('should not make download call if partner id is not set', async () => {
-        await loadPlayerAndSetMedia({provider: {env: {partnerId: ''}}});
-        expect(requestCount).to.equal(0);
-      });
-    });
-    describe('entry id', () => {
-      it('should use current entry id', async () => {
-        await loadPlayerAndSetMedia();
-        expect(requestUrl.indexOf('entryId/1234')).to.not.equal(-1);
-      });
-    });
-    describe('ks', () => {
-      it('should contain ks from config if ks is set', async () => {
-        await loadPlayerAndSetMedia();
-        expect(requestUrl.indexOf(`ks/5678`)).to.not.equal(-1);
-      });
-      it('should not make download call if ks is not set', async () => {
-        await loadPlayerAndSetMedia(null, {ks: ''});
-        expect(requestCount).to.equal(0);
-      });
-    });
-    describe('flavor id', () => {
-      it('should use flavor id if it is set', async () => {
-        await loadPlayerAndSetMedia({plugins: {uiManagers: {}, download: {flavorId: '1234'}}});
-        expect(requestUrl.indexOf('flavorId')).to.not.equal(-1);
-      });
-      it('should not contain a flavor id if flavor id is not set', async () => {
-        await loadPlayerAndSetMedia();
-        expect(requestUrl.indexOf('flavorId')).to.equal(-1);
-      });
-    });
-    describe('flavor param id', () => {
-      it('should use flavor param id if it is set', async () => {
-        await loadPlayerAndSetMedia({plugins: {uiManagers: {}, download: {flavorParamId: '1234'}}});
-        expect(requestUrl.indexOf('flavorParamId/1234')).not.to.equal(-1);
-      });
-      it('should use default flavor param id if it is not set', async () => {
-        await loadPlayerAndSetMedia();
-        expect(requestUrl.indexOf('flavorParamId/0')).not.to.equal(-1);
-      });
-    });
-  });
-
   describe('download overlay button', () => {
-    describe('if content type is not video', () => {
-      beforeEach(() => {
-        cy.intercept('**/playManifest/**', {
-          headers: {
-            'content-type': 'image/gif'
-          },
-          fixture: 'video.mp4'
-        });
-      });
-
-      it('should be hidden', () => {
-        return loadPlayerAndSetMedia().then(() => {
-          cy.get('[data-testid="download-overlay-button"]').should('not.exist');
-        });
+    it('should not exist for live media', () => {
+      mockKalturaBe();
+      loadPlayer().then(player => {
+        cy.stub(player, 'isLive').returns(true);
+        setMedia(player);
+        cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+        cy.get('[data-testid="download-overlay-button"]').should('not.exist');
       });
     });
+    it('should not exist for DRM media', () => {
+      mockKalturaBe();
+      loadPlayer().then(player => {
+        cy.stub(player, 'getVideoElement').returns({mediaKeys: {}});
+        setMedia(player);
+        cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+        cy.get('[data-testid="download-overlay-button"]').should('not.exist');
+      });
+    });
+    it('should be visible for non-DRM vod', () => {
+      mockKalturaBe();
+      loadPlayerAndSetMedia().then(() => {
+        cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+        cy.get('[data-testid="download-overlay-button"]').should('exist');
+      });
+    });
+    it('should show overlay on click', () => {
+      mockKalturaBe();
+      loadPlayerAndSetMedia().then(() => {
+        cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+        cy.get('[data-testid="download-overlay"]').should('not.exist');
+        cy.get('[data-testid="download-overlay-button"]').click({force: true});
+        cy.get('[data-testid="download-overlay"]').should('exist');
+      });
+    });
+    it('should be visible for image entry', () => {
+      cy.intercept('GET', '**/fixture/ocean.jpeg/**', {fixture: 'ocean.jpeg'});
+      mockKalturaBe('base-entry.json', 'kaltura-assets-image-entry.json');
+      const imageSourcesConfig = {
+        id: '1234',
+        downloadUrl: 'https://cfvod.kaltura.com/p/3188353/sp/318835300/raw/entry_id/1_vznuyyho/version/100001',
+        image: [
+          {
+            mimetype: 'image/jpeg',
+            url: './fixture/ocean.jpeg'
+          }
+        ]
+      };
+      loadPlayer().then(player => {
+        setMedia(player, {ks: '5678'}, imageSourcesConfig);
+        cy.get('[data-testid="download-overlay-button"]').should('exist');
+      });
+    });
+  });
 
-    describe('if content type is video', () => {
-      beforeEach(() => {
-        cy.intercept('**/playManifest/**', {fixture: 'video.mp4'});
+  describe('image entry', () => {
+    beforeEach(() => {
+      cy.intercept('GET', '**/fixture/ocean.jpeg/**', {fixture: 'ocean.jpeg'});
+    });
+
+    it('should make HEAD call for the image download url', done => {
+      mockKalturaBe('base-entry.json', 'kaltura-assets-image-entry.json');
+      const imageSourcesConfig = {
+        id: '1234',
+        downloadUrl: 'https://cfvod.kaltura.com/p/3188353/sp/318835300/raw/entry_id/1_vznuyyho/version/100001',
+        image: [
+          {
+            mimetype: 'image/jpeg',
+            url: './fixture/ocean.jpeg'
+          }
+        ]
+      };
+
+      let requestCount = 0;
+      cy.intercept('**/raw/**', () => {
+        ++requestCount;
       });
 
-      it('should be visible', () => {
-        return loadPlayerAndSetMedia().then(() => {
-          cy.get('[data-testid="download-overlay-button"]').should('exist');
-        });
+      loadPlayer().then(player => {
+        setMedia(player, {ks: '5678'}, imageSourcesConfig);
+        cy.get('[data-testid="download-overlay-button"]')
+          .should('exist')
+          .then(() => {
+            expect(requestCount).to.equal(1);
+            done();
+          });
+      });
+    });
+    it('should fallback to thumbnail service request in case sources.metadata.downloadUrl is empty', done => {
+      mockKalturaBe('base-entry.json', 'kaltura-assets-image-entry.json');
+      const imageSourcesConfig = {
+        id: '1234',
+        image: [
+          {
+            mimetype: 'image/jpeg',
+            url: './fixture/ocean.jpeg'
+          }
+        ]
+      };
+
+      let requestCount = 0;
+      cy.intercept('**/ks/5678*', () => {
+        ++requestCount;
       });
 
-      it('should show overlay on click', () => {
-        return loadPlayerAndSetMedia().then(() => {
-          cy.get('[data-testid="download-overlay"]').should('not.exist');
-          cy.get('[data-testid="download-overlay-button"]').click({force: true});
-          cy.get('[data-testid="download-overlay"]').should('exist');
-        });
+      loadPlayer().then(player => {
+        setMedia(player, {ks: '5678'}, imageSourcesConfig);
+        cy.get('[data-testid="download-overlay-button"]')
+          .should('exist')
+          .then(() => {
+            expect(requestCount).to.equal(1);
+            done();
+          });
       });
     });
   });
 
   describe('download overlay', () => {
-    describe('close button', () => {
-      beforeEach(() => {
-        cy.intercept('**/playManifest/**', {fixture: 'video.mp4'});
+    describe('download overlay configuration', () => {
+      it('should display all kinds of assets - flavors, captions and attachments', () => {
+        mockKalturaBe();
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-sources-container"]').should('exist');
+          cy.get('[data-testid="download-overlay-captions-container"]').should('exist');
+          cy.get('[data-testid="download-overlay-attachments-container"]').should('exist');
+        });
       });
-
+      it('should not display flavor assets', () => {
+        mockKalturaBe();
+        loadPlayerAndSetMedia({displayFlavors: false}).then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-sources-container"]').should('exist').children().should('have.length', 1);
+        });
+      });
+      it('should not display captions assets', () => {
+        mockKalturaBe();
+        loadPlayerAndSetMedia({displayCaptions: false}).then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-captions-container"]').should('not.exist');
+        });
+      });
+      it('should not display attachments assets', () => {
+        mockKalturaBe();
+        loadPlayerAndSetMedia({displayAttachments: false}).then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-attachments-container"]').should('not.exist');
+        });
+      });
+    });
+    describe('expandable container', () => {
+      it('should expand sources container and show more flavors', () => {
+        const sourcesContainerSelector = '[data-testid="download-overlay-sources-container"]';
+        mockKalturaBe();
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get(sourcesContainerSelector).should('exist').children().should('have.length', 2);
+          cy.get(sourcesContainerSelector).children().last().should('have.text', 'More flavors').click({force: true});
+          cy.get(sourcesContainerSelector).children().should('have.length', 7);
+          cy.get(sourcesContainerSelector).children().last().should('have.text', 'Less flavors').click({force: true});
+          cy.get(sourcesContainerSelector).children().should('have.length', 2);
+        });
+      });
+      it('should expand captions container and show more captions', () => {
+        const captionsContainerSelector = '[data-testid="download-overlay-captions-container"]';
+        mockKalturaBe();
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get(captionsContainerSelector).should('exist').children().should('have.length', 2);
+          cy.get(captionsContainerSelector).children().last().should('have.text', 'More captions').click({force: true});
+          cy.get(captionsContainerSelector).children().should('have.length', 4);
+          cy.get(captionsContainerSelector).children().last().should('have.text', 'Less captions').click({force: true});
+          cy.get(captionsContainerSelector).children().should('have.length', 2);
+        });
+      });
+    });
+    describe('close button', () => {
       it('should hide overlay on click', () => {
-        return loadPlayerAndSetMedia().then(() => {
+        mockKalturaBe();
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
-          cy.get('[data-testid="download-overlay-close-button"]').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-close-button"]')
+            .should('exist')
+            .within(() => {
+              cy.get('button').should('exist').click({force: true});
+            });
           cy.get('[data-testid="download-overlay"]').should('not.exist');
         });
       });
     });
-
-    describe('download button', () => {
-      beforeEach(() => {
-        cy.intercept('**/playManifest/**', {fixture: 'video.mp4'}).as('playManifest');
-      });
-
-      it('should hide overlay on click', () => {
-        return loadPlayerAndSetMedia().then(() => {
-          cy.get('[data-testid="download-overlay"]').should('not.exist');
-          cy.get('[data-testid="download-overlay-button"]').click({force: true});
+    describe('entry with a single source flavor', () => {
+      it('should display only the available source', () => {
+        const sourcesContainerSelector = '[data-testid="download-overlay-sources-container"]';
+        mockKalturaBe('', 'kaltura-assets-only-source-file.json');
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
-          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
-          cy.get('[data-testid="download-overlay"]').should('not.exist');
+          cy.get(sourcesContainerSelector).should('exist').children().should('have.length', 1);
         });
       });
-
+    });
+    describe('download item - download button', () => {
       it('should start download on click', () => {
-        return loadPlayerAndSetMedia().then(() => {
+        mockKalturaBe();
+        loadPlayerAndSetMedia().then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('not.exist');
           cy.get('[data-testid="download-overlay-button"]').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
-          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
-
-          setTimeout(() => {
-            const downloadsFolder = Cypress.config('downloadsFolder');
-            const downloadPath = `${downloadsFolder}/download.mp4`;
-            cy.readFile(downloadPath);
-          }, 2000);
+          cy.get('[data-testid="download-overlay-sources-container"]')
+            .should('exist')
+            .within(() => {
+              // eslint-disable-next-line cypress/unsafe-to-chain-command
+              cy.get('[data-testid="download-item-download-button"]')
+                .should('exist')
+                .click({force: true})
+                .then(() => {
+                  const downloadsFolder = Cypress.config('downloadsFolder');
+                  const downloadPath = `${downloadsFolder}/download.mp4`;
+                  cy.readFile(downloadPath);
+                });
+            });
         });
       });
+      describe('pre-download hook', () => {
+        it('should handle error in pre-download hook', () => {
+          mockKalturaBe();
 
-      it('should call pre-download hook', () => {
-        let count = 0;
+          const preDownloadHook = () => {
+            throw Error();
+          };
 
-        const preDownloadHook = () => {
-          ++count;
-        };
-        const pluginConfig = {
-          download: {preDownloadHook},
-          uiManagers: {}
-        };
-
-        return loadPlayerAndSetMedia({plugins: pluginConfig}).then(() => {
-          cy.get('[data-testid="download-overlay"]').should('not.exist');
-          cy.get('[data-testid="download-overlay-button"]').click({force: true});
-          cy.get('[data-testid="download-overlay"]').should('exist');
-          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
-
-          setTimeout(() => {
-            expect(count).to.equal(1);
-          }, 2000);
-        });
-      });
-
-      it('should handle error in pre-download hook', () => {
-        const preDownloadHook = () => {
-          throw Error();
-        };
-        const pluginConfig = {
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          download: {preDownloadHook},
-          uiManagers: {}
-        };
-
-        return loadPlayerAndSetMedia({plugins: pluginConfig}).then(() => {
-          cy.get('[data-testid="download-overlay"]').should('not.exist');
-          cy.get('[data-testid="download-overlay-button"]').click({force: true});
-          cy.get('[data-testid="download-overlay"]').should('exist');
-          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
-
-          setTimeout(() => {
-            const downloadsFolder = Cypress.config('downloadsFolder');
-            const downloadPath = `${downloadsFolder}/download.mp4`;
-            cy.readFile(downloadPath);
-          }, 2000);
-        });
-      });
-
-      it('should not call pre-download hook on download failure', () => {
-        let count = 0;
-
-        const preDownloadHook = () => {
-          ++count;
-        };
-
-        const pluginConfig = {
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          download: {preDownloadHook},
-          uiManagers: {}
-        };
-
-        return loadPlayerAndSetMedia({plugins: pluginConfig}).then(() => {
-          cy.get('[data-testid="download-overlay"]').should('not.exist');
-          cy.get('[data-testid="download-overlay-button"]').click({force: true});
-          cy.get('[data-testid="download-overlay"]').should('exist');
-
-          cy.intercept('**/playManifest/**', {
-            headers: {
-              'content-type': 'image/gif'
-            },
-            fixture: 'video.mp4'
+          loadPlayerAndSetMedia({preDownloadHook}).then(() => {
+            cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+            cy.get('[data-testid="download-overlay"]').should('not.exist');
+            cy.get('[data-testid="download-overlay-button"]').click({force: true});
+            cy.get('[data-testid="download-overlay"]').should('exist');
+            cy.get('[data-testid="download-overlay-sources-container"]')
+              .should('exist')
+              .within(() => {
+                // eslint-disable-next-line cypress/unsafe-to-chain-command
+                cy.get('[data-testid="download-item-download-button"]')
+                  .should('exist')
+                  .click({force: true})
+                  .then(() => {
+                    const downloadsFolder = Cypress.config('downloadsFolder');
+                    const downloadPath = `${downloadsFolder}/download.mp4`;
+                    cy.readFile(downloadPath);
+                  });
+              });
           });
+        });
+        it('should call pre-download hook', () => {
+          mockKalturaBe();
+          let count = 0;
 
-          cy.get('[data-testid="download-overlay-download-button"]').should('exist').click({force: true});
+          const preDownloadHook = () => {
+            ++count;
+          };
 
-          setTimeout(() => {
-            expect(count).to.equal(0);
-          }, 2000);
+          loadPlayerAndSetMedia({preDownloadHook}).then(() => {
+            cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+            cy.get('[data-testid="download-overlay"]').should('not.exist');
+            cy.get('[data-testid="download-overlay-button"]').click({force: true});
+            cy.get('[data-testid="download-overlay"]').should('exist');
+            cy.get('[data-testid="download-overlay-sources-container"]')
+              .should('exist')
+              .within(() => {
+                // eslint-disable-next-line cypress/unsafe-to-chain-command
+                cy.get('[data-testid="download-item-download-button"]')
+                  .should('exist')
+                  .click({force: true})
+                  .then(() => {
+                    expect(count).to.equal(1);
+                  });
+              });
+          });
         });
       });
     });

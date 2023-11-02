@@ -1,0 +1,44 @@
+[
+  {
+    "objects": [],
+    "totalCount": 0,
+    "objectType": "KalturaCaptionAssetListResponse"
+  },
+  {
+    "objects": [
+      {
+        "flavorParamsId": 0,
+        "width": 4096,
+        "height": 2048,
+        "bitrate": 22249,
+        "frameRate": 29.97,
+        "isOriginal": true,
+        "isWeb": true,
+        "containerFormat": "mp42",
+        "videoCodecId": "avc1",
+        "status": 2,
+        "language": "Undefined",
+        "isDefault": false,
+        "id": "1_r3cyc6eo",
+        "entryId": "1_lwh72aj6",
+        "partnerId": 3188353,
+        "version": "21",
+        "size": 67984,
+        "tags": "source,web",
+        "fileExt": "mp4",
+        "createdAt": 1660723800,
+        "updatedAt": 1660723800,
+        "description": "",
+        "sizeInBytes": "69616051",
+        "objectType": "KalturaFlavorAsset"
+      }
+    ],
+    "totalCount": 1,
+    "objectType": "KalturaFlavorAssetListResponse"
+  },
+  {
+    "objects": [],
+    "totalCount": 0,
+    "objectType": "KalturaAttachmentAssetListResponse"
+  }
+]

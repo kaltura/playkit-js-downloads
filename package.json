@@ -4,7 +4,7 @@
   "main": "dist/playkit-downloads.js",
   "homepage": "https://github.com/kaltura/playkit-js-downloads#readme",
   "scripts": {
-    "clean": "rm -rf ./dist",
+    "clean": "rimraf ./dist",
     "prebuild": "npm run clean",
     "build": "webpack --mode production",
     "dev": "webpack-dev-server --mode development",
@@ -20,7 +20,7 @@
     "cy:run:firefox": "cypress run --browser firefox --config video=false",
     "cy:run:edge": "cypress run --browser edge --config video=false",
     "cy:run:safari": "cypress run --browser webkit --config video=false",
-    "test:prepare": "yarn run build && yes | cp -i ./dist/playkit-downloads.js ./dist/playkit-downloads.js.map ./cypress/public",
+    "test:prepare": "yarn run build && copyfiles -f ./dist/playkit-downloads.js ./dist/playkit-downloads.js.map ./cypress/public",
     "test:watch": "yarn run test:prepare && yarn run cy:open",
     "test": "yarn run test:prepare && yarn run cy:run"
   },
@@ -63,6 +63,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@playkit-js/playkit-js-ui": "^0.77.8"
+    "@playkit-js/playkit-js-ui": "^0.77.8",
+    "copyfiles": "^2.4.1",
+    "rimraf": "^5.0.5"
   }
 }
