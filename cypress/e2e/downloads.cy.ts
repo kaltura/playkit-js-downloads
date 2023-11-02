@@ -229,7 +229,7 @@ describe('download plugin', () => {
       });
     });
     describe('download item - download button', () => {
-      it('should start download on click', done => {
+      it('should start download on click', () => {
         mockKalturaBe();
         loadPlayerAndSetMedia().then(() => {
           cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
@@ -247,13 +247,12 @@ describe('download plugin', () => {
                   const downloadsFolder = Cypress.config('downloadsFolder');
                   const downloadPath = `${downloadsFolder}/download.mp4`;
                   cy.readFile(downloadPath);
-                  done();
                 });
             });
         });
       });
       describe('pre-download hook', () => {
-        it('should handle error in pre-download hook', done => {
+        it('should handle error in pre-download hook', () => {
           mockKalturaBe();
 
           const preDownloadHook = () => {
@@ -276,12 +275,11 @@ describe('download plugin', () => {
                     const downloadsFolder = Cypress.config('downloadsFolder');
                     const downloadPath = `${downloadsFolder}/download.mp4`;
                     cy.readFile(downloadPath);
-                    done();
                   });
               });
           });
         });
-        it('should call pre-download hook', done => {
+        it('should call pre-download hook', () => {
           mockKalturaBe();
           let count = 0;
 
@@ -303,7 +301,6 @@ describe('download plugin', () => {
                   .click({force: true})
                   .then(() => {
                     expect(count).to.equal(1);
-                    done();
                   });
               });
           });
