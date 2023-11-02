@@ -36,12 +36,15 @@ class DownloadService {
     const assets = await this.getKalturaAssets();
     Object.assign(metadata, assets);
     metadata!.imageDownloadUrl = await this.handleImageDownload();
-    const downloadUrls: Map<string, string> = await this.getDownloadUrls(metadata);
 
-    // assign the download urls to the assets by id
-    metadata.flavors = this.setDownloadUrls(metadata?.flavors, downloadUrls);
-    metadata.captions = this.setDownloadUrls(metadata?.captions, downloadUrls);
-    metadata.attachments = this.setDownloadUrls(metadata?.attachments, downloadUrls);
+    if (metadata?.flavors.length || metadata?.captions.length || metadata?.attachments.length) {
+      const downloadUrls: Map<string, string> = await this.getDownloadUrls(metadata);
+
+      // assign the download urls to the assets by id
+      metadata.flavors = this.setDownloadUrls(metadata?.flavors, downloadUrls);
+      metadata.captions = this.setDownloadUrls(metadata?.captions, downloadUrls);
+      metadata.attachments = this.setDownloadUrls(metadata?.attachments, downloadUrls);
+    }
 
     metadata!.fileName = this.getFilename(metadata);
     return metadata;
