@@ -142,13 +142,19 @@ export const SourcesList = withText({
       return _renderFlavor(defaultFlavor!);
     };
 
+    const _renderSources = () => {
+      if (imageUrl) {
+        return _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true);
+      } else if (flavors.length > 0) {
+        return _renderExpandableFlavors();
+      } else {
+        return undefined;
+      }
+    };
+
     return (
       <div className={styles.sourcesContainer} data-testid={'download-overlay-sources-container'}>
-        {imageUrl
-          ? _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true)
-          : flavors.length > 0
-          ? _renderExpandableFlavors()
-          : undefined}
+        {_renderSources()}
       </div>
     );
   }
