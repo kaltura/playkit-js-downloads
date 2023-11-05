@@ -111,18 +111,8 @@ class Download extends KalturaPlayer.core.BasePlugin {
   private shouldInjectUI(downloadMetadata: DownloadMetadata): boolean {
     if (!downloadMetadata) return false;
     const {flavors, captions, attachments, imageDownloadUrl} = downloadMetadata;
-    if (flavors.length || imageDownloadUrl) {
-      return true;
-    }
-    // getting here means that there are no flavors and there is no image (for example, a youtube entry with captions)
     const {displayCaptions, displayAttachments} = this.downloadPluginManager.downloadPlugin.config;
-    if (captions.length && !attachments.length && !displayCaptions) {
-      return false;
-    }
-    if (attachments.length && !captions.length && !displayAttachments) {
-      return false;
-    }
-    return true;
+    return flavors.length || imageDownloadUrl || (captions.length && displayCaptions) || (attachments.length && displayAttachments);
   }
 
   async loadMedia() {

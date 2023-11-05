@@ -37,10 +37,6 @@ class DownloadService {
     Object.assign(metadata, assets);
     metadata!.imageDownloadUrl = await this.handleImageDownload();
 
-    if (!metadata?.flavors.length && !metadata?.captions.length && !metadata?.attachments.length && !metadata.imageDownloadUrl) {
-      return null;
-    }
-
     if (metadata?.flavors.length || metadata?.captions.length || metadata?.attachments.length) {
       const downloadUrls: Map<string, string> = await this.getDownloadUrls(metadata);
 
