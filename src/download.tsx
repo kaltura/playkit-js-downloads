@@ -108,13 +108,20 @@ class Download extends KalturaPlayer.core.BasePlugin {
     );
   }
 
+  private shouldInjectUI(downloadMetadata: DownloadMetadata): boolean {
+    if (!downloadMetadata) return false;
+    const {flavors, captions, attachments, imageDownloadUrl} = downloadMetadata;
+    const {displayCaptions, displayAttachments} = this.downloadPluginManager.downloadPlugin.config;
+    return flavors.length || imageDownloadUrl || (captions.length && displayCaptions) || (attachments.length && displayAttachments);
+  }
+
   async loadMedia() {
     await this.ready;
 
     this.downloadPluginManager.showOverlay = false;
     const downloadMetadata = await this.downloadPluginManager.getDownloadMetadata(true);
 
-    if (downloadMetadata) {
+    if (this.shouldInjectUI(downloadMetadata)) {
       this.logger.debug('Download is supported for current entry');
       this.injectOverlayComponents(downloadMetadata);
     }
