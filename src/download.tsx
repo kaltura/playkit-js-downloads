@@ -77,6 +77,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
   };
 
   private injectOverlayComponents(downloadMetadata: DownloadMetadata) {
+    if (this.iconId > 0) {
+      return;
+    }
+
     this.iconId = this.upperBarManager.add({
       label: (<Text id="download.download">Download</Text>) as never,
       svgIcon: {
