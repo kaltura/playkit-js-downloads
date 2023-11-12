@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.0.11 (2023-11-12)
+
+
+### Bug Fixes
+
+* **FEC-13473:** Player v7 | Playlist | Download button is being duplicated. ([49e8df8](https://github.com/kaltura/playkit-js-downloads/commit/49e8df8bcb0b7ec02a3f72af47b5b3f665888c9d))
+
 ### 1.0.10 (2023-09-11)
 
 ### 1.0.9 (2023-09-11)
