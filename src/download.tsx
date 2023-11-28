@@ -1,4 +1,4 @@
-import {UpperBarManager} from '@playkit-js/ui-managers';
+import {UpperBarManager, ToastManager, ToastSeverity} from '@playkit-js/ui-managers';
 
 import {DownloadConfig, DownloadMetadata} from './types';
 import {DownloadOverlayButton} from './components';
@@ -6,8 +6,7 @@ import {DOWNLOAD} from './icons';
 import {DownloadOverlay} from './components/download-overlay';
 import {DownloadPluginManager} from './download-plugin-manager';
 
-import {ContribServices} from '@playkit-js/common/dist/ui-common/contrib-services';
-import {OnClickEvent, ToastSeverity} from '@playkit-js/common';
+import {OnClickEvent} from '@playkit-js/common';
 import {ui} from '@playkit-js/kaltura-player-js';
 const {Text} = ui.preacti18n;
 const {ReservedPresetNames} = ui;
@@ -28,14 +27,12 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
   private componentDisposers: Array<typeof Function> = [];
   private downloadPluginManager: DownloadPluginManager;
-  private contribServices: ContribServices;
   private _pluginButtonRef: HTMLButtonElement | null = null;
   public triggeredByKeyboard = false;
 
   constructor(name: string, player: KalturaPlayerTypes.Player, config: DownloadConfig) {
     super(name, player, config);
     this.downloadPluginManager = new DownloadPluginManager(this);
-    this.contribServices = ContribServices.get({kalturaPlayer: player});
   }
 
   static isValid(): boolean {
@@ -46,8 +43,12 @@ class Download extends KalturaPlayer.core.BasePlugin {
     return (this.player.getService('upperBarManager') as UpperBarManager) || {};
   }
 
+  private get toastManager(): ToastManager {
+    return (this.player.getService('toastManager') as ToastManager) || {};
+  }
+
   addToast({title, text, icon, severity}: {title: string; text: string; icon: any; severity: ToastSeverity}) {
-    this.contribServices?.toastManager?.add({
+    this.toastManager.add({
       title,
       text,
       icon,
@@ -55,10 +56,6 @@ class Download extends KalturaPlayer.core.BasePlugin {
       duration: this.defaultToastDuration,
       onClick: () => null
     });
-  }
-
-  getUIComponents(): any[] {
-    return this.contribServices.register();
   }
 
   private _setPluginButtonRef = (ref: HTMLButtonElement) => {

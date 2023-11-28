@@ -1,6 +1,5 @@
 const {Icon} = KalturaPlayer.ui.components;
 
-import {ToastSeverity} from '@playkit-js/common';
 import {Download} from './download';
 import {DOWNLOAD, ERROR} from './icons';
 import {DownloadService} from './services';
@@ -46,7 +45,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
       title,
       text,
       icon: <Icon id={`download-started-toast-icon`} path={DOWNLOAD} viewBox={`0 0 32 32`} />,
-      severity: ToastSeverity.Success
+      severity: 'Success'
     });
   }
 
@@ -55,7 +54,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
       title,
       text,
       icon: <Icon id={`download-failed-toast-icon`} path={ERROR} viewBox={`0 0 16 16`} />,
-      severity: ToastSeverity.Error
+      severity: 'Error'
     });
   }
 
