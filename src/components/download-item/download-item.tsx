@@ -4,8 +4,13 @@ import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
 import {DownloadPluginManager} from '../../download-plugin-manager';
 import {ComponentChildren} from 'preact';
 import {useEffect, useRef} from 'preact/hooks';
-const {withEventManager} = KalturaPlayer.ui.Event;
+
+import {ui} from '@playkit-js/kaltura-player-js';
+import {DownloadEvent} from '../../event';
 const {withText} = KalturaPlayer.ui.preacti18n;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
+const {withPlayer} = ui.Components;
 
 interface DownloadItemProps {
   downloadPluginManager: DownloadPluginManager;
@@ -19,6 +24,7 @@ interface DownloadItemProps {
   downloadUrl: string;
   iconFileType: ComponentChildren;
   isDefault?: boolean;
+  player: KalturaPlayerTypes.Player;
 }
 
 export const DownloadItem = withText({
@@ -27,7 +33,7 @@ export const DownloadItem = withText({
   downloadFailedLabel: 'download.download_has_failed',
   downloadButtonLabel: 'download.download_button_label'
 })(
-  withEventManager(
+  withPlayer(
     ({
       key,
       downloadLabel,
@@ -39,7 +45,8 @@ export const DownloadItem = withText({
       description,
       downloadUrl,
       iconFileType,
-      isDefault
+      isDefault,
+      player
     }: DownloadItemProps) => {
       const downloadItemRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +62,7 @@ export const DownloadItem = withText({
             if (downloadUrl) {
               downloadPluginManager.downloadFile(downloadUrl, fileName);
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
+              player.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED));
             } else {
               downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
             }

@@ -2,7 +2,7 @@ import {Button, ButtonType, ButtonSize, A11yWrapper, OnClickEvent} from '@playki
 import {DownloadPluginManager} from '../../download-plugin-manager';
 import {createRef} from 'preact';
 import {useState, useEffect} from 'preact/hooks';
-import {EventType, DownloadMetadata} from '../../types';
+import {DownloadMetadata} from '../../types';
 
 const {withEventManager} = KalturaPlayer.ui.Event;
 const {PLAYER_SIZE} = KalturaPlayer.ui.components;
@@ -14,6 +14,7 @@ import * as styles from './download-overlay.scss';
 import {SourcesList} from '../sources-list';
 import {CaptionsList} from '../captions-list';
 import {AttachmentsList} from '../attachments-list';
+import {DownloadInternalEvent} from '../../event';
 
 interface DownloadOverlayProps {
   downloadPluginManager: DownloadPluginManager;
@@ -67,11 +68,11 @@ const DownloadOverlay = withText({
         const closeButtonRef = createRef<HTMLButtonElement>();
         const downloadConfig = downloadPluginManager.downloadPlugin.config;
         useEffect(() => {
-          eventManager?.listen(downloadPluginManager, EventType.SHOW_OVERLAY, () => {
+          eventManager?.listen(downloadPluginManager, DownloadInternalEvent.SHOW_OVERLAY, () => {
             setIsVisible(true);
           });
 
-          eventManager?.listen(downloadPluginManager, EventType.HIDE_OVERLAY, () => {
+          eventManager?.listen(downloadPluginManager, DownloadInternalEvent.HIDE_OVERLAY, () => {
             setIsVisible(false);
           });
         }, []);
