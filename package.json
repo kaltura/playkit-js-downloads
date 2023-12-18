@@ -25,7 +25,7 @@
     "test": "yarn run test:prepare && yarn run cy:run"
   },
   "devDependencies": {
-    "@playkit-js/common": "^1.5.0",
+    "@playkit-js/common": "1.5.2-canary.0-f23d183",
     "@playkit-js/kaltura-player-js": "3.17.0-canary.0-634f42e",
     "@playkit-js/ui-managers": "1.4.3-canary.0-b33eab0",
     "@typescript-eslint/eslint-plugin": "^5.58.0",

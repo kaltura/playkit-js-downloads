@@ -17,8 +17,8 @@ interface SourcesListProps {
   downloadConfig: DownloadConfig;
   fileName: string;
   displayFlavors: boolean;
-  moreFlavorsLabel?: string;
-  lessFlavorsLabel?: string;
+  selectQualityLabel?: string;
+  hideLabel?: string;
   sourceLabel?: string;
 }
 
@@ -31,8 +31,8 @@ const RESOLUTION_4K = '4K';
 const RESOLUTION_HD = 'HD';
 
 export const SourcesList = withText({
-  moreFlavorsLabel: 'download.more_flavors_label',
-  lessFlavorsLabel: 'download.less_flavors_label',
+  selectQualityLabel: 'download.select_quality_label',
+  hideLabel: 'download.hide_label',
   sourceLabel: 'download.source_label'
 })(
   ({
@@ -42,8 +42,8 @@ export const SourcesList = withText({
     downloadConfig,
     fileName,
     displayFlavors,
-    moreFlavorsLabel,
-    lessFlavorsLabel,
+    selectQualityLabel,
+    hideLabel,
     sourceLabel
   }: SourcesListProps) => {
     let defaultFlavor: KalturaFlavorAsset | undefined;
@@ -134,8 +134,8 @@ export const SourcesList = withText({
           <ExpandableContainer
             defaultItem={_renderFlavor(defaultFlavor!, true)}
             restOfItems={_renderFlavors(flavors)}
-            showMoreLabel={moreFlavorsLabel!}
-            showLessLabel={lessFlavorsLabel!}
+            showMoreLabel={selectQualityLabel!}
+            showLessLabel={hideLabel!}
           />
         );
       }

@@ -168,9 +168,9 @@ describe('download plugin', () => {
           cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
           cy.get('[data-testid="download-overlay"]').should('exist');
           cy.get(sourcesContainerSelector).should('exist').children().should('have.length', 2);
-          cy.get(sourcesContainerSelector).children().last().should('have.text', 'More flavors').click({force: true});
+          cy.get(sourcesContainerSelector).children().last().should('have.text', 'Select quality').click({force: true});
           cy.get(sourcesContainerSelector).children().should('have.length', 7);
-          cy.get(sourcesContainerSelector).children().last().should('have.text', 'Less flavors').click({force: true});
+          cy.get(sourcesContainerSelector).children().last().should('have.text', 'Hide').click({force: true});
           cy.get(sourcesContainerSelector).children().should('have.length', 2);
         });
       });
