@@ -508,19 +508,19 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@playkit-js/common@1.5.2-canary.0-f23d183":
+  version "1.5.2-canary.0-f23d183"
+  resolved "https://registry.yarnpkg.com/@playkit-js/common/-/common-1.5.2-canary.0-f23d183.tgz#4bd371c4050d1e30486b72cdea219d326fc0b798"
+  integrity sha512-/PkwsLY5w94k0cAGbWQ7ra8h8iluygMOgtHrzJ7MlQD20qd+B768cku0t3ieZQmgwhMERe62YlUdJsSkRgCPDw==
+  dependencies:
+    "@playkit-js/playkit-js-ui" "^0.77.10"
+    classnames "^2.3.2"
+    linkify-it "^4.0.1"
+
 "@playkit-js/common@^1.2.10":
   version "1.2.11"
   resolved "https://registry.yarnpkg.com/@playkit-js/common/-/common-1.2.11.tgz#23f40b5780a982aaf216c8b89b22b344434a2d0c"
   integrity sha512-1ipYDn2rio2PW97+GY5R8YG91HjR4ln0cByNstwgJXEOb3z4rISFyCpDXGoy1cLApx9XczhFXXyxmEAWdYcuZw==
-  dependencies:
-    "@playkit-js/playkit-js-ui" "^0.77.1"
-    classnames "^2.3.2"
-    linkify-it "^4.0.1"
-
-"@playkit-js/common@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@playkit-js/common/-/common-1.5.0.tgz#15995b26cef4c5de7f7f6aa37131f383c144617a"
-  integrity sha512-cJc5cl3QUxaw2FgjyW7fVJiG1b+sYrsiki/IynChKcJE5E2AKS/AXtLnUuf7sOEDrl1edNSqPIWDdMvbXgE+Cw==
   dependencies:
     "@playkit-js/playkit-js-ui" "^0.77.1"
     classnames "^2.3.2"
@@ -572,6 +572,16 @@
   version "0.77.2"
   resolved "https://registry.yarnpkg.com/@playkit-js/playkit-js-ui/-/playkit-js-ui-0.77.2.tgz#5340ba529a0a0554c4a63d7720a0bf8b27c7a696"
   integrity sha512-vuRHXlde6P7I0YdXchkcdfSQVw1sn1MCHx0o9g4AakwlCawZ9JktIWGD2s4hTCRnH5HAk6xJbMMMRaEgjCg9bQ==
+  dependencies:
+    preact "^10.3.4"
+    preact-i18n "^2.0.0-preactx.2"
+    react-redux "^7.2.0"
+    redux "^4.0.5"
+
+"@playkit-js/playkit-js-ui@^0.77.10":
+  version "0.77.12"
+  resolved "https://registry.yarnpkg.com/@playkit-js/playkit-js-ui/-/playkit-js-ui-0.77.12.tgz#84b48368ca515296c7c85b69d327bf97a77787ac"
+  integrity sha512-wALlIY1aEURsyPa9gen7kHjR8M+scqphDfI2otCrEe7LUDA94kCsc66sHCHATpyOXZzGt7rlcYUjg2UtkcAsbA==
   dependencies:
     preact "^10.3.4"
     preact-i18n "^2.0.0-preactx.2"
