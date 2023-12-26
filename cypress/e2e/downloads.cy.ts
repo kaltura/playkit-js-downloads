@@ -158,6 +158,15 @@ describe('download plugin', () => {
           cy.get('[data-testid="download-overlay-attachments-container"]').should('not.exist');
         });
       });
+      it('should not display sources', () => {
+        mockKalturaBe();
+        loadPlayerAndSetMedia({displaySources: false}).then(() => {
+          cy.get('.playkit-pre-playback-play-button').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay-button"]').should('exist').click({force: true});
+          cy.get('[data-testid="download-overlay"]').should('exist');
+          cy.get('[data-testid="download-overlay-sources-container"]').should('not.exist');
+        });
+      });
     });
     describe('expandable container', () => {
       it('should expand sources container and show more flavors', () => {
