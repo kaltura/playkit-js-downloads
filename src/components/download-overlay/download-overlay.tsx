@@ -100,15 +100,21 @@ const DownloadOverlay = withText({
           return <AttachmentsList attachments={downloadMetadata!.attachments} downloadPluginManager={downloadPluginManager} />;
         };
 
+        const shouldRenderSources = downloadConfig.displaySources && (downloadMetadata!.flavors.length || downloadMetadata!.imageDownloadUrl);
+        const shouldRenderCaptions = downloadConfig.displayCaptions && downloadMetadata!.captions.length;
+        const shouldRenderAttachments = downloadConfig.displayAttachments && downloadMetadata!.attachments.length;
+
         return isVisible ? (
           <div data-testid="download-overlay" className={styles.downloadOverlay}>
             <div className={`${styles.header} ${sizeClass}`}>{downloadsLabel}</div>
             <div className={`${styles.fileInfoList} ${sizeClass}`}>
-              <div className={styles.sourcesCaptionsContainer}>
-                {renderSources()}
-                {downloadConfig.displayCaptions && downloadMetadata!.captions.length > 0 && renderCaptions()}
-              </div>
-              {downloadConfig.displayAttachments && downloadMetadata!.attachments.length > 0 && renderAttachments()}
+              {shouldRenderSources || shouldRenderCaptions ? (
+                <div className={styles.sourcesCaptionsContainer}>
+                  {shouldRenderSources && renderSources()}
+                  {shouldRenderCaptions && renderCaptions()}
+                </div>
+              ) : undefined}
+              {shouldRenderAttachments && renderAttachments()}
             </div>
             <div>
               <div data-testid="download-overlay-close-button" className={styles.closeButtonContainer}>

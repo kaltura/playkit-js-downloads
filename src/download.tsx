@@ -1,4 +1,4 @@
-import {UpperBarManager, ToastManager, ToastSeverity} from '@playkit-js/ui-managers';
+import {ToastManager, ToastSeverity, UpperBarManager} from '@playkit-js/ui-managers';
 
 import {DownloadConfig, DownloadMetadata} from './types';
 import {DownloadOverlayButton} from './components';
@@ -19,7 +19,8 @@ class Download extends KalturaPlayer.core.BasePlugin {
     preDownloadHook: null,
     displayAttachments: true,
     displayFlavors: true,
-    displayCaptions: true
+    displayCaptions: true,
+    displaySources: true
   };
 
   private iconId = -1;
@@ -112,8 +113,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
   private shouldInjectUI(downloadMetadata: DownloadMetadata): boolean {
     if (!downloadMetadata) return false;
     const {flavors, captions, attachments, imageDownloadUrl} = downloadMetadata;
-    const {displayCaptions, displayAttachments} = this.downloadPluginManager.downloadPlugin.config;
-    return flavors.length || imageDownloadUrl || (captions.length && displayCaptions) || (attachments.length && displayAttachments);
+    const {displayCaptions, displayAttachments, displaySources} = this.downloadPluginManager.downloadPlugin.config;
+    return (
+      (displaySources && (flavors.length || imageDownloadUrl)) || (displayCaptions && captions.length) || (displayAttachments && attachments.length)
+    );
   }
 
   async loadMedia() {
