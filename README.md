@@ -13,6 +13,7 @@ The plugin has the following configuration parameters:
 - **displayFlavors** - A flag indicating whether to display flavors to download. optional- default is true. if set to false then only the configured/default source will be available for download.
 - **displayCaptions** - A flag indicating whether to display captions of the media to download. optional- default is true. 
 - **displayAttachments** - A flag indicating whether to display attachments of the media to download. optional- default is true.
+- **displaySources** - A flag indicating whether to display media sources to download. optional- default is true.
 
 
 [getFlavorAssetsWithParams]: https://developer.kaltura.com/api-docs/service/flavorAsset/action/getFlavorAssetsWithParams
@@ -119,6 +120,7 @@ plugins: {
     displayFlavors: boolean, // a flag indicating whether to display flavors to download. optional. default is true.
     displayCaptions: boolean, // a flag indicating whether to display captions to download. optional. default is true.
     displayAttachments: boolean // a flag indicating whether to display attachments to download. optional. default is true.
+    displaySources: boolean // a flag indicating whether to display media sources to download. optional. default is true.
   }
 }
 ```
