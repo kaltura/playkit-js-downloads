@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.1.0 (2024-01-07)
+
+
+### Features
+
+* **FEC-13516:** allow hiding video download from download plugin ([#38](https://github.com/kaltura/playkit-js-downloads/issues/38)) ([60c49dc](https://github.com/kaltura/playkit-js-downloads/commit/60c49dc10e81182aa855e5c66d22295a879ae12b))
+
 ### 1.0.17 (2023-12-21)
 
 ### 1.0.16 (2023-12-21)
