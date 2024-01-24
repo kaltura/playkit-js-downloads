@@ -9,6 +9,6 @@ const NAME = __NAME__;
 export {Download as Plugin};
 export {VERSION, NAME};
 
-const pluginName = 'download';
+export const pluginName = 'download';
 
 KalturaPlayer.core.registerPlugin(pluginName, Download);

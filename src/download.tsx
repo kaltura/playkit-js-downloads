@@ -8,7 +8,7 @@ import {DownloadPluginManager} from './download-plugin-manager';
 
 import {OnClickEvent} from '@playkit-js/common';
 import {ui} from '@playkit-js/kaltura-player-js';
-const {Text} = ui.preacti18n;
+import { pluginName } from "./index";
 const {ReservedPresetNames} = ui;
 const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img];
 
@@ -79,10 +79,15 @@ class Download extends KalturaPlayer.core.BasePlugin {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.iconId = this.upperBarManager.add({
-      label: (<Text id="download.download">Download</Text>) as never,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      ariaLabel: (<Text id="download.download">Download</Text>) as never,
+      displayName: 'Download',
+      order: 40,
       svgIcon: {
-        viewBox: '0 0 32 32',
         path: DOWNLOAD
       },
       onClick: this._handleClick as any,
