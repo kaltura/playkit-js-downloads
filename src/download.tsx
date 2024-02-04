@@ -8,8 +8,10 @@ import {DownloadPluginManager} from './download-plugin-manager';
 
 import {OnClickEvent} from '@playkit-js/common';
 import {ui} from '@playkit-js/kaltura-player-js';
-import { pluginName } from "./index";
+
 const {ReservedPresetNames} = ui;
+const {Text} = ui.preacti18n;
+
 const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img];
 
 class Download extends KalturaPlayer.core.BasePlugin {
