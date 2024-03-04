@@ -14,7 +14,7 @@ import * as styles from './download-overlay.scss';
 import {SourcesList} from '../sources-list';
 import {CaptionsList} from '../captions-list';
 import {AttachmentsList} from '../attachments-list';
-import {DownloadInternalEvent} from '../../event';
+import {DownloadEvent} from '../../event';
 
 interface DownloadOverlayProps {
   downloadPluginManager: DownloadPluginManager;
@@ -68,11 +68,11 @@ const DownloadOverlay = withText({
         const closeButtonRef = createRef<HTMLButtonElement>();
         const downloadConfig = downloadPluginManager.downloadPlugin.config;
         useEffect(() => {
-          eventManager?.listen(downloadPluginManager, DownloadInternalEvent.SHOW_OVERLAY, () => {
+          eventManager?.listen(downloadPluginManager, DownloadEvent.SHOW_OVERLAY, () => {
             setIsVisible(true);
           });
 
-          eventManager?.listen(downloadPluginManager, DownloadInternalEvent.HIDE_OVERLAY, () => {
+          eventManager?.listen(downloadPluginManager, DownloadEvent.HIDE_OVERLAY, () => {
             setIsVisible(false);
           });
         }, []);

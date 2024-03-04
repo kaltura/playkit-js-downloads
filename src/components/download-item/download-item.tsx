@@ -62,7 +62,7 @@ export const DownloadItem = withText({
             if (downloadUrl) {
               downloadPluginManager.downloadFile(downloadUrl, fileName);
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
-              player.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED));
+              player.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {fileName, description}));
             } else {
               downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
             }
