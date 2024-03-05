@@ -44,6 +44,7 @@ export const CaptionsList = withText({
         fileName={fileName}
         description={languageLabel}
         downloadUrl={downloadUrl}
+        assetType={"Captions"}
         iconFileType={<CommonIcon name={'closedCaptions'} />}
       />
     );

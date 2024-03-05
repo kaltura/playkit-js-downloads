@@ -21,7 +21,7 @@ export const AttachmentsList = withText({
   };
 
   const _renderDownloadItem = (key: string, fileName: string, downloadUrl: string, icon: ComponentChildren) => {
-    return <DownloadItem downloadPluginManager={downloadPluginManager} key={key} fileName={fileName} downloadUrl={downloadUrl} iconFileType={icon} />;
+    return <DownloadItem downloadPluginManager={downloadPluginManager} key={key} fileName={fileName} downloadUrl={downloadUrl} assetType={"Attachments"} iconFileType={icon} />;
   };
 
   const _renderAttachments = (attachments: Array<KalturaAttachmentAsset>) => {

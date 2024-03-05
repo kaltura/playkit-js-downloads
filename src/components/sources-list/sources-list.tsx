@@ -104,6 +104,7 @@ export const SourcesList = withText({
           description={description}
           downloadUrl={downloadUrl}
           iconFileType={icon}
+          assetType={"Media"}
           isDefault={isDefault}
         />
       );
