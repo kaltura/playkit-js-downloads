@@ -64,8 +64,8 @@ export const DownloadItem = withText({
             if (downloadUrl) {
               downloadPluginManager.downloadFile(downloadUrl, fileName);
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
-              // @ts-ignore
-              const fileType = fileName.match(/\.(.*?)$/)[1];
+
+              const fileType = fileName.match(/\.(.*?)$/)![1];
               player.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {fileType, description, assetType}));
             } else {
               downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
