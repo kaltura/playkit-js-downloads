@@ -8,6 +8,7 @@ import {DownloadPluginManager} from './download-plugin-manager';
 
 import {OnClickEvent} from '@playkit-js/common';
 import {ui} from '@playkit-js/kaltura-player-js';
+import { DownloadEvent } from "./event";
 
 const {ReservedPresetNames} = ui;
 const {Text} = ui.preacti18n;
@@ -36,6 +37,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   constructor(name: string, player: KalturaPlayerTypes.Player, config: DownloadConfig) {
     super(name, player, config);
     this.downloadPluginManager = new DownloadPluginManager(this);
+    this._addBindings();
   }
 
   static isValid(): boolean {
@@ -136,6 +138,11 @@ class Download extends KalturaPlayer.core.BasePlugin {
       this.logger.debug('Download is supported for current entry');
       this.injectOverlayComponents(downloadMetadata);
     }
+  }
+
+  _addBindings() {
+    this.eventManager.listen(this.downloadPluginManager, DownloadEvent.SHOW_OVERLAY, (e) => this.dispatchEvent(DownloadEvent.SHOW_OVERLAY, e.payload));
+    this.eventManager?.listen(this.downloadPluginManager, DownloadEvent.HIDE_OVERLAY, (e) => this.dispatchEvent(DownloadEvent.HIDE_OVERLAY, e.payload));
   }
 
   reset() {

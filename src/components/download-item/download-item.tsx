@@ -20,6 +20,7 @@ interface DownloadItemProps {
   downloadFailedLabel?: string;
   downloadButtonLabel?: string;
   fileName: string;
+  assetType: string;
   description?: string;
   downloadUrl: string;
   iconFileType: ComponentChildren;
@@ -42,6 +43,7 @@ export const DownloadItem = withText({
       downloadPluginManager,
       downloadButtonLabel,
       fileName,
+      assetType,
       description,
       downloadUrl,
       iconFileType,
@@ -62,7 +64,9 @@ export const DownloadItem = withText({
             if (downloadUrl) {
               downloadPluginManager.downloadFile(downloadUrl, fileName);
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
-              player.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED));
+
+              const fileType = fileName.match(/\.(.*?)$/)![1];
+              player.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {fileType, description, assetType}));
             } else {
               downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
             }
