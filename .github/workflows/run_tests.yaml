@@ -11,10 +11,16 @@ jobs:
   tests:
     uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@master
     secrets: inherit
-  missing-tests:
-    runs-on: ubuntu-22.04
-    steps:
-      - run: yarn run build & yarn run eslint
+  build:
+    uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
+    with:
+      node-version: '20.x'
+      yarn-run-to-execute: 'build'
+  lint:
+    uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
+    with:
+      node-version: '20.x'
+      yarn-run-to-execute: 'eslint'
 
 
 
