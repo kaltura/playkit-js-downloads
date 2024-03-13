@@ -8,7 +8,7 @@ import {DownloadPluginManager} from './download-plugin-manager';
 
 import {OnClickEvent} from '@playkit-js/common';
 import {ui} from '@playkit-js/kaltura-player-js';
-import { DownloadEvent } from "./event";
+import {DownloadEvent} from './event';
 
 const {ReservedPresetNames} = ui;
 const {Text} = ui.preacti18n;
@@ -141,8 +141,8 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   _addBindings() {
-    this.eventManager.listen(this.downloadPluginManager, DownloadEvent.SHOW_OVERLAY, (e) => this.dispatchEvent(DownloadEvent.SHOW_OVERLAY, e.payload));
-    this.eventManager?.listen(this.downloadPluginManager, DownloadEvent.HIDE_OVERLAY, (e) => this.dispatchEvent(DownloadEvent.HIDE_OVERLAY, e.payload));
+    this.eventManager.listen(this.downloadPluginManager, DownloadEvent.SHOW_OVERLAY, e => this.dispatchEvent(DownloadEvent.SHOW_OVERLAY, e.payload));
+    this.eventManager?.listen(this.downloadPluginManager, DownloadEvent.HIDE_OVERLAY, e => this.dispatchEvent(DownloadEvent.HIDE_OVERLAY, e.payload));
   }
 
   reset() {

@@ -4,7 +4,7 @@ import {DownloadItem} from '../download-item';
 import * as styles from './captions-list.scss';
 import {ExpandableContainer} from '../expandable-container';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
-import { assetType } from '../../consts/asset-type';
+import {assetType} from '../../consts/asset-type';
 
 const {withText} = KalturaPlayer.ui.preacti18n;
 

@@ -13,6 +13,7 @@
     "pushTaggedRelease": "git push --follow-tags --no-verify origin master",
     "release": "standard-version",
     "eslint": "eslint . --color",
+    "eslint:fix": "eslint . --color --fix",
     "prettier:fix": "prettier --write .",
     "cy:open": "cypress open",
     "cy:run": "yarn run cy:run:chrome && yarn run cy:run:firefox && yarn run cy:run:edge && yarn run cy:run:safari",
