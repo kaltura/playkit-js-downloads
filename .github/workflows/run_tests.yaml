@@ -11,8 +11,11 @@ jobs:
   tests:
     uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@master
     secrets: inherit
+  missing-tests:
     steps:
       - run: yarn run build & yarn run eslint
+
+
 
   notification:
     if: always()
