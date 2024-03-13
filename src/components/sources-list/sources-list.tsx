@@ -6,7 +6,7 @@ import {DownloadConfig} from '../../types';
 import {ExpandableContainer} from '../expandable-container';
 import {ComponentChildren} from 'preact';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
-import { assetType } from '../../consts/asset-type';
+import {assetType} from '../../consts/asset-type';
 const {Icon, IconType} = KalturaPlayer.ui.components;
 
 const {withText} = KalturaPlayer.ui.preacti18n;
@@ -149,9 +149,8 @@ export const SourcesList = withText({
         return _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true);
       } else if (flavors.length > 0) {
         return _renderExpandableFlavors();
-      } else {
-        return undefined;
       }
+      return undefined;
     };
 
     return (

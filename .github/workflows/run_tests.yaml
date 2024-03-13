@@ -11,6 +11,18 @@ jobs:
   tests:
     uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@master
     secrets: inherit
+  build:
+    uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
+    with:
+      node-version: '18.x'
+      yarn-run-to-execute: 'build'
+  lint:
+    uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
+    with:
+      node-version: '18.x'
+      yarn-run-to-execute: 'eslint'
+
+
 
   notification:
     if: always()
@@ -22,4 +34,3 @@ jobs:
       failure-status: ${{ contains(needs.*.result, 'failure') }}
       cancelled-status: ${{ contains(needs.*.result, 'cancelled') }}
       is-test: 'true'
-      
