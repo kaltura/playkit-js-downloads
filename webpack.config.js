@@ -55,7 +55,12 @@ module.exports = {
     ]
   },
   devServer: {
-    static: `${__dirname}/src`
+    static: {
+      directory: path.join(__dirname, 'demo')
+    },
+    client: {
+      progress: true
+    }
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
