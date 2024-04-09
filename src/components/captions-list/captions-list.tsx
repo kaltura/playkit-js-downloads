@@ -57,7 +57,7 @@ export const CaptionsList = withText({
 
   const _renderCaptions = (captions: Array<KalturaCaptionAsset>) => {
     return captions.map((caption: KalturaCaptionAsset) => {
-      if (!caption.isDefault || caption.id !== defaultCaptions?.id) {
+      if ((!caption.isDefault || caption.id !== defaultCaptions?.id) && caption.downloadUrl) {
         return _renderCaption(caption);
       }
     });

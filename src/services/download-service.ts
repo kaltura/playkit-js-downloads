@@ -65,7 +65,8 @@ class DownloadService {
 
     const data = await this.player.provider.doRequest(
       [{loader: DownloadUrlLoader, params: {flavors: metadata?.flavors, captions: metadata?.captions, attachments: metadata?.attachments}}],
-      ks
+      ks,
+      false
     );
     if (data && data.has(DownloadUrlLoader.id)) {
       const urlsLoader = data.get(DownloadUrlLoader.id);
