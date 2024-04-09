@@ -12,12 +12,11 @@ interface AttachmentsListProps {
   attachments: Array<KalturaAttachmentAsset>;
   downloadPluginManager: DownloadPluginManager;
   attachmentsLabel?: string;
-  undisplayedAttachments: string[];
 }
 
 export const AttachmentsList = withText({
   attachmentsLabel: 'download.attachments_label'
-})(({attachments, downloadPluginManager, attachmentsLabel, undisplayedAttachments}: AttachmentsListProps) => {
+})(({attachments, downloadPluginManager, attachmentsLabel}: AttachmentsListProps) => {
   const _buildFileName = (attachment: KalturaAttachmentAsset) => {
     return attachment.title || attachment.fileName;
   };
@@ -36,7 +35,7 @@ export const AttachmentsList = withText({
   };
 
   const _renderAttachments = (attachments: Array<KalturaAttachmentAsset>) => {
-    return attachments.filter((attachment: KalturaAttachmentAsset): boolean => !(undisplayedAttachments.includes(attachment.objectType))).map((attachment: KalturaAttachmentAsset) => {
+    return attachments.map((attachment: KalturaAttachmentAsset) => {
       return _renderDownloadItem(attachment.id, _buildFileName(attachment), attachment.downloadUrl, getIconByFileExt(attachment.fileExt));
     });
   };

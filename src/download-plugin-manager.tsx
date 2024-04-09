@@ -1,3 +1,5 @@
+import {KalturaAttachmentAsset} from './providers';
+
 const {Icon} = KalturaPlayer.ui.components;
 
 import {Download} from './download';
@@ -23,6 +25,8 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
 
       if (!this.downloadMetadata) {
         this.downloadPlugin.logger.debug('Failed to get download url headers');
+      } else {
+        this.downloadMetadata.attachments = this.downloadMetadata.attachments.filter((attachment: KalturaAttachmentAsset): boolean => !(this.downloadPlugin.config.undisplayedAttachments.includes(attachment.objectType)))
       }
     }
     return this.downloadMetadata;

@@ -97,7 +97,7 @@ const DownloadOverlay = withText({
         };
 
         const renderAttachments = () => {
-          return <AttachmentsList  undisplayedAttachments={downloadConfig.undisplayedAttachments} attachments={downloadMetadata!.attachments} downloadPluginManager={downloadPluginManager} />;
+          return <AttachmentsList attachments={downloadMetadata!.attachments} downloadPluginManager={downloadPluginManager} />;
         };
 
         const shouldRenderSources = downloadConfig.displaySources && (downloadMetadata!.flavors.length || downloadMetadata!.imageDownloadUrl);
