@@ -13,7 +13,7 @@ import {DownloadEvent} from './event';
 const {ReservedPresetNames} = ui;
 const {Text} = ui.preacti18n;
 
-const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img];
+const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img, 'MiniAudioUI'];
 
 class Download extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: DownloadConfig = {
@@ -63,6 +63,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
     });
   }
 
+  showOverlay(): void {
+    this.downloadPluginManager.showOverlay = true;
+  }
+
   private _setPluginButtonRef = (ref: HTMLButtonElement) => {
     this._pluginButtonRef = ref;
   };
@@ -85,21 +89,21 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    this.iconId = this.upperBarManager.add({
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      ariaLabel: (<Text id="download.download">Download</Text>) as never,
-      displayName: 'Download',
-      order: 40,
-      svgIcon: {
-        path: DOWNLOAD
-      },
-      onClick: this._handleClick as any,
-      component: () => {
-        return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
-      },
-      presets: PRESETS
-    }) as number;
+    // this.iconId = this.upperBarManager.add({
+    //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //   // @ts-ignore
+    //   ariaLabel: (<Text id="download.download">Download</Text>) as never,
+    //   displayName: 'Download',
+    //   order: 40,
+    //   svgIcon: {
+    //     path: DOWNLOAD
+    //   },
+    //   onClick: this._handleClick as any,
+    //   component: () => {
+    //     return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
+    //   },
+    //   presets: PRESETS
+    // }) as number;
 
     this.componentDisposers.push(
       this.player.ui.addComponent({
