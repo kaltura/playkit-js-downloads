@@ -23,8 +23,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
     displayAttachments: true,
     displayFlavors: true,
     displayCaptions: true,
-    displaySources: true,
-    undisplayedAttachments: ['KalturaTranscriptAsset']
+    displaySources: true
   };
 
   private iconId = -1;

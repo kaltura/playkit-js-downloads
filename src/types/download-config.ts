@@ -6,7 +6,6 @@ interface DownloadConfig {
   displayFlavors: boolean;
   displayCaptions: boolean;
   displaySources: boolean;
-  undisplayedAttachments: string[];
 }
 
 export {DownloadConfig};
