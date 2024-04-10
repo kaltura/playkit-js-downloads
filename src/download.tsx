@@ -117,6 +117,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
         get: () => {
           return (
             <DownloadOverlay
+              poster={this.player.sources.poster}
               downloadPluginManager={this.downloadPluginManager}
               setFocus={this._focusPluginButton}
               downloadMetadata={downloadMetadata}
