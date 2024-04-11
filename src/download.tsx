@@ -105,7 +105,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
         component: () => {
           return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
         },
-        presets: PRESETS
+        presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
     }
 
