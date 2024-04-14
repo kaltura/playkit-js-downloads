@@ -29,9 +29,9 @@ export class DownloadUrlLoader implements ILoader {
     this._flavors = flavors;
     this._captions = captions;
     this._attachments = attachments;
+    this.addRequest(captions, 'caption_captionAsset', 'getUrl');
     this.addRequest(flavors, 'flavorasset', 'getUrl');
     this.addRequest(attachments, 'attachment_attachmentAsset', 'getUrl');
-    this.addRequest(captions, 'caption_captionAsset', 'getUrl');
   }
 
   addRequest(items: any[], service: string, action: string): void {
@@ -56,12 +56,7 @@ export class DownloadUrlLoader implements ILoader {
   set response(response: any) {
     const urls: Map<string, string> = new Map();
     for (let index = 0; index < this._requests.length; index++) {
-      if (this._requests[index].service === 'caption_captionAsset') {
-        const id = response[index]?.data.match(/captionAssetId\/([^\/]+)/)[1];
-        urls.set(id, response[index]?.data);
-      } else {
-        urls.set(this._requests[index].params.id, response[index]?.data);
-      }
+      urls.set(this._requests[index].params.id, response[index].data);
     }
     this._response.urls = urls;
   }
