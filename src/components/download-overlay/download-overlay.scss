@@ -1,14 +1,5 @@
 @import '../../theme.scss';
 
-.img-background-cover {
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    position: absolute;
-}
-
 .download-overlay {
     -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
