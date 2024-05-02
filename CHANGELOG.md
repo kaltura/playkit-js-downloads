@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.2 (2024-05-02)
+
+
+### Bug Fixes
+
+* **FEC-13868:** Player v7 | Download | Default language is being duplicated on kms. ([#50](https://github.com/kaltura/playkit-js-downloads/issues/50)) ([c1fcd65](https://github.com/kaltura/playkit-js-downloads/commit/c1fcd65f7e0fd38b85b134f897e72efc7c7c9b70))
+
 ### 1.2.1 (2024-04-10)
 
 ## 1.2.0 (2024-04-09)
