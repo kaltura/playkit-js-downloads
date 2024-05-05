@@ -102,6 +102,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
           path: DOWNLOAD
         },
         onClick: this._handleClick as any,
+        // @ts-expect-error -  TS2322: Type '() => JSXInternal.Element' is not assignable to type 'ComponentClass<Record<string, never>, {}> | FunctionalComponent<Record<string, never>>'.
         component: () => {
           return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
         },

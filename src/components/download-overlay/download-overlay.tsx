@@ -4,9 +4,7 @@ import {createRef} from 'preact';
 import {useState, useEffect} from 'preact/hooks';
 import {DownloadMetadata} from '../../types';
 import {ui} from '@playkit-js/kaltura-player-js';
-// @ts-expect-error - will be fixed once will work with new KalturaPlayer types
 const {bindActions} = ui.utils;
-// @ts-expect-error - will be fixed once will work with new KalturaPlayer types
 const overlayActions = ui.reducers.overlay.actions;
 
 const {withEventManager} = KalturaPlayer.ui.Event;
