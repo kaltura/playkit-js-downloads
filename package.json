@@ -9,7 +9,7 @@
     "build": "webpack --mode production",
     "dev": "webpack-dev-server --mode development",
     "docs:generate": "documentation build src/** -f md -o docs/api.md",
-    "watch": "webpack --progress --colors --watch --mode development",
+    "watch": "webpack --progress --watch --mode development",
     "pushTaggedRelease": "git push --follow-tags --no-verify origin master",
     "release": "standard-version",
     "eslint": "eslint . --color",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@playkit-js/common": "1.5.2-canary.0-f23d183",
-    "@playkit-js/kaltura-player-js": "3.17.0-canary.0-634f42e",
+    "@playkit-js/kaltura-player-js": "3.17.15-canary.0-b412bfc",
     "@playkit-js/ui-managers": "1.4.3-canary.0-b33eab0",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
@@ -50,10 +50,10 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
-    "@playkit-js/playkit-js-ui": "^0.77.8"
+    "@playkit-js/playkit-js-ui": "0.79.0-canary.0-da9bbc3"
   },
   "peerDependencies": {
-    "@playkit-js/kaltura-player-js": "3.14.4"
+    "@playkit-js/kaltura-player-js": "3.17.15-canary.0-b412bfc\n"
   },
   "kaltura": {
     "name": "downloads",
