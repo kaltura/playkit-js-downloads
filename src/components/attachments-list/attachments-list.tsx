@@ -36,7 +36,6 @@ export const AttachmentsList = withText({
 
   const _renderAttachments = (attachments: Array<KalturaAttachmentAsset>) => {
     return attachments.map((attachment: KalturaAttachmentAsset) => {
-      // @ts-expect-error  - TS2345: Argument of type 'import("ui-managers/node_modules/preact/src/index").ComponentChildren' is not assignable to parameter of type 'import("playkit-js-downloads/node_modules/preact/src/index").ComponentChildren'. Type 'bigint' is not assignable to type 'ComponentChildren'.
       return _renderDownloadItem(attachment.id, _buildFileName(attachment), attachment.downloadUrl, getIconByFileExt(attachment.fileExt));
     });
   };

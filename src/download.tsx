@@ -12,7 +12,7 @@ import {DownloadEvent} from './event';
 
 const {ReservedPresetNames} = ui;
 const {Text} = ui.preacti18n;
-
+// @ts-expect-error - TS2339: Property 'MiniAudioUI' does not exist on type
 const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img, ReservedPresetNames.MiniAudioUI];
 
 class Download extends KalturaPlayer.core.BasePlugin {
@@ -88,7 +88,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
     if (this.iconId > 0) {
       return;
     }
-    // console.log('21212', ReservedPresetNames.MiniAudioUI)
+    // @ts-expect-error - TS2339: Property 'MiniAudioUI' does not exist on type
     if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -102,10 +102,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
           path: DOWNLOAD
         },
         onClick: this._handleClick as any,
-        // @ts-expect-error -  TS2322: Type '() => JSXInternal.Element' is not assignable to type 'ComponentClass<Record<string, never>, {}> | FunctionalComponent<Record<string, never>>'.
         component: () => {
           return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
         },
+        // @ts-expect-error - TS2339: Property 'MiniAudioUI' does not exist on type
         presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
     }
