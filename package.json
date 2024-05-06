@@ -9,7 +9,7 @@
     "build": "webpack --mode production",
     "dev": "webpack-dev-server --mode development",
     "docs:generate": "documentation build src/** -f md -o docs/api.md",
-    "watch": "webpack --progress --colors --watch --mode development",
+    "watch": "webpack --progress --watch --mode development",
     "pushTaggedRelease": "git push --follow-tags --no-verify origin master",
     "release": "standard-version",
     "eslint": "eslint . --color",

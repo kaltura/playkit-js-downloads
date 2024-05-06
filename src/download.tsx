@@ -12,8 +12,8 @@ import {DownloadEvent} from './event';
 
 const {ReservedPresetNames} = ui;
 const {Text} = ui.preacti18n;
-
-const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img];
+// @ts-expect-error - TS2339: Property 'MiniAudioUI' does not exist on type
+const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img, ReservedPresetNames.MiniAudioUI];
 
 class Download extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: DownloadConfig = {
@@ -33,11 +33,13 @@ class Download extends KalturaPlayer.core.BasePlugin {
   private downloadPluginManager: DownloadPluginManager;
   private _pluginButtonRef: HTMLButtonElement | null = null;
   public triggeredByKeyboard = false;
+  private store: any;
 
   constructor(name: string, player: KalturaPlayerTypes.Player, config: DownloadConfig) {
     super(name, player, config);
     this.downloadPluginManager = new DownloadPluginManager(this);
     this._addBindings();
+    this.store = ui.redux.useStore();
   }
 
   static isValid(): boolean {
@@ -63,6 +65,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
     });
   }
 
+  showOverlay(): void {
+    this.downloadPluginManager.showOverlay = true;
+  }
+
   private _setPluginButtonRef = (ref: HTMLButtonElement) => {
     this._pluginButtonRef = ref;
   };
@@ -82,24 +88,27 @@ class Download extends KalturaPlayer.core.BasePlugin {
     if (this.iconId > 0) {
       return;
     }
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.iconId = this.upperBarManager.add({
+    // @ts-expect-error - TS2339: Property 'MiniAudioUI' does not exist on type
+    if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      ariaLabel: (<Text id="download.download">Download</Text>) as never,
-      displayName: 'Download',
-      order: 40,
-      svgIcon: {
-        path: DOWNLOAD
-      },
-      onClick: this._handleClick as any,
-      component: () => {
-        return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
-      },
-      presets: PRESETS
-    }) as number;
+      this.iconId = this.upperBarManager.add({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ariaLabel: (<Text id="download.download">Download</Text>) as never,
+        displayName: 'Download',
+        order: 40,
+        svgIcon: {
+          path: DOWNLOAD
+        },
+        onClick: this._handleClick as any,
+        component: () => {
+          return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
+        },
+        // @ts-expect-error - TS2339: Property 'MiniAudioUI' does not exist on type
+        presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
+      }) as number;
+    }
 
     this.componentDisposers.push(
       this.player.ui.addComponent({

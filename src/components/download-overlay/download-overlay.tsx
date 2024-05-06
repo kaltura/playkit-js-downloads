@@ -3,6 +3,12 @@ import {DownloadPluginManager} from '../../download-plugin-manager';
 import {createRef} from 'preact';
 import {useState, useEffect} from 'preact/hooks';
 import {DownloadMetadata} from '../../types';
+import {ui} from '@playkit-js/kaltura-player-js';
+
+// @ts-expect-error - TS2339: Property 'bindActions' does not exist on type
+const {bindActions} = ui.utils;
+// @ts-expect-error - TS2339: Property 'bindActions' does not exist on type
+const overlayActions = ui.reducers.overlay.actions;
 
 const {withEventManager} = KalturaPlayer.ui.Event;
 const {PLAYER_SIZE} = KalturaPlayer.ui.components;
@@ -24,6 +30,7 @@ interface DownloadOverlayProps {
   closeLabel?: string;
   setFocus: () => void;
   downloadMetadata: DownloadMetadata;
+  updateOverlay: (isOpen: boolean) => void;
 }
 
 const mapStateToProps = (state: any) => {
@@ -61,9 +68,21 @@ const DownloadOverlay = withText({
   downloadsLabel: 'download.downloads',
   closeLabel: 'overlay.close'
 })(
-  connect(mapStateToProps)(
+  connect(
+    mapStateToProps,
+    bindActions(overlayActions)
+  )(
     withEventManager(
-      ({downloadPluginManager, eventManager, sizeClass, downloadsLabel, closeLabel, setFocus, downloadMetadata}: DownloadOverlayProps) => {
+      ({
+        downloadPluginManager,
+        eventManager,
+        sizeClass,
+        downloadsLabel,
+        closeLabel,
+        setFocus,
+        downloadMetadata,
+        updateOverlay
+      }: DownloadOverlayProps) => {
         const [isVisible, setIsVisible] = useState(false);
         const closeButtonRef = createRef<HTMLButtonElement>();
         const downloadConfig = downloadPluginManager.downloadPlugin.config;
@@ -117,9 +136,10 @@ const DownloadOverlay = withText({
               {shouldRenderAttachments && renderAttachments()}
             </div>
             <div>
-              <div data-testid="download-overlay-close-button" className={styles.closeButtonContainer}>
+              <div data-testid="download-overlay-close-button" className={`${styles.closeButtonContainer} ${sizeClass}`}>
                 <A11yWrapper
                   onClick={(e: OnClickEvent, byKeyboard: boolean) => {
+                    updateOverlay(false);
                     downloadPluginManager.showOverlay = false;
                     if (byKeyboard) {
                       setFocus();
