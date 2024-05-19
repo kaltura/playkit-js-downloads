@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.3.0 (2024-05-19)
+
+
+### Features
+
+* **RE-REVERT-FEC-13730:** Download plugin, ignore system attachments ([#51](https://github.com/kaltura/playkit-js-downloads/issues/51)) ([c1cbb26](https://github.com/kaltura/playkit-js-downloads/commit/c1cbb26e4e80e32a7aea3702c75115a6f9944ac5))
+
 ### 1.2.2 (2024-05-02)
 
 
