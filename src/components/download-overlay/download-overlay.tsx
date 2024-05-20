@@ -125,6 +125,27 @@ const DownloadOverlay = withText({
 
         return isVisible ? (
           <div data-testid="download-overlay" className={styles.downloadOverlay}>
+            <div data-testid="download-overlay-close-button" className={`${styles.closeButtonContainer} ${sizeClass}`}>
+              <A11yWrapper
+                onClick={(e: OnClickEvent, byKeyboard: boolean) => {
+                  updateOverlay(false);
+                  downloadPluginManager.showOverlay = false;
+                  if (byKeyboard) {
+                    setFocus();
+                  }
+                }}>
+                <Button
+                  type={ButtonType.borderless}
+                  size={ButtonSize.medium}
+                  tooltip={{label: closeLabel!}}
+                  ariaLabel={closeLabel}
+                  icon={'close'}
+                  setRef={ref => {
+                    closeButtonRef.current = ref;
+                  }}
+                />
+              </A11yWrapper>
+            </div>
             <div className={`${styles.header} ${sizeClass}`}>{downloadsLabel}</div>
             <div className={`${styles.fileInfoList} ${sizeClass}`}>
               {shouldRenderSources || shouldRenderCaptions ? (
@@ -134,29 +155,6 @@ const DownloadOverlay = withText({
                 </div>
               ) : undefined}
               {shouldRenderAttachments && renderAttachments()}
-            </div>
-            <div>
-              <div data-testid="download-overlay-close-button" className={`${styles.closeButtonContainer} ${sizeClass}`}>
-                <A11yWrapper
-                  onClick={(e: OnClickEvent, byKeyboard: boolean) => {
-                    updateOverlay(false);
-                    downloadPluginManager.showOverlay = false;
-                    if (byKeyboard) {
-                      setFocus();
-                    }
-                  }}>
-                  <Button
-                    type={ButtonType.borderless}
-                    size={ButtonSize.medium}
-                    tooltip={{label: closeLabel!}}
-                    ariaLabel={closeLabel}
-                    icon={'close'}
-                    setRef={ref => {
-                      closeButtonRef.current = ref;
-                    }}
-                  />
-                </A11yWrapper>
-              </div>
             </div>
           </div>
         ) : (
