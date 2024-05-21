@@ -5,9 +5,8 @@ import {useState, useEffect} from 'preact/hooks';
 import {DownloadMetadata} from '../../types';
 import {ui} from '@playkit-js/kaltura-player-js';
 
-// @ts-expect-error - TS2339: Property 'bindActions' does not exist on type
 const {bindActions} = ui.utils;
-// @ts-expect-error - TS2339: Property 'bindActions' does not exist on type
+
 const overlayActions = ui.reducers.overlay.actions;
 
 const {withEventManager} = KalturaPlayer.ui.Event;
