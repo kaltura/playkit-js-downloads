@@ -48,7 +48,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   private get upperBarManager(): UpperBarManager {
-    return (this.player.getService('upperBarManager') as UpperBarManager) || {};
+    return (this.player.getService('upperBarManager') as UpperBarManager);
   }
 
   private get toastManager(): ToastManager {
