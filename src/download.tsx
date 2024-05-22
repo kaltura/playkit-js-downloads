@@ -66,17 +66,13 @@ class Download extends KalturaPlayer.core.BasePlugin {
     });
   }
 
-  showOverlay(): void {
-    this.downloadPluginManager.showOverlay = true;
-  }
-
   private _setPluginButtonRef = (ref: HTMLButtonElement) => {
     this._pluginButtonRef = ref;
   };
 
   private _handleClick = (event: OnClickEvent, byKeyboard: boolean) => {
     this.triggeredByKeyboard = byKeyboard;
-    this.downloadPluginManager.showOverlay = !this.downloadPluginManager.showOverlay;
+    this.downloadPluginManager.setShowOverlay(!this.downloadPluginManager.showOverlay);
   };
 
   private _focusPluginButton = () => {
@@ -106,7 +102,8 @@ class Download extends KalturaPlayer.core.BasePlugin {
         component: () => {
           return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
         },
-
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
     }
@@ -141,7 +138,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   async loadMedia() {
     await this.ready;
 
-    this.downloadPluginManager.showOverlay = false;
+    this.downloadPluginManager.setShowOverlay(false, false);
     const downloadMetadata = await this.downloadPluginManager.getDownloadMetadata(true);
 
     if (this.shouldInjectUI(downloadMetadata)) {
