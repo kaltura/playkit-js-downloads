@@ -87,11 +87,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
     }
 
     if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       this.iconId = this.upperBarManager.add({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         ariaLabel: (<Text id="download.download">Download</Text>) as never,
         displayName: 'Download',
         order: 40,
@@ -102,8 +98,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
         component: () => {
           return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
         },
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error - TS2322: Type string[] is not assignable to type ReservedPresetName[]
         presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
     }
