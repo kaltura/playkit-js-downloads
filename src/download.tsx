@@ -87,7 +87,11 @@ class Download extends KalturaPlayer.core.BasePlugin {
     }
 
     if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.iconId = this.upperBarManager.add({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         ariaLabel: (<Text id="download.download">Download</Text>) as never,
         displayName: 'Download',
         order: 40,
