@@ -98,6 +98,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
         component: () => {
           return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
         },
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error - TS2322: Type string[] is not assignable to type ReservedPresetName[]
         presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
