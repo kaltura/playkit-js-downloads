@@ -65,7 +65,7 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
     });
   }
 
-  set showOverlay(overlayVisible: boolean) {
+  setShowOverlay(overlayVisible: boolean, byUserInteraction = true): void {
     this._showOverlay = overlayVisible;
 
     if (this._showOverlay) {
@@ -79,7 +79,9 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
         this.downloadPlugin.player.play();
         this.playOnClose = false;
       }
-      this.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.HIDE_OVERLAY));
+      if (byUserInteraction) {
+        this.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.HIDE_OVERLAY));
+      }
     }
   }
 

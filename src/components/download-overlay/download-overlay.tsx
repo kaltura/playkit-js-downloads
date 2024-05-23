@@ -128,7 +128,7 @@ const DownloadOverlay = withText({
               <A11yWrapper
                 onClick={(e: OnClickEvent, byKeyboard: boolean) => {
                   updateOverlay(false);
-                  downloadPluginManager.showOverlay = false;
+                  downloadPluginManager.setShowOverlay(false);
                   if (byKeyboard) {
                     setFocus();
                   }
