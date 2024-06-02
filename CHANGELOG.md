@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.3.2 (2024-06-02)
+
+
+### Bug Fixes
+
+* **FEC-13728:** bring back showOverlay api ([#54](https://github.com/kaltura/playkit-js-downloads/issues/54)) ([56bf397](https://github.com/kaltura/playkit-js-downloads/commit/56bf39774a3b88bd13542b7a532568542b109ec5))
+
 ### 1.3.1 (2024-05-19)
 
 ## 1.3.0 (2024-05-19)
