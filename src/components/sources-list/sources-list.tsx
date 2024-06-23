@@ -69,6 +69,10 @@ export const SourcesList = withText({
     _setDefaultFlavor();
 
     const _buildSourceDescription = (flavor: KalturaFlavorAsset): string => {
+      // flavor.height - 0 = audio file
+      if (flavor.height === 0) {
+        return flavor.language !== 'Undefined' ? flavor.language : '';
+      }
       let flavorDescription = `${flavor.height}p`;
       if (flavor.height >= HeightResolution.UHD_4K) {
         flavorDescription += ` ${RESOLUTION_4K}`;
@@ -81,8 +85,8 @@ export const SourcesList = withText({
       return flavorDescription;
     };
 
-    const _getPlayIcon = (): ComponentChildren => {
-      return <Icon id="download-file-play" type={IconType.Play} viewBox={`0 0 32 32`} />;
+    const _getPlayIcon = (flavor: KalturaFlavorAsset): ComponentChildren => {
+      return <Icon id="download-file-play" type={flavor.height > 0 ? IconType.Play : IconType.Audio} viewBox={`0 0 32 32`} />;
     };
 
     const _getImageIcon = (): ComponentChildren => {
@@ -117,7 +121,7 @@ export const SourcesList = withText({
         `${fileName}.${flavor.fileExt}`,
         _buildSourceDescription(flavor),
         flavor.downloadUrl,
-        _getPlayIcon(),
+        _getPlayIcon(flavor),
         isDefault
       );
     };
