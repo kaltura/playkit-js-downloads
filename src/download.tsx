@@ -16,6 +16,8 @@ const {Text} = ui.preacti18n;
 const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img, ReservedPresetNames.MiniAudioUI];
 
 class Download extends KalturaPlayer.core.BasePlugin {
+  public displayName = 'Download';
+  public symbol = {svgUrl: DOWNLOAD, viewBox: '0 0 32 32'};
   static defaultConfig: DownloadConfig = {
     flavorId: null,
     flavorParamId: '0', // source
@@ -45,6 +47,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   static isValid(): boolean {
+    return true;
+  }
+
+  public isAudioPlayerSupported(): boolean {
     return true;
   }
 
@@ -131,7 +137,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
     );
   }
 
-  private isPluginSupported(): boolean {
+  public isEntrySupported(): boolean {
     if (!this.downloadMetadata) return false;
     const {flavors, captions, attachments, imageDownloadUrl} = this.downloadMetadata;
     const {displayCaptions, displayAttachments, displaySources} = this.downloadPluginManager.downloadPlugin.config;
@@ -146,7 +152,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
     this.downloadPluginManager.setShowOverlay(false, false);
     this.downloadMetadata = await this.downloadPluginManager.getDownloadMetadata(true);
 
-    if (this.isPluginSupported()) {
+    if (this.isEntrySupported()) {
       this.logger.debug('Download is supported for current entry');
       this.injectOverlayComponents(this.downloadMetadata);
     }
@@ -158,6 +164,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   reset() {
+    this.downloadMetadata = null;
     this.upperBarManager?.remove(this.iconId);
     this.iconId = -1;
     this._pluginButtonRef = null;
