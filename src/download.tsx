@@ -73,7 +73,11 @@ class Download extends KalturaPlayer.core.BasePlugin {
     });
   }
 
-  showOverlay(): void {
+  public open(): void {
+    this.showOverlay()
+  }
+
+  private showOverlay(): void {
     this.downloadPluginManager.setShowOverlay(true);
   }
 
