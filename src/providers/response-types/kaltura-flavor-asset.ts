@@ -4,6 +4,7 @@ export interface KalturaFlavorAssetArgs {
   flavorParamsId: number;
   isOriginal: boolean;
   height: number;
+  language: string;
 }
 
 export class KalturaFlavorAsset {
@@ -13,6 +14,7 @@ export class KalturaFlavorAsset {
   isOriginal: boolean;
   downloadUrl: string;
   height: number;
+  language: string;
 
   constructor(flavorAsset: KalturaFlavorAssetArgs) {
     this.id = flavorAsset.id;
@@ -21,5 +23,6 @@ export class KalturaFlavorAsset {
     this.isOriginal = flavorAsset.isOriginal;
     this.downloadUrl = '';
     this.height = flavorAsset.height;
+    this.language = flavorAsset.language;
   }
 }

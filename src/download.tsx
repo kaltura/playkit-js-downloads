@@ -16,6 +16,8 @@ const {Text} = ui.preacti18n;
 const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img, ReservedPresetNames.MiniAudioUI];
 
 class Download extends KalturaPlayer.core.BasePlugin {
+  public displayName = 'Download';
+  public symbol = {svgUrl: DOWNLOAD, viewBox: '0 0 32 32'};
   static defaultConfig: DownloadConfig = {
     flavorId: null,
     flavorParamId: '0', // source
@@ -33,6 +35,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   private componentDisposers: Array<typeof Function> = [];
   private downloadPluginManager: DownloadPluginManager;
   private _pluginButtonRef: HTMLButtonElement | null = null;
+  private downloadMetadata?: DownloadMetadata;
   public triggeredByKeyboard = false;
   private store: any;
 
@@ -44,6 +47,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   static isValid(): boolean {
+    return true;
+  }
+
+  public isAudioPlayerSupported(): boolean {
     return true;
   }
 
@@ -66,7 +73,11 @@ class Download extends KalturaPlayer.core.BasePlugin {
     });
   }
 
-  showOverlay(): void {
+  public open(): void {
+    this.showOverlay()
+  }
+
+  private showOverlay(): void {
     this.downloadPluginManager.setShowOverlay(true);
   }
 
@@ -130,9 +141,9 @@ class Download extends KalturaPlayer.core.BasePlugin {
     );
   }
 
-  private shouldInjectUI(downloadMetadata: DownloadMetadata): boolean {
-    if (!downloadMetadata) return false;
-    const {flavors, captions, attachments, imageDownloadUrl} = downloadMetadata;
+  public isEntrySupported(): boolean {
+    if (!this.downloadMetadata) return false;
+    const {flavors, captions, attachments, imageDownloadUrl} = this.downloadMetadata;
     const {displayCaptions, displayAttachments, displaySources} = this.downloadPluginManager.downloadPlugin.config;
     return (
       (displaySources && (flavors.length || imageDownloadUrl)) || (displayCaptions && captions.length) || (displayAttachments && attachments.length)
@@ -143,11 +154,11 @@ class Download extends KalturaPlayer.core.BasePlugin {
     await this.ready;
 
     this.downloadPluginManager.setShowOverlay(false, false);
-    const downloadMetadata = await this.downloadPluginManager.getDownloadMetadata(true);
+    this.downloadMetadata = await this.downloadPluginManager.getDownloadMetadata(true);
 
-    if (this.shouldInjectUI(downloadMetadata)) {
+    if (this.isEntrySupported()) {
       this.logger.debug('Download is supported for current entry');
-      this.injectOverlayComponents(downloadMetadata);
+      this.injectOverlayComponents(this.downloadMetadata);
     }
   }
 
@@ -157,6 +168,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   reset() {
+    this.downloadMetadata = null;
     this.upperBarManager?.remove(this.iconId);
     this.iconId = -1;
     this._pluginButtonRef = null;
