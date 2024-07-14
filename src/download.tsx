@@ -74,7 +74,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   public open(): void {
-    this.showOverlay()
+    this.showOverlay();
   }
 
   private showOverlay(): void {
@@ -121,6 +121,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
         // @ts-ignore
         presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
+    } else {
+      const {displayName, symbol} = this;
+      // @ts-ignore
+      this.player.getService('AudioPluginsManager').add({displayName, symbol, open: () => this.open()});
     }
 
     this.componentDisposers.push(
