@@ -35,7 +35,6 @@ class Download extends KalturaPlayer.core.BasePlugin {
   private componentDisposers: Array<typeof Function> = [];
   private downloadPluginManager: DownloadPluginManager;
   private _pluginButtonRef: HTMLButtonElement | null = null;
-  private downloadMetadata?: DownloadMetadata;
   public triggeredByKeyboard = false;
   private store: any;
 
@@ -47,10 +46,6 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   static isValid(): boolean {
-    return true;
-  }
-
-  public isAudioPlayerSupported(): boolean {
     return true;
   }
 
@@ -145,9 +140,9 @@ class Download extends KalturaPlayer.core.BasePlugin {
     );
   }
 
-  public isEntrySupported(): boolean {
-    if (!this.downloadMetadata) return false;
-    const {flavors, captions, attachments, imageDownloadUrl} = this.downloadMetadata;
+  public isEntrySupported(downloadMetadata: DownloadMetadata): boolean {
+    if (!downloadMetadata) return false;
+    const {flavors, captions, attachments, imageDownloadUrl} = downloadMetadata;
     const {displayCaptions, displayAttachments, displaySources} = this.downloadPluginManager.downloadPlugin.config;
     return (
       (displaySources && (flavors.length || imageDownloadUrl)) || (displayCaptions && captions.length) || (displayAttachments && attachments.length)
@@ -158,11 +153,11 @@ class Download extends KalturaPlayer.core.BasePlugin {
     await this.ready;
 
     this.downloadPluginManager.setShowOverlay(false, false);
-    this.downloadMetadata = await this.downloadPluginManager.getDownloadMetadata(true);
+    const downloadMetadata = await this.downloadPluginManager.getDownloadMetadata(true);
 
-    if (this.isEntrySupported()) {
+    if (this.isEntrySupported(downloadMetadata)) {
       this.logger.debug('Download is supported for current entry');
-      this.injectOverlayComponents(this.downloadMetadata);
+      this.injectOverlayComponents(downloadMetadata);
     }
   }
 
@@ -172,7 +167,6 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   reset() {
-    this.downloadMetadata = null;
     this.upperBarManager?.remove(this.iconId);
     this.iconId = -1;
     this._pluginButtonRef = null;
