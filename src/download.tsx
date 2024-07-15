@@ -30,6 +30,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   };
 
   private iconId = -1;
+  private audioPlayerIconId = -1;
   private defaultToastDuration = 5 * 1000;
 
   private componentDisposers: Array<typeof Function> = [];
@@ -92,11 +93,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   };
 
   private injectOverlayComponents(downloadMetadata: DownloadMetadata) {
-    if (this.iconId > 0) {
-      return;
-    }
-
-    if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI) {
+    if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI && this.iconId !== -1) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.iconId = this.upperBarManager.add({
@@ -119,7 +116,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
     } else {
       const {displayName, symbol} = this;
       // @ts-ignore
-      this.player.getService('AudioPluginsManager').add({displayName, symbol, open: () => this.open()});
+      this.audioPlayerIconId = this.player.getService('AudioPluginsManager').add({displayName, symbol, open: () => this.open()});
     }
 
     this.componentDisposers.push(
@@ -168,7 +165,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
   reset() {
     this.upperBarManager?.remove(this.iconId);
+    // @ts-ignore
+    this.player.getService('AudioPluginsManager').remove(this.audioPlayerIconId)
     this.iconId = -1;
+    this.audioPlayerIconId = -1;
     this._pluginButtonRef = null;
     this.triggeredByKeyboard = false;
 
