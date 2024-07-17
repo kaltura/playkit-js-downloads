@@ -17,7 +17,7 @@ const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img, Reserved
 
 class Download extends KalturaPlayer.core.BasePlugin {
   public displayName = 'Download';
-  public symbol = {svgUrl: DOWNLOAD, viewBox: '0 0 32 32'};
+  public svgIcon = {path: DOWNLOAD, viewBox: '0 0 32 32'};
   static defaultConfig: DownloadConfig = {
     flavorId: null,
     flavorParamId: '0', // source
@@ -93,9 +93,14 @@ class Download extends KalturaPlayer.core.BasePlugin {
   };
 
   private injectOverlayComponents(downloadMetadata: DownloadMetadata) {
-    if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI && this.iconId !== -1) {
+    if (this.iconId > 0) {
+      return;
+    }
+
+    if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
+
       this.iconId = this.upperBarManager.add({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -114,9 +119,9 @@ class Download extends KalturaPlayer.core.BasePlugin {
         presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
     } else {
-      const {displayName, symbol} = this;
+      const {displayName, svgIcon} = this;
       // @ts-ignore
-      this.audioPlayerIconId = this.player.getService('AudioPluginsManager').add({displayName, symbol, open: () => this.open()});
+      this.audioPlayerIconId = this.player.getService('AudioPluginsManager').add({displayName, svgIcon, onClick: (e) => this.open(e)});
     }
 
     this.componentDisposers.push(
