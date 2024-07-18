@@ -121,7 +121,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
     } else {
       const {displayName, svgIcon} = this;
       // @ts-ignore
-      this.audioPlayerIconId = this.player.getService('AudioPluginsManager').add({displayName, svgIcon, onClick: (e) => this.open(e)});
+      this.audioPlayerIconId = this.player.getService('AudioPluginsManager').add({displayName, svgIcon, onClick: e => this.open(e)});
     }
 
     this.componentDisposers.push(
