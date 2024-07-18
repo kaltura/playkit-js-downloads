@@ -18,19 +18,16 @@ export class KalturaFlavorAssetListResponse extends BaseServiceResult {
   private setDataWithoutDuplicates(flavors: Array<any>): Array<KalturaFlavorAsset> {
     const data = [];
     // sort flavors by height and filter out flavors with height 0
-    const sortedFlavors = flavors
-      .sort((a: {height: number}, b: {height: number}) => {
-        return a.height < b.height ? 1 : -1;
-      })
-      .filter(flavor => {
-        return flavor.height > 0;
-      });
+    const sortedFlavors = flavors.sort((a: {height: number}, b: {height: number}) => {
+      return b.height - a.height;
+    });
     data.push(new KalturaFlavorAsset(sortedFlavors[0]));
     let previousFlavor = data[0];
 
     for (let i = 1; i < sortedFlavors.length; i++) {
       const currentFlavor = sortedFlavors[i];
-      if (previousFlavor.height !== currentFlavor.height) {
+      // Excluding audio file from filter (it's always 0)
+      if (previousFlavor.height !== currentFlavor.height || currentFlavor.height === 0) {
         data.push(new KalturaFlavorAsset(currentFlavor));
       }
       previousFlavor = currentFlavor;

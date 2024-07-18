@@ -34,7 +34,13 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          'style-loader',
+          {
+            loader: 'style-loader',
+            options: {
+              attributes: {id: `${packageData.name}`},
+              injectType: "singletonStyleTag"
+            }
+          },
           {
             loader: 'css-loader',
             options: {

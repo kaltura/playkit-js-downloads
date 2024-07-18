@@ -35,7 +35,28 @@
         plugins: {
           uiManagers: {},
           download: {}
-        }
+        },
+        ui: {
+          // translations - for local environment
+          translations: {
+            en: {
+              download: {
+                download: 'Download',
+                downloads: 'Downloads',
+                download_has_started: 'Download has started',
+                download_has_failed: 'Download has failed',
+                attachments: 'Attachments',
+                download_button_label: 'Click to download the video',
+                select_quality_label: 'Select quality',
+                hide_label: 'Hide',
+                source_label: 'Source',
+                more_captions_label: 'More captions',
+                less_captions_label: 'Less captions',
+                attachments_label: 'Attachments'
+              },
+            }
+          }
+        },
       };
 
       const player = KalturaPlayer.setup(config);
