@@ -22,6 +22,13 @@
   position: absolute;
   width: 100%;
   padding: 0 calc(100% / 9);
+  overflow-y: auto;
+
+  @include download-scrollbar();
+  &:hover::-webkit-scrollbar-track,
+  &:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+  }
 
   .file-info-list {
     margin: auto;
@@ -31,12 +38,6 @@
 
     .sources-captions-container {
       margin-bottom: 24px;
-    }
-
-    @include download-scrollbar();
-    &:hover::-webkit-scrollbar-track,
-    &:hover::-webkit-scrollbar-thumb {
-      visibility: visible;
     }
   }
 }
@@ -57,6 +58,7 @@
       background-color: rgba(0, 0, 0, 0.7);
       color: $tone-1-color;
       text-align: initial;
+      overflow-y: initial;
       :global(.playkit-title) {
         margin: 0;
       }
