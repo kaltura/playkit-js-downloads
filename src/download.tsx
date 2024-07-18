@@ -98,12 +98,9 @@ class Download extends KalturaPlayer.core.BasePlugin {
     }
 
     if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-
       this.iconId = this.upperBarManager.add({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        //@ts-expect-error - TS2353: Object literal may only specify known properties, and ariaLabel does not exist in type IconDto
         ariaLabel: (<Text id="download.download">Download</Text>) as never,
         displayName: 'Download',
         order: 40,
@@ -115,12 +112,11 @@ class Download extends KalturaPlayer.core.BasePlugin {
           return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
         },
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
     } else {
       const {displayName, svgIcon} = this;
-      // @ts-ignore
+      // @ts-expect-error - TS2339: Property add does not exist on type Object
       this.audioPlayerIconId = this.player.getService('AudioPluginsManager').add({displayName, svgIcon, onClick: e => this.open(e)});
     }
 
@@ -170,7 +166,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
   reset() {
     this.upperBarManager?.remove(this.iconId);
-    // @ts-ignore
+    // @ts-expect-error - TS2339: Property add does not exist on type Object
     this.player.getService('AudioPluginsManager').remove(this.audioPlayerIconId);
     this.iconId = -1;
     this.audioPlayerIconId = -1;
