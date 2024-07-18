@@ -171,7 +171,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
   reset() {
     this.upperBarManager?.remove(this.iconId);
     // @ts-ignore
-    this.player.getService('AudioPluginsManager').remove(this.audioPlayerIconId)
+    this.player.getService('AudioPluginsManager').remove(this.audioPlayerIconId);
     this.iconId = -1;
     this.audioPlayerIconId = -1;
     this._pluginButtonRef = null;

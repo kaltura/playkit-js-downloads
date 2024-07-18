@@ -19,7 +19,7 @@ export class KalturaFlavorAssetListResponse extends BaseServiceResult {
     const data = [];
     // sort flavors by height and filter out flavors with height 0
     const sortedFlavors = flavors.sort((a: {height: number}, b: {height: number}) => {
-      return a.height < b.height ? 1 : -1;
+      return b.height - a.height;
     });
     data.push(new KalturaFlavorAsset(sortedFlavors[0]));
     let previousFlavor = data[0];
