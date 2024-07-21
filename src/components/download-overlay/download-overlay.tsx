@@ -1,5 +1,4 @@
 import {DownloadPluginManager} from '../../download-plugin-manager';
-import {createRef} from 'preact';
 import {useState, useEffect} from 'preact/hooks';
 import {DownloadMetadata} from '../../types';
 import {ui} from '@playkit-js/kaltura-player-js';
@@ -42,7 +41,6 @@ const DownloadOverlay = withText({
   )(
     withEventManager(({downloadPluginManager, eventManager, downloadsLabel, downloadMetadata, updateOverlay}: DownloadOverlayProps) => {
       const [isVisible, setIsVisible] = useState(false);
-      const closeButtonRef = createRef<HTMLButtonElement>();
       const downloadConfig = downloadPluginManager.downloadPlugin.config;
       useEffect(() => {
         eventManager?.listen(downloadPluginManager, DownloadEvent.SHOW_OVERLAY, () => {
@@ -83,7 +81,6 @@ const DownloadOverlay = withText({
 
       return isVisible ? (
         <OverlayPortal>
-          {/*@ts-ignore*/}
           <Overlay
             open
             onClose={() => {
