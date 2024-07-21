@@ -81,7 +81,6 @@ const DownloadOverlay = withText({
 
       return isVisible ? (
         <OverlayPortal>
-          {/*@ts-expect-error - TS2786: Overlay cannot be used as a JSX component. */}
           <Overlay
             open
             onClose={() => {
