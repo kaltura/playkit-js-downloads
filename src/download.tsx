@@ -58,6 +58,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
     return (this.player.getService('toastManager') as ToastManager) || {};
   }
 
+  private get audioPluginsManager(): {remove: (id: number) => null; add: (obj: object) => number} | null {
+    return (this.player.getService('AudioPluginsManager') as {remove: () => null; add: (obj: object) => number}) || null;
+  }
+
   addToast({title, text, icon, severity}: {title: string; text: string; icon: any; severity: ToastSeverity}) {
     this.toastManager.add({
       title,
@@ -116,8 +120,9 @@ class Download extends KalturaPlayer.core.BasePlugin {
       }) as number;
     } else {
       const {displayName, svgIcon} = this;
-      // @ts-expect-error - TS2339: Property add does not exist on type Object
-      this.audioPlayerIconId = this.player.getService('AudioPluginsManager').add({displayName, svgIcon, onClick: e => this.open(e)});
+      if (this.audioPluginsManager) {
+        this.audioPlayerIconId = this.audioPluginsManager.add({displayName, svgIcon, onClick: () => this.open()});
+      }
     }
 
     this.componentDisposers.push(
@@ -166,8 +171,7 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
   reset() {
     this.upperBarManager?.remove(this.iconId);
-    // @ts-expect-error - TS2339: Property add does not exist on type Object
-    this.player.getService('AudioPluginsManager').remove(this.audioPlayerIconId);
+    this.audioPluginsManager?.remove(this.audioPlayerIconId);
     this.iconId = -1;
     this.audioPlayerIconId = -1;
     this._pluginButtonRef = null;
