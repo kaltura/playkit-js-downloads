@@ -21,16 +21,19 @@
         targetId: 'player-placeholder',
         provider: {
           env: {
-            serviceUrl: 'https://cdnapisec.kaltura.com/api_v3',
-            cdnUrl: 'https://cfvod.kaltura.com',
-            statsServiceUrl: 'https://stats.kaltura.com',
-            liveStatsServiceUrl: 'https://livestats.kaltura.com',
-            analyticsServiceUrl: 'https://analytics.kaltura.com',
+            serviceUrl: 'https://api.nvq2.ovp.kaltura.com/api_v3',
+            cdnUrl: 'https://cfvod.nvq2.ovp.kaltura.com',
+            statsServiceUrl: 'https://analytics.rcqa3.kaltura.com',
+            liveStatsServiceUrl: 'https://livestats.nvq2.ovp.kaltura.com',
+            analyticsServiceUrl: 'https://analytics.nvq2.ovp.kaltura.com',
             apiFeatures: {
               entryRedirect: '1'
             }
           },
-          partnerId: 3076893
+          partnerId: 242,
+          log: {
+            level: 'ERROR'
+          }
         },
         plugins: {
           uiManagers: {},
@@ -53,14 +56,14 @@
                 more_captions_label: 'More captions',
                 less_captions_label: 'Less captions',
                 attachments_label: 'Attachments'
-              },
+              }
             }
           }
-        },
+        }
       };
 
       const player = KalturaPlayer.setup(config);
-      player.loadMedia({entryId: '1_rhur4p1n'});
+      player.loadMedia({entryId: '0_xmt516jj'});
     </script>
   </body>
 </html>
