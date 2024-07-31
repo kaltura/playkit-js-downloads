@@ -1,6 +1,8 @@
-import ILoader = KalturaPlayerTypes.ILoader;
+
 import {KalturaAttachmentAsset, KalturaCaptionAsset, KalturaFlavorAsset} from './response-types';
-const {RequestBuilder} = KalturaPlayer.providers;
+import {providers} from '@playkit-js/kaltura-player-js';
+const {RequestBuilder} = providers;
+
 
 interface DownloadUrlLoaderParams {
   flavors: Array<KalturaFlavorAsset>;
@@ -12,6 +14,7 @@ interface DownloadUrlResponse {
   urls: Map<string, string>;
 }
 
+// @ts-ignore
 export class DownloadUrlLoader implements ILoader {
   _flavors: Array<KalturaFlavorAsset>;
   _captions: Array<KalturaCaptionAsset>;

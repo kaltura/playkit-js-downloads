@@ -1,85 +1,102 @@
 const webpack = require('webpack');
 const path = require('path');
 const packageData = require('./package.json');
+const CSS_MODULE_PREFIX = 'playkit';
 
-const plugins = [
-  new webpack.DefinePlugin({
-    __VERSION__: JSON.stringify(packageData.version),
-    __NAME__: JSON.stringify(packageData.name)
-  })
-];
-
-module.exports = {
-  context: `${__dirname}/src`,
-  entry: {
-    'playkit-downloads': 'index.ts'
-  },
-  output: {
-    path: `${__dirname}/dist`,
-    filename: '[name].js',
-    library: ['KalturaPlayer', 'plugins', 'download']
-  },
-  devtool: 'source-map',
-  plugins,
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-        options: {
-          configFile: 'tsconfig.json'
-        },
-        exclude: /node_modules/
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: 'style-loader',
+module.exports = (env, {mode}) => {
+  return {
+    target: 'web',
+    entry: './src/index.ts',
+    devtool: 'source-map',
+    module: {
+      rules: [
+        {
+          test: /\.(tsx?|js)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
             options: {
-              attributes: {id: `${packageData.name}`},
-              injectType: 'singletonStyleTag'
-            }
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName: '[name]__[local]___[hash:base64:5]',
-                namedExport: true
-              }
-            }
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    bugfixes: true
+                  }
+                ],
+                ['@babel/preset-typescript', {jsxPragma: 'h', jsxPragmaFrag: 'Fragment'}]
+              ],
+              plugins: [
+                ['@babel/plugin-transform-runtime'],
+                ['@babel/plugin-proposal-decorators', {legacy: true}],
+                ['@babel/plugin-transform-react-jsx', {pragma: 'h', pragmaFrag: 'Fragment'}]
+              ]
             }
           }
-        ]
-      }
-    ]
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'demo')
+        },
+        {
+          test: /\.scss/,
+          use: [
+            {
+              loader: 'style-loader',
+              options: {
+                attributes: {id: `${packageData.name}`},
+                injectType: "singletonStyleTag"
+              }
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                esModule: true,
+                modules: {
+                  localIdentName: `${CSS_MODULE_PREFIX}-ap-[local]`,
+                  namedExport: true
+                }
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                // sourceMap: mode === 'development'
+              }
+            }
+          ]
+        }
+      ]
     },
-    client: {
-      progress: true
-    }
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-    alias: {
-      react: 'preact/compat',
-      'react-dom': 'preact/compat',
-      'react/jsx-runtime': 'preact/jsx-runtime'
-    }
-  },
-  externals: {
-    preact: 'root KalturaPlayer.ui.preact',
-    'preact/hooks': 'root KalturaPlayer.ui.preactHooks',
-    '@playkit-js/kaltura-player-js': ['KalturaPlayer']
-  }
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js']
+    },
+    output: {
+      filename: 'playkit-downloads.js',
+      path: path.resolve(__dirname, 'dist'),
+      library: {
+        umdNamedDefine: true,
+        name: ['KalturaPlayer', 'plugins', 'download'],
+        type: 'umd'
+      },
+      clean: true
+    },
+    externals: {
+      '@playkit-js/kaltura-player-js': 'root KalturaPlayer',
+      '@playkit-js/playkit-js-ui': 'root KalturaPlayer.ui',
+      '@playkit-js/playkit-js': 'root KalturaPlayer.core',
+      preact: 'root KalturaPlayer.ui.preact',
+      'preact-i18n': 'root KalturaPlayer.ui.preacti18n',
+      'preact/hooks': 'root KalturaPlayer.ui.preactHooks'
+    },
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'demo')
+      },
+      client: {
+        progress: true
+      }
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        __VERSION__: JSON.stringify(packageData.version),
+        __NAME__: JSON.stringify(packageData.name)
+      })
+    ]
+  };
 };

@@ -8,7 +8,7 @@ import {useEffect, useRef} from 'preact/hooks';
 
 import {ui} from '@playkit-js/kaltura-player-js';
 import {DownloadEvent} from '../../event';
-const {withText} = KalturaPlayer.ui.preacti18n;
+const {withText} = ui.preacti18n;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 const {withPlayer} = ui.Components;

@@ -1,6 +1,7 @@
+import {h} from 'preact';
 import {KalturaAttachmentAsset} from './providers';
-
-const {Icon} = KalturaPlayer.ui.components;
+import {core, ui} from '@playkit-js/kaltura-player-js';
+const {Icon} = ui.components;
 
 import {Download} from './download';
 import {DOWNLOAD, ERROR} from './icons';
@@ -8,7 +9,8 @@ import {DownloadService} from './services';
 import {DownloadMetadata} from './types';
 import {DownloadEvent} from './event';
 
-class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
+
+class DownloadPluginManager extends core.FakeEventTarget {
   private _showOverlay = false;
   private downloadService: any;
   private downloadMetadata: DownloadMetadata = null;
@@ -73,14 +75,14 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
         this.downloadPlugin.player.pause();
         this.playOnClose = true;
       }
-      this.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.SHOW_OVERLAY, {byKeyboard: this.downloadPlugin.triggeredByKeyboard}));
+      this.dispatchEvent(new core.FakeEvent(DownloadEvent.SHOW_OVERLAY, {byKeyboard: this.downloadPlugin.triggeredByKeyboard}));
     } else {
       if (this.playOnClose) {
         this.downloadPlugin.player.play();
         this.playOnClose = false;
       }
       if (byUserInteraction) {
-        this.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.HIDE_OVERLAY));
+        this.dispatchEvent(new core.FakeEvent(DownloadEvent.HIDE_OVERLAY));
       }
     }
   }

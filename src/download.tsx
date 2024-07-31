@@ -1,3 +1,4 @@
+import {h} from 'preact';
 import {ToastManager, ToastSeverity, UpperBarManager} from '@playkit-js/ui-managers';
 
 import {DownloadConfig, DownloadMetadata} from './types';

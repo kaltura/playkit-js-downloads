@@ -1,6 +1,7 @@
-import ILoader = KalturaPlayerTypes.ILoader;
+
 import {KalturaAttachmentAssetListResponse, KalturaAttachmentAsset} from './response-types';
-const {RequestBuilder} = KalturaPlayer.providers;
+import {providers} from '@playkit-js/kaltura-player-js';
+const {RequestBuilder} = providers;
 
 interface AttachmentsLoaderParams {
   entryId: string;
@@ -10,6 +11,7 @@ interface AttachmentsResponse {
   attachments: Array<KalturaAttachmentAsset>;
 }
 
+// @ts-ignore
 export class AttachmentsLoader implements ILoader {
   _entryId: string;
   _requests: (typeof RequestBuilder)[] = [];

@@ -1,5 +1,6 @@
 import {KalturaFlavorAsset} from './kaltura-flavor-asset';
-const {BaseServiceResult} = KalturaPlayer.providers.ResponseTypes;
+import {providers} from '@playkit-js/kaltura-player-js';
+const {BaseServiceResult} = providers.ResponseTypes;
 
 export class KalturaFlavorAssetListResponse extends BaseServiceResult {
   totalCount?: number;
