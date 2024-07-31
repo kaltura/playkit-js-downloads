@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import {A11yWrapper} from '@playkit-js/common';
 import * as styles from './download-item.scss';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';

@@ -38,7 +38,7 @@ module.exports = {
             loader: 'style-loader',
             options: {
               attributes: {id: `${packageData.name}`},
-              injectType: "singletonStyleTag"
+              injectType: 'singletonStyleTag'
             }
           },
           {
@@ -70,7 +70,12 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    alias: {
+      react: 'preact/compat',
+      'react-dom': 'preact/compat',
+      'react/jsx-runtime': 'preact/jsx-runtime'
+    }
   },
   externals: {
     preact: 'root KalturaPlayer.ui.preact',
