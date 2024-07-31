@@ -1,3 +1,4 @@
+import { h, Fragment } from 'preact';
 import {DownloadPluginManager} from '../../download-plugin-manager';
 import {KalturaAttachmentAsset} from '../../providers';
 import {DownloadItem} from '../download-item';
