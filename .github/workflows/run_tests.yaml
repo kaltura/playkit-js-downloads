@@ -5,33 +5,24 @@ run-name: Player And Plugin Tests
 on:
   pull_request:
     branches:
-      - '*'
+      - "*"
 
 jobs:
   tests:
     uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@master
     secrets: inherit
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18.x'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build project
-        run: yarn build
+    uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
+    with:
+      node-version: '18.x'
+      yarn-run-to-execute: 'build'
   lint:
     uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
     with:
       node-version: '18.x'
       yarn-run-to-execute: 'eslint'
+
+
 
   notification:
     if: always()
