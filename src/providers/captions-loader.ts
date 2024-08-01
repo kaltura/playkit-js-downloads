@@ -1,6 +1,6 @@
 import {KalturaCaptionAssetListResponse, KalturaCaptionAsset} from './response-types';
-import {providers} from '@playkit-js/kaltura-player-js';
-const {RequestBuilder} = providers;
+import {ILoader} from '@playkit-js/playkit-js-providers/types';
+import {RequestBuilder} from '@playkit-js/playkit-js-providers/ovp-provider';
 
 interface CaptionsLoaderParams {
   entryId: string;
@@ -10,10 +10,9 @@ interface CaptionsResponse {
   captions: Array<KalturaCaptionAsset>;
 }
 
-// @ts-ignore
 export class CaptionsLoader implements ILoader {
   _entryId: string;
-  _requests: (typeof RequestBuilder)[] = [];
+  _requests: (RequestBuilder)[] = [];
   _response: CaptionsResponse = {
     captions: []
   };

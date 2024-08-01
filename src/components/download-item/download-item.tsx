@@ -6,11 +6,9 @@ import {DownloadPluginManager} from '../../download-plugin-manager';
 import {ComponentChildren} from 'preact';
 import {useEffect, useRef} from 'preact/hooks';
 
-import {ui} from '@playkit-js/kaltura-player-js';
+import {core, KalturaPlayer, ui} from '@playkit-js/kaltura-player-js';
 import {DownloadEvent} from '../../event';
 const {withText} = ui.preacti18n;
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
 const {withPlayer} = ui.Components;
 
 interface DownloadItemProps {
@@ -26,7 +24,7 @@ interface DownloadItemProps {
   downloadUrl: string;
   iconFileType: ComponentChildren;
   isDefault?: boolean;
-  player: KalturaPlayerTypes.Player;
+  player: KalturaPlayer;
 }
 
 export const DownloadItem = withText({
@@ -67,7 +65,7 @@ export const DownloadItem = withText({
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
 
               const fileType = fileName.match(/\.(.*?)$/)![1];
-              player.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {fileType, description, assetType}));
+              player.dispatchEvent(new core.FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {fileType, description, assetType}));
             } else {
               downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
             }

@@ -18,17 +18,21 @@ class DownloadPluginManager extends core.FakeEventTarget {
 
   constructor(public downloadPlugin: Download) {
     super();
+    // @ts-expect-error - Property 'player' is protected and only accessible within class 'BasePlugin' and its subclasses.
     this.downloadService = new DownloadService(downloadPlugin.player, downloadPlugin.logger);
   }
 
   async getDownloadMetadata(refresh = false): Promise<DownloadMetadata> {
     if (!this.downloadMetadata || refresh) {
+      // @ts-expect-error - Property 'config' is protected and only accessible within class 'BasePlugin' and its subclasses.
       this.downloadMetadata = await this.downloadService.getDownloadMetadata(this.downloadPlugin.config);
 
       if (!this.downloadMetadata) {
+        // @ts-expect-error - Property 'logger' is protected and only accessible within class 'BasePlugin' and its subclasses.
         this.downloadPlugin.logger.debug('Failed to get download url headers');
       } else {
         this.downloadMetadata.attachments = this.downloadMetadata.attachments.filter(
+          // @ts-expect-error - Property 'config' is protected and only accessible within class 'BasePlugin' and its subclasses.
           (attachment: KalturaAttachmentAsset): boolean => !this.downloadPlugin.config.undisplayedAttachments.includes(attachment.objectType)
         );
       }
@@ -38,11 +42,13 @@ class DownloadPluginManager extends core.FakeEventTarget {
 
   downloadFile(downloadUrl: string, fileName: string) {
     try {
+      // @ts-expect-error - Property 'config' is protected and only accessible within class 'BasePlugin' and its subclasses.
       const {preDownloadHook} = this.downloadPlugin.config;
       if (typeof preDownloadHook === 'function') {
         preDownloadHook();
       }
     } catch (e: any) {
+      // @ts-expect-error - Property 'logger' is protected and only accessible within class 'BasePlugin' and its subclasses.
       this.downloadPlugin.logger.debug('Exception in pre-download hook');
     }
 
@@ -71,13 +77,16 @@ class DownloadPluginManager extends core.FakeEventTarget {
     this._showOverlay = overlayVisible;
 
     if (this._showOverlay) {
+      // @ts-expect-error - Property 'player' is protected and only accessible within class 'BasePlugin' and its subclasses.
       if (!this.downloadPlugin.player.paused) {
+        // @ts-expect-error - Property 'player' is protected and only accessible within class 'BasePlugin' and its subclasses.
         this.downloadPlugin.player.pause();
         this.playOnClose = true;
       }
       this.dispatchEvent(new core.FakeEvent(DownloadEvent.SHOW_OVERLAY, {byKeyboard: this.downloadPlugin.triggeredByKeyboard}));
     } else {
       if (this.playOnClose) {
+        // @ts-expect-error - Property 'player' is protected and only accessible within class 'BasePlugin' and its subclasses.
         this.downloadPlugin.player.play();
         this.playOnClose = false;
       }

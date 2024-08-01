@@ -6,8 +6,9 @@ import * as styles from './attachments-list.scss';
 import {ComponentChildren} from 'preact';
 import {getIconByFileExt} from '@playkit-js/common/dist/icon/icon-utils';
 import {assetType} from '../../consts/asset-type';
+import {ui} from '@playkit-js/kaltura-player-js';
 
-const {withText} = KalturaPlayer.ui.preacti18n;
+const {withText} = ui.preacti18n;
 
 interface AttachmentsListProps {
   attachments: Array<KalturaAttachmentAsset>;

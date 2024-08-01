@@ -8,15 +8,16 @@ import {DownloadOverlay} from './components/download-overlay';
 import {DownloadPluginManager} from './download-plugin-manager';
 
 import {OnClickEvent} from '@playkit-js/common';
-import {ui} from '@playkit-js/kaltura-player-js';
+import {BasePlugin, KalturaPlayer, ui} from '@playkit-js/kaltura-player-js';
 import {DownloadEvent} from './event';
+import {FakeEvent} from '@playkit-js/playkit-js';
 
 const {ReservedPresetNames} = ui;
 const {Text} = ui.preacti18n;
 
 const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img, ReservedPresetNames.MiniAudioUI];
 
-class Download extends KalturaPlayer.core.BasePlugin {
+class Download extends BasePlugin {
   public displayName = 'Download';
   public svgIcon = {path: DOWNLOAD, viewBox: '0 0 32 32'};
   static defaultConfig: DownloadConfig = {
@@ -34,13 +35,13 @@ class Download extends KalturaPlayer.core.BasePlugin {
   private audioPlayerIconId = -1;
   private defaultToastDuration = 5 * 1000;
 
-  private componentDisposers: Array<typeof Function> = [];
+  private componentDisposers: Array<() => void> = [];
   private downloadPluginManager: DownloadPluginManager;
   private _pluginButtonRef: HTMLButtonElement | null = null;
   public triggeredByKeyboard = false;
   private store: any;
 
-  constructor(name: string, player: KalturaPlayerTypes.Player, config: DownloadConfig) {
+  constructor(name: string, player: KalturaPlayer, config: DownloadConfig) {
     super(name, player, config);
     this.downloadPluginManager = new DownloadPluginManager(this);
     this._addBindings();
@@ -104,8 +105,6 @@ class Download extends KalturaPlayer.core.BasePlugin {
 
     if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI) {
       this.iconId = this.upperBarManager.add({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-expect-error - TS2353: Object literal may only specify known properties, and ariaLabel does not exist in type IconDto
         ariaLabel: (<Text id="download.download">Download</Text>) as never,
         displayName: 'Download',
         order: 40,
@@ -113,10 +112,10 @@ class Download extends KalturaPlayer.core.BasePlugin {
           path: DOWNLOAD
         },
         onClick: this._handleClick as any,
+        // @ts-expect-error - Type '() => h.JSX.Element' is not assignable to type 'ComponentClass<Record<string, never>, {}> | FunctionalComponent<Record<string, never>>'
         component: () => {
           return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
         },
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
     } else {
@@ -166,8 +165,8 @@ class Download extends KalturaPlayer.core.BasePlugin {
   }
 
   _addBindings() {
-    this.eventManager.listen(this.downloadPluginManager, DownloadEvent.SHOW_OVERLAY, e => this.dispatchEvent(DownloadEvent.SHOW_OVERLAY, e.payload));
-    this.eventManager?.listen(this.downloadPluginManager, DownloadEvent.HIDE_OVERLAY, e => this.dispatchEvent(DownloadEvent.HIDE_OVERLAY, e.payload));
+    this.eventManager.listen(this.downloadPluginManager, DownloadEvent.SHOW_OVERLAY, (e: FakeEvent) => this.dispatchEvent(DownloadEvent.SHOW_OVERLAY, e.payload));
+    this.eventManager?.listen(this.downloadPluginManager, DownloadEvent.HIDE_OVERLAY, (e: FakeEvent) => this.dispatchEvent(DownloadEvent.HIDE_OVERLAY, e.payload));
   }
 
   reset() {
