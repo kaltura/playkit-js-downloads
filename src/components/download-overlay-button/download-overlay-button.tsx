@@ -1,7 +1,9 @@
+import {h} from 'preact';
 import {DOWNLOAD} from '../../icons';
+import {ui} from '@playkit-js/kaltura-player-js';
 
-const {withText} = KalturaPlayer.ui.preacti18n;
-const {Icon, Tooltip} = KalturaPlayer.ui.components;
+const {withText} = ui.preacti18n;
+const {Icon, Tooltip} = ui.components;
 
 /**
  * Button to toggle download overlay visibility.
@@ -16,7 +18,7 @@ const DownloadOverlayButton = withText({
   return (
     <div data-testid="download-overlay-button">
       <Tooltip label={downloadLabel}>
-        <button type="button" aria-label={downloadLabel} tabIndex={0} className={`${KalturaPlayer.ui.style.upperBarIcon}`} ref={setRef}>
+        <button type="button" aria-label={downloadLabel} tabIndex={0} className={`${ui.style.upperBarIcon}`} ref={setRef}>
           <Icon id={`download-overlay-icon`} path={DOWNLOAD} viewBox={`0 0 32 32`} hidden="true" />
         </button>
       </Tooltip>

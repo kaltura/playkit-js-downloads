@@ -14,13 +14,18 @@ jobs:
   build:
     uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
     with:
-      node-version: '18.x'
+      node-version: '20.x'
       yarn-run-to-execute: 'build'
+  type-check:
+    uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
+    with:
+      node-version: '20.x'
+      yarn-run-to-execute: 'type-check'
   lint:
     uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
     with:
-      node-version: '18.x'
-      yarn-run-to-execute: 'eslint'
+      node-version: '20.x'
+      yarn-run-to-execute: 'lint'
 
 
 

@@ -1,22 +1,37 @@
 {
-    "compilerOptions": {
-      "allowJs": false,
-      "baseUrl": "..",
-      "experimentalDecorators": true,
-      "jsx": "react-jsx",
-      "jsxImportSource": "preact",
-      "module": "commonjs",
-      "moduleResolution": "Node",
-      "preserveSymlinks": true,
-      "skipLibCheck": true,
-      "sourceMap": true,
-      "strict": true,
-      "target": "ES5",
-      "types": ["cypress", "node"],
-      "paths": {
-        "*": ["./src/*", "./node_modules/*", "cypress.config.ts"]
-      },
-      "lib": ["es2015", "dom"],
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "customMatcher": "\\.(css|scss)$",
+          "classnameTransform": "camelCase"
+        }
+      }
+    ],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "baseUrl": ".",
+    "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "jsx": "preserve",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "types": ["cypress", "node"],
+    "paths": {
+      "react": ["./node_modules/preact/compat/"],
+      "react-dom": ["./node_modules/preact/compat/"]
     },
-    "include": ["src/**/*.tsx", "src/**/*.ts", "node_modules/@playkit-js/kaltura-player-js/ts-typed", "cypress/e2e/*.ts"]
+    "lib": ["dom", "ESNext"],
+    "outDir": "./lib/",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*", "cypress/e2e/*.ts"]
 }

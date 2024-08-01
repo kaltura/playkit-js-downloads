@@ -1,3 +1,4 @@
+import {h} from 'preact';
 import {DownloadPluginManager} from '../../download-plugin-manager';
 import {KalturaFlavorAsset} from '../../providers';
 import {DownloadItem} from '../download-item';
@@ -7,9 +8,10 @@ import {ExpandableContainer} from '../expandable-container';
 import {ComponentChildren} from 'preact';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
 import {assetType} from '../../consts/asset-type';
-const {Icon, IconType} = KalturaPlayer.ui.components;
+import {ui} from '@playkit-js/kaltura-player-js';
+const {Icon, IconType} = ui.components;
 
-const {withText} = KalturaPlayer.ui.preacti18n;
+const {withText} = ui.preacti18n;
 
 interface SourcesListProps {
   flavors: Array<KalturaFlavorAsset>;

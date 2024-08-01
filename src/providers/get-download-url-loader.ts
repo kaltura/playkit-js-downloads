@@ -1,6 +1,7 @@
-import ILoader = KalturaPlayerTypes.ILoader;
 import {KalturaAttachmentAsset, KalturaCaptionAsset, KalturaFlavorAsset} from './response-types';
-const {RequestBuilder} = KalturaPlayer.providers;
+import {ILoader} from '@playkit-js/playkit-js-providers/types';
+import {RequestBuilder} from '@playkit-js/playkit-js-providers/ovp-provider';
+
 
 interface DownloadUrlLoaderParams {
   flavors: Array<KalturaFlavorAsset>;
@@ -16,7 +17,7 @@ export class DownloadUrlLoader implements ILoader {
   _flavors: Array<KalturaFlavorAsset>;
   _captions: Array<KalturaCaptionAsset>;
   _attachments: Array<KalturaAttachmentAsset>;
-  _requests: (typeof RequestBuilder)[] = [];
+  _requests: (RequestBuilder)[] = [];
   _response: DownloadUrlResponse = {
     urls: new Map()
   };
@@ -57,6 +58,7 @@ export class DownloadUrlLoader implements ILoader {
     const urls: Map<string, string> = new Map();
     for (let index = 0; index < this._requests.length; index++) {
       if (this._requests[index].service === 'caption_captionAsset') {
+        // eslint-disable-next-line  no-useless-escape
         const id = response[index]?.data.match(/captionAssetId\/([^\/]+)/)[1];
         urls.set(id, response[index]?.data);
       } else {

@@ -1,8 +1,9 @@
-import ILoader = KalturaPlayerTypes.ILoader;
 import {KalturaFlavorAssetListResponse, KalturaFlavorAsset} from './response-types';
-const {RequestBuilder} = KalturaPlayer.providers;
+import {ILoader} from '@playkit-js/playkit-js-providers/types';
+import {RequestBuilder} from '@playkit-js/playkit-js-providers/ovp-provider';
 
 interface FlavorsLoaderParams {
+
   entryId: string;
 }
 
@@ -12,7 +13,7 @@ interface FlavorsResponse {
 
 export class FlavorsLoader implements ILoader {
   _entryId: string;
-  _requests: (typeof RequestBuilder)[] = [];
+  _requests: (RequestBuilder)[] = [];
   _response: FlavorsResponse = {
     flavors: []
   };

@@ -1,3 +1,4 @@
+import {h} from 'preact';
 import {DownloadPluginManager} from '../../download-plugin-manager';
 import {useState, useEffect} from 'preact/hooks';
 import {DownloadMetadata} from '../../types';
@@ -10,10 +11,10 @@ const {bindActions} = ui.utils;
 
 const overlayActions = ui.reducers.overlay.actions;
 
-const {withEventManager} = KalturaPlayer.ui.Event;
-const {connect} = KalturaPlayer.ui.redux;
+const {withEventManager} = ui.Event;
+const {connect} = ui.redux;
 
-const {withText} = KalturaPlayer.ui.preacti18n;
+const {withText} = ui.preacti18n;
 
 import * as styles from './download-overlay.scss';
 import {SourcesList} from '../sources-list';
@@ -41,6 +42,7 @@ const DownloadOverlay = withText({
   )(
     withEventManager(({downloadPluginManager, eventManager, downloadsLabel, downloadMetadata, updateOverlay}: DownloadOverlayProps) => {
       const [isVisible, setIsVisible] = useState(false);
+      // @ts-expect-error - Property 'config' is protected and only accessible within class 'BasePlugin' and its subclasses.
       const downloadConfig = downloadPluginManager.downloadPlugin.config;
       useEffect(() => {
         eventManager?.listen(downloadPluginManager, DownloadEvent.SHOW_OVERLAY, () => {
