@@ -69,12 +69,16 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
     this._showOverlay = overlayVisible;
 
     if (this._showOverlay) {
+      document.getElementById(this.downloadPlugin.player.config.targetId as string)?.classList.add('download-overlay-active');
+
       if (!this.downloadPlugin.player.paused) {
         this.downloadPlugin.player.pause();
         this.playOnClose = true;
       }
       this.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.SHOW_OVERLAY, {byKeyboard: this.downloadPlugin.triggeredByKeyboard}));
     } else {
+      document.getElementById(this.downloadPlugin.player.config.targetId as string)?.classList.remove('download-overlay-active');
+
       if (this.playOnClose) {
         this.downloadPlugin.player.play();
         this.playOnClose = false;
