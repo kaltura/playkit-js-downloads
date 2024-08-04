@@ -13,10 +13,12 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
   private downloadService: any;
   private downloadMetadata: DownloadMetadata = null;
   private playOnClose = false;
+  private player;
 
   constructor(public downloadPlugin: Download) {
     super();
     this.downloadService = new DownloadService(downloadPlugin.player, downloadPlugin.logger);
+    this.player = downloadPlugin.player;
   }
 
   async getDownloadMetadata(refresh = false): Promise<DownloadMetadata> {
@@ -69,12 +71,16 @@ class DownloadPluginManager extends KalturaPlayer.core.FakeEventTarget {
     this._showOverlay = overlayVisible;
 
     if (this._showOverlay) {
+      document.getElementById(this.player.config.targetId as string)?.classList.add('download-overlay-active');
+
       if (!this.downloadPlugin.player.paused) {
         this.downloadPlugin.player.pause();
         this.playOnClose = true;
       }
       this.dispatchEvent(new KalturaPlayer.core.FakeEvent(DownloadEvent.SHOW_OVERLAY, {byKeyboard: this.downloadPlugin.triggeredByKeyboard}));
     } else {
+      document.getElementById(this.player.config.targetId as string)?.classList.remove('download-overlay-active');
+
       if (this.playOnClose) {
         this.downloadPlugin.player.play();
         this.playOnClose = false;

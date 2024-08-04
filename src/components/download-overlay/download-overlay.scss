@@ -65,3 +65,11 @@
     }
   }
 }
+
+:global(.download-overlay-active .playkit-overlay-active .playkit-interactive-area) {
+  filter: none !important;
+}
+
+:global(.download-overlay-active .playkit-player.playkit-overlay-active .overlay-portal) {
+  z-index: 2 !important;
+}
