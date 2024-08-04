@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.3.6 (2024-08-04)
+
+
+### Bug Fixes
+
+* **FEC-14086:** Player v7 | Download plugin overlay doesnt match figma. ([#64](https://github.com/kaltura/playkit-js-downloads/issues/64)) ([0f5668e](https://github.com/kaltura/playkit-js-downloads/commit/0f5668e4656508cb3c77e13b189bc39b12d947e1))
+
 ### 1.3.5 (2024-08-03)
 
 ### 1.3.4 (2024-06-30)
