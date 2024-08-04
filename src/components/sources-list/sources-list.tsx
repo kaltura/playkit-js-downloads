@@ -85,8 +85,8 @@ export const SourcesList = withText({
       return flavorDescription;
     };
 
-    const _getMediaIcon = (flavor: KalturaFlavorAsset): ComponentChildren => {
-      return flavor.height > 0 ? <Icon id="download-file-play" type={IconType.Play} viewBox={`0 0 32 32`} /> : <CommonIcon name={'audio'} />;
+    const _getPlayIcon = (flavor: KalturaFlavorAsset): ComponentChildren => {
+      return <Icon id="download-file-play" type={flavor.height > 0 ? IconType.Play : IconType.Audio} viewBox={`0 0 32 32`} />;
     };
 
     const _getImageIcon = (): ComponentChildren => {
@@ -121,7 +121,7 @@ export const SourcesList = withText({
         `${fileName}.${flavor.fileExt}`,
         _buildSourceDescription(flavor),
         flavor.downloadUrl,
-        _getMediaIcon(flavor),
+        _getPlayIcon(flavor),
         isDefault
       );
     };
