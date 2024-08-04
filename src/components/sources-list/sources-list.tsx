@@ -128,7 +128,7 @@ export const SourcesList = withText({
 
     const _renderFlavors = (flavors: Array<KalturaFlavorAsset>) => {
       return flavors.map((flavor: KalturaFlavorAsset) => {
-        if (flavor.id !== defaultFlavor?.id) {
+        if (flavor.downloadUrl && flavor.id !== defaultFlavor?.id) {
           return _renderFlavor(flavor);
         }
       });
