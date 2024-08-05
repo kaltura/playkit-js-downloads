@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.3.7 (2024-08-05)
+
+
+### Bug Fixes
+
+* **FEC-14089:** filter audio flavors ([#67](https://github.com/kaltura/playkit-js-downloads/issues/67)) ([dd27367](https://github.com/kaltura/playkit-js-downloads/commit/dd27367e935fd715aea4e6d921de73bc3646f380))
+
 ### 1.3.6 (2024-08-04)
 
 
