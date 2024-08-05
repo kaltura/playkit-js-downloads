@@ -27,7 +27,7 @@ export class KalturaFlavorAssetListResponse extends BaseServiceResult {
     for (let i = 1; i < sortedFlavors.length; i++) {
       const currentFlavor = sortedFlavors[i];
       // Excluding audio file from filter (it's always 0)
-      if (previousFlavor.height !== currentFlavor.height || currentFlavor.height === 0) {
+      if (previousFlavor.height !== currentFlavor.height && currentFlavor.height > 0) {
         data.push(new KalturaFlavorAsset(currentFlavor));
       }
       previousFlavor = currentFlavor;
