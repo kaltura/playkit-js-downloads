@@ -18,7 +18,7 @@ interface DownloadItemProps {
   downloadLabel?: string;
   downloadStartedLabel?: string;
   downloadFailedLabel?: string;
-  downloadButtonLabel?: string;
+  ariaLabel: string;
   fileName: string;
   assetType: string;
   description?: string;
@@ -31,8 +31,7 @@ interface DownloadItemProps {
 export const DownloadItem = withText({
   downloadLabel: 'download.download',
   downloadStartedLabel: 'download.download_has_started',
-  downloadFailedLabel: 'download.download_has_failed',
-  downloadButtonLabel: 'download.download_button_label'
+  downloadFailedLabel: 'download.download_has_failed'
 })(
   withPlayer(
     ({
@@ -41,7 +40,7 @@ export const DownloadItem = withText({
       downloadStartedLabel,
       downloadFailedLabel,
       downloadPluginManager,
-      downloadButtonLabel,
+      ariaLabel,
       fileName,
       assetType,
       description,
@@ -76,7 +75,7 @@ export const DownloadItem = withText({
             data-testid="download-item-download-button"
             className={styles.fileInfo}
             tabIndex={0}
-            aria-label={downloadButtonLabel}
+            aria-label={`${ariaLabel} ${fileName} ${description || ''}`}
             ref={downloadItemRef}>
             <div className={`${styles.iconContainer} ${styles.fileIcon}`}>{iconFileType}</div>
             <div className={styles.fileInfoTextContainer}>
