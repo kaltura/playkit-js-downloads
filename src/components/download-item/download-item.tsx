@@ -18,7 +18,7 @@ interface DownloadItemProps {
   downloadLabel?: string;
   downloadStartedLabel?: string;
   downloadFailedLabel?: string;
-  downloadButtonLabel: string;
+  ariaLabel: string;
   fileName: string;
   assetType: string;
   description?: string;
@@ -40,7 +40,7 @@ export const DownloadItem = withText({
       downloadStartedLabel,
       downloadFailedLabel,
       downloadPluginManager,
-      downloadButtonLabel,
+      ariaLabel,
       fileName,
       assetType,
       description,
@@ -75,7 +75,7 @@ export const DownloadItem = withText({
             data-testid="download-item-download-button"
             className={styles.fileInfo}
             tabIndex={0}
-            aria-label={`${downloadButtonLabel} ${fileName} ${description || ''}`}
+            aria-label={`${ariaLabel} ${fileName} ${description || ''}`}
             ref={downloadItemRef}>
             <div className={`${styles.iconContainer} ${styles.fileIcon}`}>{iconFileType}</div>
             <div className={styles.fileInfoTextContainer}>

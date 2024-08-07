@@ -5,31 +5,26 @@ import * as styles from './attachments-list.scss';
 import {ComponentChildren} from 'preact';
 import {getIconByFileExt} from '@playkit-js/common/dist/icon/icon-utils';
 import {assetType} from '../../consts/asset-type';
+import {AssetsListProps} from '../../types/assets-list-props';
 
 const {withText} = KalturaPlayer.ui.preacti18n;
 
-interface AttachmentsListProps {
-  attachments: Array<KalturaAttachmentAsset>;
+interface AttachmentsListProps extends AssetsListProps {
+  files: KalturaAttachmentAsset[];
   downloadPluginManager: DownloadPluginManager;
-  attachmentsLabel?: string;
-  downloadAttachmentsButtonLabel?: string;
+  title?: string;
+  ariaLabel?: string;
 }
 
 export const AttachmentsList = withText({
-  attachmentsLabel: 'download.attachments_label',
-  downloadAttachmentsButtonLabel: 'download.download_button_label_attachment'
-})(({attachments, downloadPluginManager, attachmentsLabel, downloadAttachmentsButtonLabel}: AttachmentsListProps) => {
+  title: 'download.attachments_label',
+  ariaLabel: 'download.download_button_label_attachment'
+})(({files, downloadPluginManager, title, ariaLabel}: AttachmentsListProps) => {
   const _buildFileName = (attachment: KalturaAttachmentAsset) => {
     return attachment.title || attachment.fileName;
   };
 
-  const _renderDownloadItem = (
-    key: string,
-    fileName: string,
-    downloadUrl: string,
-    icon: ComponentChildren,
-    downloadAttachmentsButtonLabel: string
-  ) => {
+  const _renderDownloadItem = (key: string, fileName: string, downloadUrl: string, icon: ComponentChildren, ariaLabel: string) => {
     return (
       <DownloadItem
         downloadPluginManager={downloadPluginManager}
@@ -38,27 +33,21 @@ export const AttachmentsList = withText({
         downloadUrl={downloadUrl}
         assetType={assetType.Attachments}
         iconFileType={icon}
-        downloadButtonLabel={downloadAttachmentsButtonLabel}
+        ariaLabel={ariaLabel}
       />
     );
   };
 
   const _renderAttachments = (attachments: Array<KalturaAttachmentAsset>) => {
     return attachments.map((attachment: KalturaAttachmentAsset) => {
-      return _renderDownloadItem(
-        attachment.id,
-        _buildFileName(attachment),
-        attachment.downloadUrl,
-        getIconByFileExt(attachment.fileExt),
-        downloadAttachmentsButtonLabel!
-      );
+      return _renderDownloadItem(attachment.id, _buildFileName(attachment), attachment.downloadUrl, getIconByFileExt(attachment.fileExt), ariaLabel!);
     });
   };
 
   return (
     <div className={styles.attachmentsContainer} data-testid={'download-overlay-attachments-container'}>
-      <div className={styles.attachmentsLabel}>{attachmentsLabel}</div>
-      {_renderAttachments(attachments)}
+      <div className={styles.attachmentsLabel}>{title}</div>
+      {_renderAttachments(files)}
     </div>
   );
 });

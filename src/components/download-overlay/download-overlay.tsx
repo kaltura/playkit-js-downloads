@@ -20,8 +20,9 @@ import {SourcesList} from '../sources-list';
 import {CaptionsList} from '../captions-list';
 import {AttachmentsList} from '../attachments-list';
 import {DownloadEvent} from '../../event';
+import {AssetsListProps} from '../../types/assets-list-props';
 
-interface DownloadOverlayProps {
+interface DownloadOverlayProps extends AssetsListProps {
   downloadPluginManager: DownloadPluginManager;
   eventManager: any;
   downloadsLabel?: string;
@@ -55,7 +56,7 @@ const DownloadOverlay = withText({
       const renderSources = () => {
         return (
           <SourcesList
-            flavors={downloadMetadata!.flavors}
+            files={downloadMetadata!.flavors}
             imageUrl={downloadMetadata!.imageDownloadUrl}
             downloadPluginManager={downloadPluginManager}
             downloadConfig={downloadConfig}
@@ -67,12 +68,12 @@ const DownloadOverlay = withText({
 
       const renderCaptions = () => {
         return (
-          <CaptionsList captions={downloadMetadata!.captions} downloadPluginManager={downloadPluginManager} fileName={downloadMetadata!.fileName} />
+          <CaptionsList files={downloadMetadata!.captions} downloadPluginManager={downloadPluginManager} fileName={downloadMetadata!.fileName} />
         );
       };
 
       const renderAttachments = () => {
-        return <AttachmentsList attachments={downloadMetadata!.attachments} downloadPluginManager={downloadPluginManager} />;
+        return <AttachmentsList files={downloadMetadata!.attachments} downloadPluginManager={downloadPluginManager} />;
       };
 
       const shouldRenderSources = downloadConfig.displaySources && (downloadMetadata!.flavors.length || downloadMetadata!.imageDownloadUrl);

@@ -5,23 +5,25 @@ import * as styles from './captions-list.scss';
 import {ExpandableContainer} from '../expandable-container';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
 import {assetType} from '../../consts/asset-type';
+import {AssetsListProps} from '../../types/assets-list-props';
 
 const {withText} = KalturaPlayer.ui.preacti18n;
 
-interface CaptionsListProps {
-  captions: Array<KalturaCaptionAsset>;
+interface CaptionsListProps extends AssetsListProps {
+  files: KalturaCaptionAsset[];
   downloadPluginManager: DownloadPluginManager;
   fileName: string;
   moreCaptionsLabel?: string;
   lessCaptionsLabel?: string;
-  downloadCaptionsButtonLabel?: string;
+  ariaLabel?: string;
 }
 
 export const CaptionsList = withText({
   moreCaptionsLabel: 'download.more_captions_label',
   lessCaptionsLabel: 'download.less_captions_label',
-  downloadCaptionsButtonLabel: 'download.download_button_label_captions'
-})(({captions, downloadPluginManager, fileName, moreCaptionsLabel, lessCaptionsLabel, downloadCaptionsButtonLabel}: CaptionsListProps) => {
+  ariaLabel: 'download.download_button_label_captions'
+})(({files, downloadPluginManager, fileName, moreCaptionsLabel, lessCaptionsLabel, ariaLabel}: CaptionsListProps) => {
+  const captions: KalturaCaptionAsset[] = files;
   let defaultCaptions: KalturaCaptionAsset | undefined;
 
   const _setDefaultCaption = () => {
@@ -39,7 +41,7 @@ export const CaptionsList = withText({
     return `${fileName}.${caption.fileExt}`;
   };
 
-  const _renderDownloadItem = (key: string, fileName: string, languageLabel: string, downloadUrl: string, downloadCaptionsButtonLabel: string) => {
+  const _renderDownloadItem = (key: string, fileName: string, languageLabel: string, downloadUrl: string, ariaLabel: string) => {
     return (
       <DownloadItem
         downloadPluginManager={downloadPluginManager}
@@ -49,13 +51,13 @@ export const CaptionsList = withText({
         downloadUrl={downloadUrl}
         assetType={assetType.Captions}
         iconFileType={<CommonIcon name={'closedCaptions'} />}
-        downloadButtonLabel={downloadCaptionsButtonLabel}
+        ariaLabel={ariaLabel}
       />
     );
   };
 
   const _renderCaption = (caption: KalturaCaptionAsset) => {
-    return _renderDownloadItem(caption.id, _buildFileName(caption), caption.label, caption.downloadUrl, downloadCaptionsButtonLabel!);
+    return _renderDownloadItem(caption.id, _buildFileName(caption), caption.label, caption.downloadUrl, ariaLabel!);
   };
 
   const _renderCaptions = (captions: Array<KalturaCaptionAsset>) => {

@@ -7,19 +7,20 @@ import {ExpandableContainer} from '../expandable-container';
 import {ComponentChildren} from 'preact';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
 import {assetType} from '../../consts/asset-type';
+import {AssetsListProps} from '../../types/assets-list-props';
 const {Icon, IconType} = KalturaPlayer.ui.components;
 
 const {withText} = KalturaPlayer.ui.preacti18n;
 
-interface SourcesListProps {
-  flavors: Array<KalturaFlavorAsset>;
+interface SourcesListProps extends AssetsListProps {
+  files: KalturaFlavorAsset[];
   imageUrl: string;
   downloadPluginManager: DownloadPluginManager;
   downloadConfig: DownloadConfig;
   fileName: string;
   displayFlavors: boolean;
   selectQualityLabel?: string;
-  downloadVideoButtonLabel?: string;
+  ariaLabel?: string;
   hideLabel?: string;
   sourceLabel?: string;
 }
@@ -36,20 +37,21 @@ export const SourcesList = withText({
   selectQualityLabel: 'download.select_quality_label',
   hideLabel: 'download.hide_label',
   sourceLabel: 'download.source_label',
-  downloadVideoButtonLabel: 'download.download_button_label_video'
+  ariaLabel: 'download.download_button_label_video'
 })(
   ({
-    flavors,
+    files,
     imageUrl,
     downloadPluginManager,
     downloadConfig,
     fileName,
     displayFlavors,
     selectQualityLabel,
-    downloadVideoButtonLabel,
+    ariaLabel,
     hideLabel,
     sourceLabel
   }: SourcesListProps) => {
+    const flavors = files;
     let defaultFlavor: KalturaFlavorAsset | undefined;
 
     const _setDefaultFlavor = () => {
@@ -103,7 +105,7 @@ export const SourcesList = withText({
       downloadUrl: string,
       icon: ComponentChildren,
       isDefault = false,
-      downloadVideoButtonLabel: string
+      ariaLabel: string
     ) => {
       return (
         <DownloadItem
@@ -115,7 +117,7 @@ export const SourcesList = withText({
           iconFileType={icon}
           assetType={assetType.Media}
           isDefault={isDefault}
-          downloadButtonLabel={downloadVideoButtonLabel}
+          ariaLabel={ariaLabel}
         />
       );
     };
@@ -128,7 +130,7 @@ export const SourcesList = withText({
         flavor.downloadUrl,
         _getPlayIcon(flavor),
         isDefault,
-        downloadVideoButtonLabel!
+        ariaLabel!
       );
     };
 
@@ -156,7 +158,7 @@ export const SourcesList = withText({
 
     const _renderSources = () => {
       if (imageUrl) {
-        return _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true, downloadVideoButtonLabel!);
+        return _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true, ariaLabel!);
       } else if (flavors.length > 0) {
         return _renderExpandableFlavors();
       }
