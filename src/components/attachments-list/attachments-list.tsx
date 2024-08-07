@@ -23,7 +23,13 @@ export const AttachmentsList = withText({
     return attachment.title || attachment.fileName;
   };
 
-  const _renderDownloadItem = (key: string, fileName: string, downloadUrl: string, icon: ComponentChildren, downloadAttachmentsButtonLabel: string) => {
+  const _renderDownloadItem = (
+    key: string,
+    fileName: string,
+    downloadUrl: string,
+    icon: ComponentChildren,
+    downloadAttachmentsButtonLabel: string
+  ) => {
     return (
       <DownloadItem
         downloadPluginManager={downloadPluginManager}
@@ -39,7 +45,13 @@ export const AttachmentsList = withText({
 
   const _renderAttachments = (attachments: Array<KalturaAttachmentAsset>) => {
     return attachments.map((attachment: KalturaAttachmentAsset) => {
-      return _renderDownloadItem(attachment.id, _buildFileName(attachment), attachment.downloadUrl, getIconByFileExt(attachment.fileExt), downloadAttachmentsButtonLabel!);
+      return _renderDownloadItem(
+        attachment.id,
+        _buildFileName(attachment),
+        attachment.downloadUrl,
+        getIconByFileExt(attachment.fileExt),
+        downloadAttachmentsButtonLabel!
+      );
     });
   };
 
