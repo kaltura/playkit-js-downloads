@@ -19,6 +19,7 @@ interface SourcesListProps {
   fileName: string;
   displayFlavors: boolean;
   selectQualityLabel?: string;
+  downloadVideoButtonLabel?: string;
   hideLabel?: string;
   sourceLabel?: string;
 }
@@ -34,7 +35,8 @@ const RESOLUTION_HD = 'HD';
 export const SourcesList = withText({
   selectQualityLabel: 'download.select_quality_label',
   hideLabel: 'download.hide_label',
-  sourceLabel: 'download.source_label'
+  sourceLabel: 'download.source_label',
+  downloadVideoButtonLabel: 'download.download_button_label_video'
 })(
   ({
     flavors,
@@ -44,6 +46,7 @@ export const SourcesList = withText({
     fileName,
     displayFlavors,
     selectQualityLabel,
+    downloadVideoButtonLabel,
     hideLabel,
     sourceLabel
   }: SourcesListProps) => {
@@ -99,7 +102,8 @@ export const SourcesList = withText({
       description: string,
       downloadUrl: string,
       icon: ComponentChildren,
-      isDefault = false
+      isDefault = false,
+      downloadVideoButtonLabel: string
     ) => {
       return (
         <DownloadItem
@@ -111,6 +115,7 @@ export const SourcesList = withText({
           iconFileType={icon}
           assetType={assetType.Media}
           isDefault={isDefault}
+          downloadButtonLabel={downloadVideoButtonLabel}
         />
       );
     };
@@ -122,7 +127,8 @@ export const SourcesList = withText({
         _buildSourceDescription(flavor),
         flavor.downloadUrl,
         _getPlayIcon(flavor),
-        isDefault
+        isDefault,
+        downloadVideoButtonLabel!
       );
     };
 
@@ -150,7 +156,7 @@ export const SourcesList = withText({
 
     const _renderSources = () => {
       if (imageUrl) {
-        return _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true);
+        return _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true, downloadVideoButtonLabel!);
       } else if (flavors.length > 0) {
         return _renderExpandableFlavors();
       }

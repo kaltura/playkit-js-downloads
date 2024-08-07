@@ -12,16 +12,18 @@ interface AttachmentsListProps {
   attachments: Array<KalturaAttachmentAsset>;
   downloadPluginManager: DownloadPluginManager;
   attachmentsLabel?: string;
+  downloadAttachmentsButtonLabel?: string;
 }
 
 export const AttachmentsList = withText({
-  attachmentsLabel: 'download.attachments_label'
-})(({attachments, downloadPluginManager, attachmentsLabel}: AttachmentsListProps) => {
+  attachmentsLabel: 'download.attachments_label',
+  downloadAttachmentsButtonLabel: 'download.download_button_label_attachment'
+})(({attachments, downloadPluginManager, attachmentsLabel, downloadAttachmentsButtonLabel}: AttachmentsListProps) => {
   const _buildFileName = (attachment: KalturaAttachmentAsset) => {
     return attachment.title || attachment.fileName;
   };
 
-  const _renderDownloadItem = (key: string, fileName: string, downloadUrl: string, icon: ComponentChildren) => {
+  const _renderDownloadItem = (key: string, fileName: string, downloadUrl: string, icon: ComponentChildren, downloadAttachmentsButtonLabel: string) => {
     return (
       <DownloadItem
         downloadPluginManager={downloadPluginManager}
@@ -30,13 +32,14 @@ export const AttachmentsList = withText({
         downloadUrl={downloadUrl}
         assetType={assetType.Attachments}
         iconFileType={icon}
+        downloadButtonLabel={downloadAttachmentsButtonLabel}
       />
     );
   };
 
   const _renderAttachments = (attachments: Array<KalturaAttachmentAsset>) => {
     return attachments.map((attachment: KalturaAttachmentAsset) => {
-      return _renderDownloadItem(attachment.id, _buildFileName(attachment), attachment.downloadUrl, getIconByFileExt(attachment.fileExt));
+      return _renderDownloadItem(attachment.id, _buildFileName(attachment), attachment.downloadUrl, getIconByFileExt(attachment.fileExt), downloadAttachmentsButtonLabel!);
     });
   };
 
