@@ -4,6 +4,7 @@ import {DownloadMetadata} from '../../types';
 import {ui} from '@playkit-js/kaltura-player-js';
 
 import {OverlayPortal} from '@playkit-js/common/dist/hoc/overlay-portal';
+import {FocusTrap} from '../focus-trap';
 const {Overlay} = ui.Components;
 
 const {bindActions} = ui.utils;
@@ -82,26 +83,28 @@ const DownloadOverlay = withText({
 
       return isVisible ? (
         <OverlayPortal>
-          <Overlay
-            open
-            onClose={() => {
-              updateOverlay(false);
-              downloadPluginManager.setShowOverlay(false);
-            }}
-            type="playkit-download">
-            <div data-testid="download-overlay" className={styles.downloadOverlay}>
-              <div className={styles.header}>{downloadsLabel}</div>
-              <div className={styles.fileInfoList}>
-                {shouldRenderSources || shouldRenderCaptions ? (
-                  <div className={styles.sourcesCaptionsContainer}>
-                    {shouldRenderSources && renderSources()}
-                    {shouldRenderCaptions && renderCaptions()}
-                  </div>
-                ) : undefined}
-                {shouldRenderAttachments && renderAttachments()}
+          <FocusTrap active>
+            <Overlay
+              open
+              onClose={() => {
+                updateOverlay(false);
+                downloadPluginManager.setShowOverlay(false);
+              }}
+              type="playkit-download">
+              <div data-testid="download-overlay" className={styles.downloadOverlay}>
+                <div className={styles.header}>{downloadsLabel}</div>
+                <div className={styles.fileInfoList}>
+                  {shouldRenderSources || shouldRenderCaptions ? (
+                    <div className={styles.sourcesCaptionsContainer}>
+                      {shouldRenderSources && renderSources()}
+                      {shouldRenderCaptions && renderCaptions()}
+                    </div>
+                  ) : undefined}
+                  {shouldRenderAttachments && renderAttachments()}
+                </div>
               </div>
-            </div>
-          </Overlay>
+            </Overlay>
+          </FocusTrap>
         </OverlayPortal>
       ) : null;
     })
