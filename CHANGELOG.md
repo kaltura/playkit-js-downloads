@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.3.8 (2024-08-25)
+
+
+### Bug Fixes
+
+* **A11Y-194:** use FocusTrap hoc ([#69](https://github.com/kaltura/playkit-js-downloads/issues/69)) ([0ae4cb4](https://github.com/kaltura/playkit-js-downloads/commit/0ae4cb4743c0161b04abb641847221277ec91685))
+
 ### 1.3.7 (2024-08-05)
 
 
