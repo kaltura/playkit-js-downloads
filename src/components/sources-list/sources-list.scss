@@ -1,4 +1,7 @@
 .sources-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
   overflow: hidden;
   margin-bottom: 16px;
