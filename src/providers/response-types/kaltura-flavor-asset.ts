@@ -1,3 +1,7 @@
+export enum FlavorsStatus {
+  ACTIVE = 2
+}
+
 export interface KalturaFlavorAssetArgs {
   id: string;
   fileExt: string;

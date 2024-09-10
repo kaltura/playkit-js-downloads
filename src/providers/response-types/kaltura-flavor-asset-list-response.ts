@@ -1,4 +1,4 @@
-import {KalturaFlavorAsset} from './kaltura-flavor-asset';
+import {KalturaFlavorAsset, FlavorsStatus} from './kaltura-flavor-asset';
 const {BaseServiceResult} = KalturaPlayer.providers.ResponseTypes;
 
 export class KalturaFlavorAssetListResponse extends BaseServiceResult {
@@ -22,10 +22,10 @@ export class KalturaFlavorAssetListResponse extends BaseServiceResult {
     return sortedFlavors;
   };
 
-  private _filterFlavors = (flavors: Array<any>) => {
+  private _filterUniqueFlavors = (flavors: Array<any>) => {
     const flavorsMap = new Map();
     flavors.forEach(flavor => {
-      if (flavor.status === 2) {
+      if (flavor.status === FlavorsStatus.ACTIVE) {
         flavorsMap.set(flavor.uniqKey, flavor);
       }
     });
@@ -44,7 +44,7 @@ export class KalturaFlavorAssetListResponse extends BaseServiceResult {
   };
 
   private _setData(flavors: Array<any>): Array<KalturaFlavorAsset> {
-    const flavorAssets = this._filterFlavors(this._sortFlavors(this._updateFlavors(flavors))).map(flavor => {
+    const flavorAssets = this._filterUniqueFlavors(this._sortFlavors(this._updateFlavors(flavors))).map(flavor => {
       return new KalturaFlavorAsset(flavor);
     });
     return flavorAssets;
