@@ -32,8 +32,8 @@ export const loadPlayer = (pluginConf = {}, playbackConf: Record<string, any> = 
               download: {
                 downloads: 'Downloads',
                 download: 'Download',
-                select_quality_label: 'Select quality',
-                hide_label: 'Hide',
+                select_quality_label: 'More flavors',
+                hide_label: 'Less flavors',
                 source_label: 'Source',
                 more_captions_label: 'More captions',
                 less_captions_label: 'Less captions',
