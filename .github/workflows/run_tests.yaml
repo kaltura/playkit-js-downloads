@@ -9,7 +9,7 @@ on:
 
 jobs:
   tests:
-    uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@master
+    uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@fix-cypress-tests
     secrets: inherit
   build:
     uses: kaltura/ovp-pipelines-pub/.github/workflows/player_tests.yaml@master
