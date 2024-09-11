@@ -4,7 +4,7 @@ import {DownloadMetadata} from '../../types';
 import {ui} from '@playkit-js/kaltura-player-js';
 
 import {OverlayPortal} from '@playkit-js/common/dist/hoc/overlay-portal';
-import {FocusTrap} from '../focus-trap';
+import {FocusTrap} from '../focus-trap'; // TODO: replace with FocusTrap from @playkit-js/common
 const {Overlay} = ui.Components;
 
 const {bindActions} = ui.utils;
