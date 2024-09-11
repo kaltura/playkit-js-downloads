@@ -34,7 +34,7 @@
     "@babel/preset-typescript": "^7.23.3",
     "@babel/runtime": "^7.23.8",
     "@playkit-js/browserslist-config": "1.0.8",
-    "@playkit-js/common": "1.5.18",
+    "@playkit-js/common": "1.5.19",
     "@playkit-js/kaltura-player-js": "3.17.24",
     "@playkit-js/ui-managers": "1.6.0",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
