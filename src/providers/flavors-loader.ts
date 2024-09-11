@@ -12,7 +12,7 @@ interface FlavorsResponse {
 
 export class FlavorsLoader implements ILoader {
   _entryId: string;
-  _requests: (RequestBuilder)[] = [];
+  _requests: RequestBuilder[] = [];
   _response: FlavorsResponse = {
     flavors: []
   };

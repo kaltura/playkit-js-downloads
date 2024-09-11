@@ -1,11 +1,9 @@
-import {h} from 'preact';
+import {h, ComponentChildren} from 'preact';
 import {A11yWrapper} from '@playkit-js/common';
 import * as styles from './download-item.scss';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
 import {DownloadPluginManager} from '../../download-plugin-manager';
-import {ComponentChildren} from 'preact';
 import {useEffect, useRef} from 'preact/hooks';
-
 import {core, KalturaPlayer, ui} from '@playkit-js/kaltura-player-js';
 import {DownloadEvent} from '../../event';
 

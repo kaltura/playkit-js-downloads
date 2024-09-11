@@ -12,7 +12,7 @@ interface CaptionsResponse {
 
 export class CaptionsLoader implements ILoader {
   _entryId: string;
-  _requests: (RequestBuilder)[] = [];
+  _requests: RequestBuilder[] = [];
   _response: CaptionsResponse = {
     captions: []
   };

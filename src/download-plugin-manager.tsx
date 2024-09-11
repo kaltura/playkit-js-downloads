@@ -48,7 +48,7 @@ class DownloadPluginManager extends core.FakeEventTarget {
       if (typeof preDownloadHook === 'function') {
         preDownloadHook();
       }
-    } catch (e: any) {
+    } catch (e) {
       // @ts-expect-error - Property 'logger' is protected and only accessible within class 'BasePlugin' and its subclasses.
       this.downloadPlugin.logger.debug('Exception in pre-download hook');
     }

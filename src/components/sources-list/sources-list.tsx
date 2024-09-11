@@ -1,11 +1,10 @@
-import {h} from 'preact';
+import {h, ComponentChildren} from 'preact';
 import {DownloadPluginManager} from '../../download-plugin-manager';
 import {KalturaFlavorAsset} from '../../providers';
 import {DownloadItem} from '../download-item';
 import * as styles from './sources-list.scss';
 import {DownloadConfig} from '../../types';
 import {ExpandableContainer} from '../expandable-container';
-import {ComponentChildren} from 'preact';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
 import {assetType} from '../../consts/asset-type';
 import {AssetsListProps} from '../../types/assets-list-props';

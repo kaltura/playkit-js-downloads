@@ -12,7 +12,7 @@ interface AttachmentsResponse {
 
 export class AttachmentsLoader implements ILoader {
   _entryId: string;
-  _requests: (RequestBuilder)[] = [];
+  _requests: RequestBuilder[] = [];
   _response: AttachmentsResponse = {
     attachments: []
   };

@@ -1,9 +1,8 @@
-import { h } from 'preact';
+import {h, ComponentChildren} from 'preact';
 import {DownloadPluginManager} from '../../download-plugin-manager';
 import {KalturaAttachmentAsset} from '../../providers';
 import {DownloadItem} from '../download-item';
 import * as styles from './attachments-list.scss';
-import {ComponentChildren} from 'preact';
 import {getIconByFileExt} from '@playkit-js/common/dist/icon/icon-utils';
 import {assetType} from '../../consts/asset-type';
 import {AssetsListProps} from '../../types/assets-list-props';
