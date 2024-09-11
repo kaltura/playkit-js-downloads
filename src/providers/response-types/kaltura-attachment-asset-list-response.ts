@@ -1,5 +1,6 @@
+import {providers} from '@playkit-js/kaltura-player-js';
+const {BaseServiceResult} = providers.ResponseTypes;
 import {KalturaAttachmentAsset, KalturaAttachmentAssetArgs} from './kaltura-attachment-asset';
-const {BaseServiceResult} = KalturaPlayer.providers.ResponseTypes;
 
 export class KalturaAttachmentAssetListResponse extends BaseServiceResult {
   totalCount?: number;

@@ -1,3 +1,4 @@
+import {h} from 'preact';
 import {DownloadPluginManager} from '../../download-plugin-manager';
 import {KalturaFlavorAsset} from '../../providers';
 import {DownloadItem} from '../download-item';
@@ -8,9 +9,10 @@ import {ComponentChildren} from 'preact';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
 import {assetType} from '../../consts/asset-type';
 import {AssetsListProps} from '../../types/assets-list-props';
-const {Icon, IconType} = KalturaPlayer.ui.components;
+import {ui} from '@playkit-js/kaltura-player-js';
 
-const {withText} = KalturaPlayer.ui.preacti18n;
+const {Icon, IconType} = ui.components;
+const {withText} = ui.preacti18n;
 
 interface SourcesListProps extends AssetsListProps {
   files: KalturaFlavorAsset[];
@@ -91,17 +93,7 @@ export const SourcesList = withText({
 
     const _getPlayIcon = (flavor: KalturaFlavorAsset): ComponentChildren => {
       if (flavor.isAudio) {
-        // TODO: replace with <CommonIcon name={'audio'} />;
-        return (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M10.5 4.5C10.5 3.67157 11.1716 3 12 3C12.8284 3 13.5 3.67157 13.5 4.5V19.5C13.5 20.3284 12.8284 21 12 21C11.1716 21 10.5 20.3284 10.5 19.5V4.5ZM4.5 9C4.5 8.17157 5.17157 7.5 6 7.5C6.82843 7.5 7.5 8.17157 7.5 9V15C7.5 15.8284 6.82843 16.5 6 16.5C5.17157 16.5 4.5 15.8284 4.5 15V9ZM18 7.5C17.1716 7.5 16.5 8.17157 16.5 9V15C16.5 15.8284 17.1716 16.5 18 16.5C18.8284 16.5 19.5 15.8284 19.5 15V9C19.5 8.17157 18.8284 7.5 18 7.5Z"
-              fill="white"
-            />
-          </svg>
-        );
+        return <CommonIcon name="audio" />;
       }
       return <Icon id="download-file-play" type={IconType.Play} viewBox={`0 0 32 32`} />;
     };
