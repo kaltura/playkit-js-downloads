@@ -1,15 +1,14 @@
 import {h} from 'preact';
 import {ToastManager, ToastSeverity, UpperBarManager} from '@playkit-js/ui-managers';
+import {BasePlugin, KalturaPlayer, ui} from '@playkit-js/kaltura-player-js';
+import {FakeEvent} from '@playkit-js/playkit-js';
+import {OnClickEvent} from '@playkit-js/common';
 
 import {DownloadConfig, DownloadMetadata} from './types';
 import {DownloadOverlayButton} from './components';
 import {DOWNLOAD} from './icons';
 import {DownloadOverlay} from './components/download-overlay';
 import {DownloadPluginManager} from './download-plugin-manager';
-
-import {OnClickEvent} from '@playkit-js/common';
-import {BasePlugin, KalturaPlayer, ui} from '@playkit-js/kaltura-player-js';
-import {FakeEvent} from '@playkit-js/playkit-js';
 import {DownloadEvent} from './event';
 
 const {ReservedPresetNames} = ui;
@@ -41,9 +40,9 @@ class Download extends BasePlugin {
   public triggeredByKeyboard = false;
   private store: any;
 
-  constructor(name: string, player: KalturaPlayer, config: DownloadConfig) {
+  constructor(name: string, public player: KalturaPlayer, public config: DownloadConfig) {
     super(name, player, config);
-    this.downloadPluginManager = new DownloadPluginManager(this);
+    this.downloadPluginManager = new DownloadPluginManager(this, this.logger);
     this._addBindings();
     this.store = ui.redux.useStore();
   }
@@ -105,7 +104,6 @@ class Download extends BasePlugin {
 
     if (this.store.getState().shell['activePresetName'] !== ReservedPresetNames.MiniAudioUI) {
       this.iconId = this.upperBarManager.add({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         ariaLabel: (<Text id="download.download">Download</Text>) as never,
         displayName: 'Download',
         order: 40,
@@ -113,11 +111,9 @@ class Download extends BasePlugin {
           path: DOWNLOAD
         },
         onClick: this._handleClick as any,
-        // @ts-expect-error - Type '() => h.JSX.Element' is not assignable to type 'ComponentClass<Record<string, never>, {}> | FunctionalComponent<Record<string, never>>'
         component: () => {
-          return <DownloadOverlayButton setRef={this._setPluginButtonRef} />;
+          return (<DownloadOverlayButton setRef={this._setPluginButtonRef} />) as any;
         },
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         presets: PRESETS.filter(presetName => presetName !== ReservedPresetNames.MiniAudioUI)
       }) as number;
     } else {
@@ -146,11 +142,15 @@ class Download extends BasePlugin {
   }
 
   public isEntrySupported(downloadMetadata: DownloadMetadata): boolean {
-    if (!downloadMetadata) return false;
+    if (!downloadMetadata) {
+      return false;
+    }
     const {flavors, captions, attachments, imageDownloadUrl} = downloadMetadata;
     const {displayCaptions, displayAttachments, displaySources} = this.downloadPluginManager.downloadPlugin.config;
     return (
-      (displaySources && (flavors.length || imageDownloadUrl)) || (displayCaptions && captions.length) || (displayAttachments && attachments.length)
+      (displaySources && (flavors.length > 0 || Boolean(imageDownloadUrl))) ||
+      (displayCaptions && captions.length > 0) ||
+      (displayAttachments && attachments.length > 0)
     );
   }
 

@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const packageData = require('./package.json');
-const CSS_MODULE_PREFIX = 'playkit';
 
 const plugins = [
   new webpack.DefinePlugin({
@@ -68,7 +67,7 @@ module.exports = {
             options: {
               esModule: true,
               modules: {
-                localIdentName: `${CSS_MODULE_PREFIX}-ap-[local]`,
+                localIdentName: '[name]__[local]___[hash:base64:5]',
                 namedExport: true
               }
             }
