@@ -44,7 +44,6 @@ const DownloadOverlay = withText({
   )(
     withEventManager(({downloadPluginManager, eventManager, downloadsLabel, downloadMetadata, updateOverlay}: DownloadOverlayProps) => {
       const [isVisible, setIsVisible] = useState(false);
-      // @ts-expect-error - Property 'config' is protected and only accessible within class 'BasePlugin' and its subclasses.
       const downloadConfig = downloadPluginManager.downloadPlugin.config;
       useEffect(() => {
         eventManager?.listen(downloadPluginManager, DownloadEvent.SHOW_OVERLAY, () => {
