@@ -40,9 +40,9 @@ class Download extends BasePlugin {
   public triggeredByKeyboard = false;
   private store: any;
 
-  constructor(name: string, public player: KalturaPlayer, public config: DownloadConfig) {
+  constructor(name: string, public player: KalturaPlayer, config: DownloadConfig) {
     super(name, player, config);
-    this.downloadPluginManager = new DownloadPluginManager(this, this.logger);
+    this.downloadPluginManager = new DownloadPluginManager(this, this.config, this.logger);
     this._addBindings();
     this.store = ui.redux.useStore();
   }

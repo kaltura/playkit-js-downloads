@@ -5,7 +5,7 @@ import {Download} from './download';
 import {KalturaAttachmentAsset} from './providers';
 import {DOWNLOAD, ERROR} from './icons';
 import {DownloadService} from './services';
-import {DownloadMetadata} from './types';
+import {DownloadConfig, DownloadMetadata} from './types';
 import {DownloadEvent} from './event';
 
 const {Icon} = ui.components;
@@ -17,20 +17,20 @@ class DownloadPluginManager extends core.FakeEventTarget {
   private downloadMetadata: DownloadMetadata = null;
   private playOnClose = false;
 
-  constructor(public downloadPlugin: Download, public logger: any) {
+  constructor(public downloadPlugin: Download, private _config: DownloadConfig, private _logger: any) {
     super();
-    this.downloadService = new DownloadService(this.downloadPlugin.player, this.logger);
+    this.downloadService = new DownloadService(this.downloadPlugin.player, this._logger);
   }
 
   async getDownloadMetadata(refresh = false): Promise<DownloadMetadata> {
     if (!this.downloadMetadata || refresh) {
-      this.downloadMetadata = await this.downloadService.getDownloadMetadata(this.downloadPlugin.config);
+      this.downloadMetadata = await this.downloadService.getDownloadMetadata(this._config);
 
       if (!this.downloadMetadata) {
-        this.logger.debug('Failed to get download url headers');
+        this._logger.debug('Failed to get download url headers');
       } else {
         this.downloadMetadata.attachments = this.downloadMetadata.attachments.filter(
-          (attachment: KalturaAttachmentAsset): boolean => !this.downloadPlugin.config.undisplayedAttachments.includes(attachment.objectType)
+          (attachment: KalturaAttachmentAsset): boolean => !this._config.undisplayedAttachments.includes(attachment.objectType)
         );
       }
     }
@@ -39,12 +39,12 @@ class DownloadPluginManager extends core.FakeEventTarget {
 
   downloadFile(downloadUrl: string, fileName: string) {
     try {
-      const {preDownloadHook} = this.downloadPlugin.config;
+      const {preDownloadHook} = this._config;
       if (typeof preDownloadHook === 'function') {
         preDownloadHook();
       }
     } catch (e) {
-      this.logger.debug('Exception in pre-download hook');
+      this._logger.debug('Exception in pre-download hook');
     }
 
     this.downloadService.downloadFile(downloadUrl, fileName);
