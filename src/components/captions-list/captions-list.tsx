@@ -1,3 +1,4 @@
+import {h} from 'preact';
 import {DownloadPluginManager} from '../../download-plugin-manager';
 import {KalturaCaptionAsset} from '../../providers';
 import {DownloadItem} from '../download-item';
@@ -6,8 +7,9 @@ import {ExpandableContainer} from '../expandable-container';
 import {Icon as CommonIcon} from '@playkit-js/common/dist/icon';
 import {assetType} from '../../consts/asset-type';
 import {AssetsListProps} from '../../types/assets-list-props';
+import {ui} from '@playkit-js/kaltura-player-js';
 
-const {withText} = KalturaPlayer.ui.preacti18n;
+const {withText} = ui.preacti18n;
 
 interface CaptionsListProps extends AssetsListProps {
   files: KalturaCaptionAsset[];

@@ -1,8 +1,9 @@
+import {KalturaPlayer} from '@playkit-js/kaltura-player-js';
 import {DownloadMetadata} from '../types';
 import {AttachmentsLoader, CaptionsLoader, DownloadUrlLoader, FlavorsLoader} from '../providers';
 
 class DownloadService {
-  constructor(private player: KalturaPlayerTypes.Player, private logger: KalturaPlayerTypes.Logger) {}
+  constructor(private player: KalturaPlayer, private logger: any) {}
 
   private isPlatformSupported() {
     const userAgent = navigator.userAgent || '';
@@ -10,7 +11,7 @@ class DownloadService {
   }
 
   private isEntrySupported() {
-    return !(this.player.isLive() || this.player.getVideoElement().mediaKeys);
+    return !(this.player.isLive() || this.player.getVideoElement()?.mediaKeys);
   }
 
   private getFilename(metadata: DownloadMetadata) {
@@ -64,6 +65,7 @@ class DownloadService {
     let urls = new Map<string, string>();
 
     const data = await this.player.provider.doRequest(
+      // @ts-expect-error - Type 'typeof DownloadUrlLoader' is missing the following properties from type 'ILoader': requests, response, isValid
       [{loader: DownloadUrlLoader, params: {flavors: metadata?.flavors, captions: metadata?.captions, attachments: metadata?.attachments}}],
       ks,
       false
@@ -78,6 +80,7 @@ class DownloadService {
 
   private async handleImageDownload(): Promise<string> {
     if (!this.player.isImage()) return '';
+    // @ts-expect-error - Property 'downloadUrl' does not exist on type 'PKSourcesConfigObject'.
     let imageRequestUrl = this.player.sources.downloadUrl;
     if (!imageRequestUrl) {
       return await this.getImageDownloadMetadata();
@@ -102,8 +105,11 @@ class DownloadService {
 
     const data: Map<string, any> = await this.player.provider.doRequest(
       [
+        // @ts-expect-error - Type 'typeof CaptionsLoader' is missing the following properties from type 'ILoader': requests, response, isValid
         {loader: CaptionsLoader, params: {entryId}},
+        // @ts-expect-error - Type 'typeof FlavorsLoader' is missing the following properties from type 'ILoader': requests, response, isValid
         {loader: FlavorsLoader, params: {entryId}},
+        // @ts-expect-error - Type 'typeof AttachmentsLoader' is missing the following properties from type 'ILoader': requests, response, isValid
         {loader: AttachmentsLoader, params: {entryId}}
       ],
       ks
@@ -144,7 +150,7 @@ class DownloadService {
     let requestUrl = imageSource && imageSource.length > 0 ? imageSource[0].url : '';
     if (!requestUrl) return '';
     if (!requestUrl.includes('/ks/')) {
-      const ks = this.player.config.session.ks;
+      const ks = this.player.config.session!.ks;
       requestUrl = ks ? `${requestUrl}/ks/${ks}` : requestUrl;
     }
     try {
@@ -170,7 +176,7 @@ class DownloadService {
     return downloadUrl;
   }
 
-  async downloadFile(downloadUrl: string, fileName: string) {
+  async downloadFile(downloadUrl: string, fileName: string): Promise<void> {
     const aElement = document.createElement('a');
     aElement.href = await this._getDownloadUrl(downloadUrl);
     aElement.hidden = true;

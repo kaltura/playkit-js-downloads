@@ -10,40 +10,62 @@ const plugins = [
 ];
 
 module.exports = {
+  target: 'web',
   context: `${__dirname}/src`,
   entry: {
-    'playkit-downloads': 'index.ts'
+    'playkit-downloads': './index.ts'
   },
   output: {
     path: `${__dirname}/dist`,
     filename: '[name].js',
-    library: ['KalturaPlayer', 'plugins', 'download']
+    library: {
+      name: ['KalturaPlayer', 'plugins', 'download'],
+      umdNamedDefine: true,
+      type: 'umd'
+    },
+    clean: true
   },
   devtool: 'source-map',
   plugins,
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-        options: {
-          configFile: 'tsconfig.json'
-        },
-        exclude: /node_modules/
+        test: /\.(tsx?|js)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  bugfixes: true
+                }
+              ],
+              ['@babel/preset-typescript', {jsxPragma: 'h', jsxPragmaFrag: 'Fragment'}]
+            ],
+            plugins: [
+              ['@babel/plugin-transform-runtime'],
+              ['@babel/plugin-proposal-decorators', {legacy: true}],
+              ['@babel/plugin-transform-react-jsx', {pragma: 'h', pragmaFrag: 'Fragment'}]
+            ]
+          }
+        }
       },
       {
-        test: /\.scss$/,
+        test: /\.scss/,
         use: [
           {
             loader: 'style-loader',
             options: {
               attributes: {id: `${packageData.name}`},
-              injectType: "singletonStyleTag"
+              injectType: 'singletonStyleTag'
             }
           },
           {
             loader: 'css-loader',
             options: {
+              esModule: true,
               modules: {
                 localIdentName: '[name]__[local]___[hash:base64:5]',
                 namedExport: true
@@ -51,10 +73,7 @@ module.exports = {
             }
           },
           {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true
-            }
+            loader: 'sass-loader'
           }
         ]
       }
@@ -69,12 +88,14 @@ module.exports = {
     }
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+    extensions: ['.tsx', '.ts', '.js']
   },
   externals: {
+    '@playkit-js/kaltura-player-js': 'root KalturaPlayer',
+    '@playkit-js/playkit-js-ui': 'root KalturaPlayer.ui',
+    '@playkit-js/playkit-js': 'root KalturaPlayer.core',
     preact: 'root KalturaPlayer.ui.preact',
-    'preact/hooks': 'root KalturaPlayer.ui.preactHooks',
-    '@playkit-js/kaltura-player-js': ['KalturaPlayer']
+    'preact-i18n': 'root KalturaPlayer.ui.preacti18n',
+    'preact/hooks': 'root KalturaPlayer.ui.preactHooks'
   }
 };
