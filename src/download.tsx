@@ -11,7 +11,7 @@ import {ui} from '@playkit-js/kaltura-player-js';
 import {DownloadEvent} from './event';
 
 const {ReservedPresetNames} = ui;
-const {Text} = ui.preacti18n;
+const {Text, Localizer} = ui.preacti18n;
 
 const PRESETS = [ReservedPresetNames.Playback, ReservedPresetNames.Img, ReservedPresetNames.MiniAudioUI];
 
@@ -105,7 +105,14 @@ class Download extends KalturaPlayer.core.BasePlugin {
       this.iconId = this.upperBarManager.add({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-expect-error - TS2353: Object literal may only specify known properties, and ariaLabel does not exist in type IconDto
-        ariaLabel: (<Text id="download.download">Download</Text>) as never,
+        ariaLabel: () => {
+          const textJSX = (
+            <Localizer>
+              <Text id="download.download">Download</Text>
+            </Localizer>
+          );
+          return textJSX
+        },
         displayName: 'Download',
         order: 40,
         svgIcon: {
