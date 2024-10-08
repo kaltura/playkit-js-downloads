@@ -70,12 +70,23 @@ const DownloadOverlay = withText({
 
       const renderCaptions = () => {
         return (
-          <CaptionsList files={downloadMetadata!.captions} downloadPluginManager={downloadPluginManager} fileName={downloadMetadata!.fileName} />
+          <CaptionsList
+            files={downloadMetadata!.captions}
+            downloadPluginManager={downloadPluginManager}
+            fileName={downloadMetadata!.fileName}
+            displayFirst={!shouldRenderSources}
+          />
         );
       };
 
       const renderAttachments = () => {
-        return <AttachmentsList files={downloadMetadata!.attachments} downloadPluginManager={downloadPluginManager} />;
+        return (
+          <AttachmentsList
+            files={downloadMetadata!.attachments}
+            downloadPluginManager={downloadPluginManager}
+            displayFirst={!shouldRenderSources && !shouldRenderCaptions}
+          />
+        );
       };
 
       const shouldRenderSources = downloadConfig.displaySources && (downloadMetadata!.flavors.length || downloadMetadata!.imageDownloadUrl);
