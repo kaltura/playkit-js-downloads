@@ -53,9 +53,7 @@ export const DownloadItem = withText({
       const downloadItemRef = useRef<HTMLDivElement>(null);
 
       useEffect(() => {
-        if (isDefault) {
-          downloadItemRef.current?.focus();
-        } else if (displayFirst) {
+        if (isDefault || displayFirst) {
           downloadItemRef.current?.focus();
         }
       }, []);
