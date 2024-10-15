@@ -108,7 +108,8 @@ export const SourcesList = withText({
       downloadUrl: string,
       icon: ComponentChildren,
       isDefault = false,
-      ariaLabel: string
+      ariaLabel: string,
+      shouldFocus: boolean
     ) => {
       return (
         <DownloadItem
@@ -121,11 +122,12 @@ export const SourcesList = withText({
           assetType={assetType.Media}
           isDefault={isDefault}
           ariaLabel={ariaLabel}
+          shouldFocus={shouldFocus}
         />
       );
     };
 
-    const _renderFlavor = (flavor: KalturaFlavorAsset, isDefault = false) => {
+    const _renderFlavor = (flavor: KalturaFlavorAsset, isDefault = false, shouldFocus = true) => {
       return _renderDownloadItem(
         flavor.id,
         `${fileName}.${flavor.fileExt}`,
@@ -133,14 +135,15 @@ export const SourcesList = withText({
         flavor.downloadUrl,
         _getPlayIcon(flavor),
         isDefault,
-        ariaLabel!
+        ariaLabel!,
+        shouldFocus
       );
     };
 
     const _renderFlavors = (flavors: Array<KalturaFlavorAsset>) => {
       return flavors.reduce((acc: Array<ComponentChildren>, curr: KalturaFlavorAsset) => {
         if (curr.downloadUrl && curr.id !== defaultFlavor?.id) {
-          return [...acc, _renderFlavor(curr)];
+          return [...acc, _renderFlavor(curr, false, false)];
         }
         return acc;
       }, []);
@@ -162,7 +165,7 @@ export const SourcesList = withText({
 
     const _renderSources = () => {
       if (imageUrl) {
-        return _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true, ariaLabel!);
+        return _renderDownloadItem('1', fileName, '', imageUrl, _getImageIcon(), true, ariaLabel!, false);
       } else if (flavors.length > 0) {
         return _renderExpandableFlavors();
       }
