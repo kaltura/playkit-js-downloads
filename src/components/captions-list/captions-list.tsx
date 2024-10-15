@@ -14,7 +14,7 @@ const {withText} = ui.preacti18n;
 interface CaptionsListProps extends AssetsListProps {
   files: KalturaCaptionAsset[];
   downloadPluginManager: DownloadPluginManager;
-  displayFirst: boolean;
+  shouldFocus: boolean;
   fileName: string;
   moreCaptionsLabel?: string;
   lessCaptionsLabel?: string;
@@ -25,7 +25,7 @@ export const CaptionsList = withText({
   moreCaptionsLabel: 'download.more_captions_label',
   lessCaptionsLabel: 'download.less_captions_label',
   ariaLabel: 'download.download_button_label_captions'
-})(({files, downloadPluginManager, displayFirst, fileName, moreCaptionsLabel, lessCaptionsLabel, ariaLabel}: CaptionsListProps) => {
+})(({files, downloadPluginManager, shouldFocus, fileName, moreCaptionsLabel, lessCaptionsLabel, ariaLabel}: CaptionsListProps) => {
   const captions: KalturaCaptionAsset[] = files;
   let defaultCaptions: KalturaCaptionAsset | undefined;
 
@@ -55,7 +55,7 @@ export const CaptionsList = withText({
         assetType={assetType.Captions}
         iconFileType={<CommonIcon name={'closedCaptions'} />}
         ariaLabel={ariaLabel}
-        displayFirst={displayFirst}
+        shouldFocus={shouldFocus}
       />
     );
   };

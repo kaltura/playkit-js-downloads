@@ -74,7 +74,7 @@ const DownloadOverlay = withText({
             files={downloadMetadata!.captions}
             downloadPluginManager={downloadPluginManager}
             fileName={downloadMetadata!.fileName}
-            displayFirst={!shouldRenderSources}
+            shouldFocus={!shouldRenderSources}
           />
         );
       };
@@ -84,7 +84,7 @@ const DownloadOverlay = withText({
           <AttachmentsList
             files={downloadMetadata!.attachments}
             downloadPluginManager={downloadPluginManager}
-            displayFirst={!shouldRenderSources && !shouldRenderCaptions}
+            shouldFocus={!shouldRenderSources && !shouldRenderCaptions}
           />
         );
       };

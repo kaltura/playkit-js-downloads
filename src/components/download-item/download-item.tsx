@@ -25,7 +25,7 @@ interface DownloadItemProps {
   iconFileType: ComponentChildren;
   isDefault?: boolean;
   player: KalturaPlayer;
-  displayFirst?: boolean;
+  shouldFocus?: boolean;
 }
 
 export const DownloadItem = withText({
@@ -48,12 +48,12 @@ export const DownloadItem = withText({
       iconFileType,
       isDefault,
       player,
-      displayFirst
+      shouldFocus
     }: DownloadItemProps) => {
       const downloadItemRef = useRef<HTMLDivElement>(null);
 
       useEffect(() => {
-        if (isDefault || displayFirst) {
+        if (isDefault || shouldFocus) {
           downloadItemRef.current?.focus();
         }
       }, []);

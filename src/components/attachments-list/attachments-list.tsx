@@ -14,7 +14,7 @@ const {withText} = ui.preacti18n;
 interface AttachmentsListProps extends AssetsListProps {
   files: KalturaAttachmentAsset[];
   downloadPluginManager: DownloadPluginManager;
-  displayFirst: boolean;
+  shouldFocus: boolean;
   title?: string;
   ariaLabel?: string;
 }
@@ -22,7 +22,7 @@ interface AttachmentsListProps extends AssetsListProps {
 export const AttachmentsList = withText({
   title: 'download.attachments_label',
   ariaLabel: 'download.download_button_label_attachment'
-})(({files, downloadPluginManager, displayFirst, title, ariaLabel}: AttachmentsListProps) => {
+})(({files, downloadPluginManager, shouldFocus, title, ariaLabel}: AttachmentsListProps) => {
   const _buildFileName = (attachment: KalturaAttachmentAsset) => {
     return attachment.title || attachment.fileName;
   };
@@ -37,7 +37,7 @@ export const AttachmentsList = withText({
         assetType={assetType.Attachments}
         iconFileType={icon}
         ariaLabel={ariaLabel}
-        displayFirst={displayFirst}
+        shouldFocus={shouldFocus}
       />
     );
   };

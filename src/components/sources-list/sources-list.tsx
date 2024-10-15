@@ -109,7 +109,7 @@ export const SourcesList = withText({
       icon: ComponentChildren,
       isDefault = false,
       ariaLabel: string,
-      displayFirst: boolean
+      shouldFocus: boolean
     ) => {
       return (
         <DownloadItem
@@ -122,12 +122,12 @@ export const SourcesList = withText({
           assetType={assetType.Media}
           isDefault={isDefault}
           ariaLabel={ariaLabel}
-          displayFirst={displayFirst}
+          shouldFocus={shouldFocus}
         />
       );
     };
 
-    const _renderFlavor = (flavor: KalturaFlavorAsset, isDefault = false, displayFirst = true) => {
+    const _renderFlavor = (flavor: KalturaFlavorAsset, isDefault = false, shouldFocus = true) => {
       return _renderDownloadItem(
         flavor.id,
         `${fileName}.${flavor.fileExt}`,
@@ -136,7 +136,7 @@ export const SourcesList = withText({
         _getPlayIcon(flavor),
         isDefault,
         ariaLabel!,
-        displayFirst
+        shouldFocus
       );
     };
 
