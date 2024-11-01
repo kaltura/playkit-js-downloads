@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.3.11 (2024-11-01)
+
+
+### Bug Fixes
+
+* **ADA-1514:** Incorrect focus order is observed when Related Files button is activated. ([#74](https://github.com/kaltura/playkit-js-downloads/issues/74)) ([f0c4d76](https://github.com/kaltura/playkit-js-downloads/commit/f0c4d765d3602fbc9ae5a911562aa3698e6fa947))
+
 ### 1.3.10 (2024-10-13)
 
 ### 1.3.9 (2024-09-19)
