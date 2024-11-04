@@ -27,7 +27,14 @@ export const AttachmentsList = withText({
     return attachment.title || attachment.fileName;
   };
 
-  const _renderDownloadItem = (key: string, fileName: string, downloadUrl: string, icon: ComponentChildren, ariaLabel: string) => {
+  const _renderDownloadItem = (
+    key: string,
+    fileName: string,
+    downloadUrl: string,
+    icon: ComponentChildren,
+    ariaLabel: string,
+    shouldFocusItem: boolean
+  ) => {
     return (
       <DownloadItem
         downloadPluginManager={downloadPluginManager}
@@ -37,14 +44,22 @@ export const AttachmentsList = withText({
         assetType={assetType.Attachments}
         iconFileType={icon}
         ariaLabel={ariaLabel}
-        shouldFocus={shouldFocus}
+        shouldFocus={shouldFocusItem}
       />
     );
   };
 
   const _renderAttachments = (attachments: Array<KalturaAttachmentAsset>) => {
-    return attachments.map((attachment: KalturaAttachmentAsset) => {
-      return _renderDownloadItem(attachment.id, _buildFileName(attachment), attachment.downloadUrl, getIconByFileExt(attachment.fileExt), ariaLabel!);
+    return attachments.map((attachment: KalturaAttachmentAsset, index) => {
+      const shouldFocusItem = index === 0 ? shouldFocus : false;
+      return _renderDownloadItem(
+        attachment.id,
+        _buildFileName(attachment),
+        attachment.downloadUrl,
+        getIconByFileExt(attachment.fileExt),
+        ariaLabel!,
+        shouldFocusItem
+      );
     });
   };
 

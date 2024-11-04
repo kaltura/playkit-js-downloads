@@ -44,7 +44,14 @@ export const CaptionsList = withText({
     return `${fileName}.${caption.fileExt}`;
   };
 
-  const _renderDownloadItem = (key: string, fileName: string, languageLabel: string, downloadUrl: string, ariaLabel: string) => {
+  const _renderDownloadItem = (
+    key: string,
+    fileName: string,
+    languageLabel: string,
+    downloadUrl: string,
+    ariaLabel: string,
+    shouldFocusItem: boolean
+  ) => {
     return (
       <DownloadItem
         downloadPluginManager={downloadPluginManager}
@@ -55,13 +62,14 @@ export const CaptionsList = withText({
         assetType={assetType.Captions}
         iconFileType={<CommonIcon name={'closedCaptions'} />}
         ariaLabel={ariaLabel}
-        shouldFocus={shouldFocus}
+        shouldFocus={shouldFocusItem}
       />
     );
   };
 
-  const _renderCaption = (caption: KalturaCaptionAsset) => {
-    return _renderDownloadItem(caption.id, _buildFileName(caption), caption.label, caption.downloadUrl, ariaLabel!);
+  const _renderCaption = (caption: KalturaCaptionAsset, firstItemInList?: boolean) => {
+    const shouldFocusItem = !!(shouldFocus && firstItemInList);
+    return _renderDownloadItem(caption.id, _buildFileName(caption), caption.label, caption.downloadUrl, ariaLabel!, shouldFocusItem);
   };
 
   const _renderCaptions = (captions: Array<KalturaCaptionAsset>) => {
@@ -75,7 +83,7 @@ export const CaptionsList = withText({
   const _renderExpandableCaptions = () => {
     return (
       <ExpandableContainer
-        defaultItem={_renderCaption(defaultCaptions!)}
+        defaultItem={_renderCaption(defaultCaptions!, true)}
         restOfItems={_renderCaptions(captions)}
         showMoreLabel={moreCaptionsLabel!}
         showLessLabel={lessCaptionsLabel!}
@@ -85,7 +93,7 @@ export const CaptionsList = withText({
 
   return (
     <div className={styles.captionsContainer} data-testid={'download-overlay-captions-container'}>
-      {captions.length > 1 ? _renderExpandableCaptions() : _renderCaption(defaultCaptions!)}
+      {captions.length > 1 ? _renderExpandableCaptions() : _renderCaption(defaultCaptions!, true)}
     </div>
   );
 });
