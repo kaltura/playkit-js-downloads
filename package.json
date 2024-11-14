@@ -69,7 +69,7 @@
   "kaltura": {
     "name": "downloads",
     "dependencies": {
-      "playkit-ui-managers": "1.6.1"
+      "playkit-ui-managers": "1.6.2"
     }
   },
   "publishConfig": {
