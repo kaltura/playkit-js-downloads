@@ -163,7 +163,6 @@ class Download extends BasePlugin {
       const isEntrySupported = this.isEntrySupported(downloadMetadata);
       if (!isEntrySupported) {
         this.logger.debug('Download not supported for current metadata', downloadMetadata);
-        return false;
       }
       return isEntrySupported;
     });
