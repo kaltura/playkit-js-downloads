@@ -23,11 +23,8 @@ class DownloadService {
   }
 
   private getFilename(metadata: DownloadMetadata) {
-    if (this.player.sources.metadata?.name) {
-      return this.player.sources.metadata?.name;
-    }
-    if (this.player.isImage()) {
-      return 'image';
+    if (metadata?.fileName) {
+      return metadata.fileName;
     }
     const responseUrlSplit = metadata!.flavors[0].downloadUrl.split('/');
     return responseUrlSplit[responseUrlSplit.indexOf('fileName') + 1];
@@ -37,7 +34,12 @@ class DownloadService {
     if (!(this.isPlatformSupported() && this.isEntrySupported())) {
       return [null];
     }
-    const entriesId: string[] = [this.player.config.sources.id!];
+    const entries: {id: string; name: string | undefined}[] = [
+      {
+        id: this.player.config.sources.id!,
+        name: this.player.isImage() ? 'image' : this.player.sources.metadata?.name
+      }
+    ];
     const dualScreenPlayers = await this.getDualScreenPlayers();
     if (dualScreenPlayers) {
       // wait till all dual-screen players are load a media
@@ -46,8 +48,11 @@ class DownloadService {
           return new Promise<void>(resolve => {
             this._eventManager.listenOnce(player, core.EventType.MEDIA_LOADED, () => {
               const entryId = player.config.sources.id;
-              if (entryId && !entriesId.includes(entryId)) {
-                entriesId.push(entryId);
+              if (entryId && !entries.find(entry => entry.id === entryId)) {
+                entries.push({
+                  id: entryId,
+                  name: player.sources.metadata?.name!
+                });
               }
               resolve();
             });
@@ -57,16 +62,16 @@ class DownloadService {
     }
 
     return Promise.all(
-      entriesId.map(async (entryId: string) => {
+      entries.map(async entry => {
         const metadata: DownloadMetadata = {
-          fileName: '',
+          fileName: entry.name || '',
           captions: [],
           flavors: [],
           attachments: [],
           imageDownloadUrl: ''
         };
 
-        const assets = await this.getKalturaAssets(entryId);
+        const assets = await this.getKalturaAssets(entry.id);
         Object.assign(metadata, assets);
         metadata!.imageDownloadUrl = await this.handleImageDownload();
 
