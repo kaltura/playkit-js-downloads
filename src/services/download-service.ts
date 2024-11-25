@@ -1,9 +1,17 @@
-import {KalturaPlayer} from '@playkit-js/kaltura-player-js';
+import {KalturaPlayer, core} from '@playkit-js/kaltura-player-js';
 import {DownloadMetadata} from '../types';
 import {AttachmentsLoader, CaptionsLoader, DownloadUrlLoader, FlavorsLoader} from '../providers';
 
 class DownloadService {
-  constructor(private player: KalturaPlayer, private logger: any) {}
+  constructor(private player: KalturaPlayer, private logger: any, private _eventManager: core.EventManager) {}
+
+  private async getDualScreenPlayers() {
+    const dualScreenService = this.player.getService('dualScreen');
+    if (!dualScreenService) {
+      return Promise.resolve(null);
+    }
+    return dualScreenService.ready.then(() => dualScreenService.getDualScreenPlayers('video'));
+  }
 
   private isPlatformSupported() {
     const userAgent = navigator.userAgent || '';
@@ -15,40 +23,66 @@ class DownloadService {
   }
 
   private getFilename(metadata: DownloadMetadata) {
-    if (this.player.sources.metadata?.name) return this.player.sources.metadata?.name;
-    if (this.player.isImage()) return 'image';
+    if (this.player.sources.metadata?.name) {
+      return this.player.sources.metadata?.name;
+    }
+    if (this.player.isImage()) {
+      return 'image';
+    }
     const responseUrlSplit = metadata!.flavors[0].downloadUrl.split('/');
     return responseUrlSplit[responseUrlSplit.indexOf('fileName') + 1];
   }
 
-  async getDownloadMetadata(): Promise<DownloadMetadata> {
+  async getDownloadMetadatas(): Promise<DownloadMetadata[]> {
     if (!(this.isPlatformSupported() && this.isEntrySupported())) {
-      return null;
+      return [null];
+    }
+    const entriesId: string[] = [this.player.config.sources.id!];
+    const dualScreenPlayers = await this.getDualScreenPlayers();
+    if (dualScreenPlayers) {
+      // wait till all dual-screen players are load a media
+      await Promise.all(
+        dualScreenPlayers.map(({player}: {player: KalturaPlayer}) => {
+          return new Promise<void>(resolve => {
+            this._eventManager.listenOnce(player, core.EventType.MEDIA_LOADED, () => {
+              const entryId = player.config.sources.id;
+              if (entryId && !entriesId.includes(entryId)) {
+                entriesId.push(entryId);
+              }
+              resolve();
+            });
+          });
+        })
+      );
     }
 
-    const metadata: DownloadMetadata = {
-      fileName: '',
-      captions: [],
-      flavors: [],
-      attachments: [],
-      imageDownloadUrl: ''
-    };
+    return Promise.all(
+      entriesId.map(async (entryId: string) => {
+        const metadata: DownloadMetadata = {
+          fileName: '',
+          captions: [],
+          flavors: [],
+          attachments: [],
+          imageDownloadUrl: ''
+        };
 
-    const assets = await this.getKalturaAssets();
-    Object.assign(metadata, assets);
-    metadata!.imageDownloadUrl = await this.handleImageDownload();
+        const assets = await this.getKalturaAssets(entryId);
+        Object.assign(metadata, assets);
+        metadata!.imageDownloadUrl = await this.handleImageDownload();
 
-    if (metadata?.flavors.length || metadata?.captions.length || metadata?.attachments.length) {
-      const downloadUrls: Map<string, string> = await this.getDownloadUrls(metadata);
+        if (metadata?.flavors.length || metadata?.captions.length || metadata?.attachments.length) {
+          const downloadUrls: Map<string, string> = await this.getDownloadUrls(metadata);
 
-      // assign the download urls to the assets by id
-      metadata.flavors = this.setDownloadUrls(metadata?.flavors, downloadUrls);
-      metadata.captions = this.setDownloadUrls(metadata?.captions, downloadUrls);
-      metadata.attachments = this.setDownloadUrls(metadata?.attachments, downloadUrls);
-    }
+          // assign the download urls to the assets by id
+          metadata.flavors = this.setDownloadUrls(metadata?.flavors, downloadUrls);
+          metadata.captions = this.setDownloadUrls(metadata?.captions, downloadUrls);
+          metadata.attachments = this.setDownloadUrls(metadata?.attachments, downloadUrls);
+        }
 
-    metadata!.fileName = this.getFilename(metadata);
-    return metadata;
+        metadata!.fileName = this.getFilename(metadata);
+        return metadata;
+      })
+    );
   }
 
   private setDownloadUrls(assets: any[], downloadUrls: Map<string, string>): any[] {
@@ -99,8 +133,7 @@ class DownloadService {
     }
   }
 
-  private async getKalturaAssets(): Promise<object> {
-    const entryId = this.player.config.sources.id;
+  private async getKalturaAssets(entryId: string): Promise<object> {
     const ks = this.player.config.session?.ks || '';
 
     const data: Map<string, any> = await this.player.provider.doRequest(

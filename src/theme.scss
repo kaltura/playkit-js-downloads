@@ -17,3 +17,13 @@ $roundness-2: 8px;
     visibility: hidden;
   }
 }
+
+@mixin label {
+  display: inline-block;
+  font-size: 16px;
+  color: $tone-1-color;
+  font-weight: 700;
+  line-height: 21px;
+  width: fit-content;
+  margin-bottom: 8px;
+}

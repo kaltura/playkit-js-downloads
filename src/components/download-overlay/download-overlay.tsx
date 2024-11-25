@@ -28,98 +28,138 @@ interface DownloadOverlayProps extends AssetsListProps {
   downloadPluginManager: DownloadPluginManager;
   eventManager: any;
   downloadsLabel?: string;
+  mainStream?: string;
+  additionalStreams?: string;
+  captionsLabel?: string;
   closeLabel?: string;
   setFocus: () => void;
-  downloadMetadata: DownloadMetadata;
+  downloadMetadatas: DownloadMetadata[];
   updateOverlay: (isOpen: boolean) => void;
 }
 
 const DownloadOverlay = withText({
   downloadsLabel: 'download.downloads',
-  closeLabel: 'overlay.close'
+  closeLabel: 'overlay.close',
+  mainStream: 'download.mainStream',
+  additionalStreams: 'download.additionalStreams',
+  captionsLabel: 'download.captions'
 })(
   connect(
     null,
     bindActions(overlayActions)
   )(
-    withEventManager(({downloadPluginManager, eventManager, downloadsLabel, downloadMetadata, updateOverlay}: DownloadOverlayProps) => {
-      const [isVisible, setIsVisible] = useState(false);
-      const downloadConfig = downloadPluginManager.downloadPlugin.config;
-      useEffect(() => {
-        eventManager?.listen(downloadPluginManager, DownloadEvent.SHOW_OVERLAY, () => {
-          setIsVisible(true);
-        });
+    withEventManager(
+      ({
+        downloadPluginManager,
+        eventManager,
+        downloadsLabel,
+        mainStream,
+        additionalStreams,
+        captionsLabel,
+        downloadMetadatas,
+        updateOverlay
+      }: DownloadOverlayProps) => {
+        const [isVisible, setIsVisible] = useState(false);
+        const mainSourceMetadata = downloadMetadatas[0];
+        // tslint:disable-next-line: ts-expect-error
+        // @ts-expect-error: Property 'config' is protected and only accessible within class 'BasePlugin' and its subclasses
+        const downloadConfig = downloadPluginManager.downloadPlugin.config;
+        useEffect(() => {
+          eventManager?.listen(downloadPluginManager, DownloadEvent.SHOW_OVERLAY, () => {
+            setIsVisible(true);
+          });
 
-        eventManager?.listen(downloadPluginManager, DownloadEvent.HIDE_OVERLAY, () => {
-          setIsVisible(false);
-        });
-      }, []);
+          eventManager?.listen(downloadPluginManager, DownloadEvent.HIDE_OVERLAY, () => {
+            setIsVisible(false);
+          });
+        }, []);
 
-      const renderSources = () => {
-        return (
-          <SourcesList
-            files={downloadMetadata!.flavors}
-            imageUrl={downloadMetadata!.imageDownloadUrl}
-            downloadPluginManager={downloadPluginManager}
-            downloadConfig={downloadConfig}
-            fileName={downloadMetadata!.fileName}
-            displayFlavors={downloadConfig.displayFlavors}
-          />
-        );
-      };
+        const getTitle = (index: number) => {
+          if (index < 1) {
+            return mainStream;
+          }
+          if (index > 1) {
+            return '';
+          }
+          return additionalStreams;
+        };
 
-      const renderCaptions = () => {
-        return (
-          <CaptionsList
-            files={downloadMetadata!.captions}
-            downloadPluginManager={downloadPluginManager}
-            fileName={downloadMetadata!.fileName}
-            shouldFocus={!shouldRenderSources}
-          />
-        );
-      };
+        const renderSources = () => {
+          return downloadMetadatas
+            .filter(downloadMetadata => getShouldRenderSources(downloadMetadata))
+            .map((downloadMetadata, index) => {
+              return (
+                <SourcesList
+                  files={downloadMetadata!.flavors}
+                  imageUrl={downloadMetadata!.imageDownloadUrl}
+                  downloadPluginManager={downloadPluginManager}
+                  downloadConfig={downloadConfig}
+                  fileName={downloadMetadata!.fileName}
+                  displayFlavors={downloadConfig.displayFlavors}
+                  title={getTitle(index)}
+                />
+              );
+            });
+        };
 
-      const renderAttachments = () => {
-        return (
-          <AttachmentsList
-            files={downloadMetadata!.attachments}
-            downloadPluginManager={downloadPluginManager}
-            shouldFocus={!shouldRenderSources && !shouldRenderCaptions}
-          />
-        );
-      };
+        const renderCaptions = () => {
+          return (
+            <CaptionsList
+              files={mainSourceMetadata!.captions}
+              downloadPluginManager={downloadPluginManager}
+              fileName={mainSourceMetadata!.fileName}
+              shouldFocus={!shouldRenderSources}
+              title={captionsLabel}
+            />
+          );
+        };
 
-      const shouldRenderSources = downloadConfig.displaySources && (downloadMetadata!.flavors.length || downloadMetadata!.imageDownloadUrl);
-      const shouldRenderCaptions = downloadConfig.displayCaptions && downloadMetadata!.captions.length;
-      const shouldRenderAttachments = downloadConfig.displayAttachments && downloadMetadata!.attachments.length;
+        const renderAttachments = () => {
+          return (
+            <AttachmentsList
+              files={mainSourceMetadata!.attachments}
+              downloadPluginManager={downloadPluginManager}
+              shouldFocus={!shouldRenderSources && !shouldRenderCaptions}
+            />
+          );
+        };
 
-      return isVisible ? (
-        <OverlayPortal>
-          <FocusTrap active>
-            <Overlay
-              open
-              onClose={() => {
-                updateOverlay(false);
-                downloadPluginManager.setShowOverlay(false);
-              }}
-              type="playkit-download">
-              <div data-testid="download-overlay" className={styles.downloadOverlay}>
-                <div className={styles.header}>{downloadsLabel}</div>
-                <div className={styles.fileInfoList}>
-                  {shouldRenderSources || shouldRenderCaptions ? (
-                    <div className={styles.sourcesCaptionsContainer}>
-                      {shouldRenderSources && renderSources()}
-                      {shouldRenderCaptions && renderCaptions()}
-                    </div>
-                  ) : undefined}
-                  {shouldRenderAttachments && renderAttachments()}
+        const getShouldRenderSources = (sourceMetadata: DownloadMetadata) => {
+          return sourceMetadata!.flavors.length || sourceMetadata!.imageDownloadUrl;
+        };
+
+        const shouldRenderSources = downloadConfig.displaySources && getShouldRenderSources(mainSourceMetadata);
+        const shouldRenderCaptions = downloadConfig.displayCaptions && mainSourceMetadata!.captions.length;
+        const shouldRenderAttachments = downloadConfig.displayAttachments && mainSourceMetadata!.attachments.length;
+
+        return isVisible ? (
+          <OverlayPortal>
+            <FocusTrap active>
+              <Overlay
+                open
+                onClose={() => {
+                  updateOverlay(false);
+                  downloadPluginManager.setShowOverlay(false);
+                }}
+                type="playkit-download">
+                <div data-testid="download-overlay" className={styles.downloadOverlay}>
+                  <div className={styles.header}>{downloadsLabel}</div>
+                  <div className={styles.fileInfoList}>
+                    {shouldRenderSources || shouldRenderCaptions ? (
+                      <div className={styles.sourcesCaptionsContainer}>
+                        {shouldRenderSources && renderSources()}
+                        {shouldRenderCaptions && renderCaptions()}
+                      </div>
+                    ) : null}
+                    {shouldRenderAttachments && renderAttachments()}
+                  </div>
                 </div>
-              </div>
-            </Overlay>
-          </FocusTrap>
-        </OverlayPortal>
-      ) : null;
-    })
+              </Overlay>
+            </FocusTrap>
+          </OverlayPortal>
+        ) : null;
+      }
+    )
   )
 );
 

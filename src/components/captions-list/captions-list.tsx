@@ -19,13 +19,14 @@ interface CaptionsListProps extends AssetsListProps {
   moreCaptionsLabel?: string;
   lessCaptionsLabel?: string;
   ariaLabel?: string;
+  title?: string;
 }
 
 export const CaptionsList = withText({
   moreCaptionsLabel: 'download.more_captions_label',
   lessCaptionsLabel: 'download.less_captions_label',
   ariaLabel: 'download.download_button_label_captions'
-})(({files, downloadPluginManager, shouldFocus, fileName, moreCaptionsLabel, lessCaptionsLabel, ariaLabel}: CaptionsListProps) => {
+})(({files, downloadPluginManager, shouldFocus, fileName, moreCaptionsLabel, lessCaptionsLabel, ariaLabel, title}: CaptionsListProps) => {
   const captions: KalturaCaptionAsset[] = files;
   let defaultCaptions: KalturaCaptionAsset | undefined;
 
@@ -93,6 +94,7 @@ export const CaptionsList = withText({
 
   return (
     <div className={styles.captionsContainer} data-testid={'download-overlay-captions-container'}>
+      {title ? <div className={styles.captionsLabel}>{title}</div> : null}
       {captions.length > 1 ? _renderExpandableCaptions() : _renderCaption(defaultCaptions!, true)}
     </div>
   );
