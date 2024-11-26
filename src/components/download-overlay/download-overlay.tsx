@@ -40,8 +40,8 @@ interface DownloadOverlayProps extends AssetsListProps {
 const DownloadOverlay = withText({
   downloadsLabel: 'download.downloads',
   closeLabel: 'overlay.close',
-  mainStream: 'download.mainStream',
-  additionalStreams: 'download.additionalStreams',
+  mainStream: 'download.main_stream',
+  additionalStreams: 'download.additional_streams',
   captionsLabel: 'download.captions'
 })(
   connect(
@@ -90,6 +90,7 @@ const DownloadOverlay = withText({
             .map((downloadMetadata, index) => {
               return (
                 <SourcesList
+                  key={index}
                   files={downloadMetadata!.flavors}
                   imageUrl={downloadMetadata!.imageDownloadUrl}
                   downloadPluginManager={downloadPluginManager}
