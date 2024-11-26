@@ -166,8 +166,10 @@ class Download extends BasePlugin {
       }
       return isEntrySupported;
     });
-
-    this.injectOverlayComponents(filteredMetadatas);
+    if (filteredMetadatas.length) {
+      this.logger.debug('Download is supported for current entry');
+      this.injectOverlayComponents(filteredMetadatas);
+    }
   }
 
   _addBindings() {
