@@ -49,9 +49,10 @@ class DownloadService {
             this._eventManager.listenOnce(player, core.EventType.MEDIA_LOADED, () => {
               const entryId = player.config.sources.id;
               if (entryId && !entries.find(entry => entry.id === entryId)) {
+                const entryName = player.sources.metadata?.name;
                 entries.push({
                   id: entryId,
-                  name: player.sources.metadata?.name!
+                  name: entryName
                 });
               }
               resolve();
