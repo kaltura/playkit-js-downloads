@@ -66,7 +66,7 @@ export const DownloadItem = withText({
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
 
               const fileType = fileName.match(/\.(.*?)$/)![1];
-              player.dispatchEvent(new FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {fileType, description, assetType}));
+              player.dispatchEvent(new FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {fileName, fileType, description, assetType}));
             } else {
               downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
             }
