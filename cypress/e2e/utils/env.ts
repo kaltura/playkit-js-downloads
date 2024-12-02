@@ -37,7 +37,10 @@ export const loadPlayer = (pluginConf = {}, playbackConf: Record<string, any> = 
                 source_label: 'Source',
                 more_captions_label: 'More captions',
                 less_captions_label: 'Less captions',
-                attachments_label: 'Attachments'
+                attachments_label: 'Attachments',
+                main_stream: "Main stream",
+                additional_streams: "Additional streams",
+                captions: "Captions"
               }
             }
           }

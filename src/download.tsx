@@ -5,9 +5,8 @@ import {FakeEvent} from '@playkit-js/playkit-js';
 import {OnClickEvent} from '@playkit-js/common';
 
 import {DownloadConfig, DownloadMetadata} from './types';
-import {DownloadOverlayButton} from './components';
+import {DownloadOverlayButton, DownloadOverlay} from './components';
 import {DOWNLOAD} from './icons';
-import {DownloadOverlay} from './components/download-overlay';
 import {DownloadPluginManager} from './download-plugin-manager';
 import {DownloadEvent} from './event';
 
@@ -42,7 +41,7 @@ class Download extends BasePlugin {
 
   constructor(name: string, public player: KalturaPlayer, config: DownloadConfig) {
     super(name, player, config);
-    this.downloadPluginManager = new DownloadPluginManager(this, this.config, this.logger);
+    this.downloadPluginManager = new DownloadPluginManager(this, this.config, this.logger, this.eventManager);
     this._addBindings();
     this.store = ui.redux.useStore();
   }
@@ -97,7 +96,7 @@ class Download extends BasePlugin {
     });
   };
 
-  private injectOverlayComponents(downloadMetadata: DownloadMetadata) {
+  private injectOverlayComponents(downloadMetadatas: DownloadMetadata[]) {
     if (this.iconId > 0) {
       return;
     }
@@ -133,7 +132,7 @@ class Download extends BasePlugin {
             <DownloadOverlay
               downloadPluginManager={this.downloadPluginManager}
               setFocus={this._focusPluginButton}
-              downloadMetadata={downloadMetadata}
+              downloadMetadatas={downloadMetadatas}
             />
           );
         }
@@ -158,11 +157,17 @@ class Download extends BasePlugin {
     await this.ready;
 
     this.downloadPluginManager.setShowOverlay(false, false);
-    const downloadMetadata = await this.downloadPluginManager.getDownloadMetadata(true);
-
-    if (this.isEntrySupported(downloadMetadata)) {
+    const downloadMetadatas = await this.downloadPluginManager.getDownloadMetadatas(true);
+    const filteredMetadatas = downloadMetadatas.filter(downloadMetadata => {
+      const isEntrySupported = this.isEntrySupported(downloadMetadata);
+      if (!isEntrySupported) {
+        this.logger.debug('Download not supported for current metadata', downloadMetadata);
+      }
+      return isEntrySupported;
+    });
+    if (filteredMetadatas.length) {
       this.logger.debug('Download is supported for current entry');
-      this.injectOverlayComponents(downloadMetadata);
+      this.injectOverlayComponents(filteredMetadatas);
     }
   }
 

@@ -13,33 +13,49 @@ const {FakeEvent} = core;
 
 class DownloadPluginManager extends core.FakeEventTarget {
   private _showOverlay = false;
-  private downloadService: any;
-  private downloadMetadata: DownloadMetadata = null;
+  private downloadService: DownloadService;
+  private downloadMetadatas: DownloadMetadata[] = [null];
   private playOnClose = false;
 
-  constructor(public downloadPlugin: Download, private _config: DownloadConfig, private _logger: any) {
+  constructor(public downloadPlugin: Download, private _config: DownloadConfig, private _logger: any, private _eventManager: core.EventManager) {
     super();
-    this.downloadService = new DownloadService(this.downloadPlugin.player, this._logger);
+    this.downloadService = new DownloadService(this.downloadPlugin.player, this._logger, this._eventManager);
   }
 
-  async getDownloadMetadata(refresh = false): Promise<DownloadMetadata> {
-    if (!this.downloadMetadata || refresh) {
-      this.downloadMetadata = await this.downloadService.getDownloadMetadata(this._config);
+  get config(): DownloadConfig {
+    return this._config;
+  }
 
-      if (!this.downloadMetadata) {
+  isMetadataEmpty(metadata: DownloadMetadata): boolean {
+    return metadata === null;
+  }
+
+  isMetadatasEmpty(): boolean {
+    return this.downloadMetadatas.every(this.isMetadataEmpty);
+  }
+
+  async getDownloadMetadatas(refresh = false): Promise<DownloadMetadata[]> {
+    if (this.isMetadatasEmpty() || refresh) {
+      this.downloadMetadatas = await this.downloadService.getDownloadMetadatas();
+
+      if (this.isMetadatasEmpty()) {
         this._logger.debug('Failed to get download url headers');
       } else {
-        this.downloadMetadata.attachments = this.downloadMetadata.attachments.filter(
-          (attachment: KalturaAttachmentAsset): boolean => !this._config.undisplayedAttachments.includes(attachment.objectType)
-        );
+        this.downloadMetadatas
+          .filter(downloadMetadata => !this.isMetadataEmpty(downloadMetadata))
+          .forEach(downloadMetadata => {
+            downloadMetadata!.attachments = downloadMetadata!.attachments.filter(
+              (attachment: KalturaAttachmentAsset): boolean => !this.config.undisplayedAttachments.includes(attachment.objectType)
+            );
+          });
       }
     }
-    return this.downloadMetadata;
+    return this.downloadMetadatas;
   }
 
   downloadFile(downloadUrl: string, fileName: string) {
     try {
-      const {preDownloadHook} = this._config;
+      const {preDownloadHook} = this.config;
       if (typeof preDownloadHook === 'function') {
         preDownloadHook();
       }

@@ -24,6 +24,7 @@ interface SourcesListProps extends AssetsListProps {
   ariaLabel?: string;
   hideLabel?: string;
   sourceLabel?: string;
+  title?: string;
 }
 
 const HeightResolution = {
@@ -50,7 +51,8 @@ export const SourcesList = withText({
     selectQualityLabel,
     ariaLabel,
     hideLabel,
-    sourceLabel
+    sourceLabel,
+    title
   }: SourcesListProps) => {
     const flavors = files;
     let defaultFlavor: KalturaFlavorAsset | undefined;
@@ -174,6 +176,7 @@ export const SourcesList = withText({
 
     return (
       <div className={styles.sourcesContainer} data-testid={'download-overlay-sources-container'}>
+        {title ? <div className={styles.sourcesLabel}>{title}</div> : null}
         {_renderSources()}
       </div>
     );
