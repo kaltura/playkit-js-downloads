@@ -22,6 +22,10 @@ class DownloadPluginManager extends core.FakeEventTarget {
     this.downloadService = new DownloadService(this.downloadPlugin.player, this._logger, this._eventManager);
   }
 
+  get config(): DownloadConfig {
+    return this._config;
+  }
+
   isMetadataEmpty(metadata: DownloadMetadata): boolean {
     return metadata === null;
   }
@@ -41,7 +45,7 @@ class DownloadPluginManager extends core.FakeEventTarget {
           .filter(downloadMetadata => !this.isMetadataEmpty(downloadMetadata))
           .forEach(downloadMetadata => {
             downloadMetadata!.attachments = downloadMetadata!.attachments.filter(
-              (attachment: KalturaAttachmentAsset): boolean => !this._config.undisplayedAttachments.includes(attachment.objectType)
+              (attachment: KalturaAttachmentAsset): boolean => !this.config.undisplayedAttachments.includes(attachment.objectType)
             );
           });
       }
@@ -51,7 +55,7 @@ class DownloadPluginManager extends core.FakeEventTarget {
 
   downloadFile(downloadUrl: string, fileName: string) {
     try {
-      const {preDownloadHook} = this._config;
+      const {preDownloadHook} = this.config;
       if (typeof preDownloadHook === 'function') {
         preDownloadHook();
       }

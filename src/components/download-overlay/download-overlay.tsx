@@ -61,9 +61,7 @@ const DownloadOverlay = withText({
       }: DownloadOverlayProps) => {
         const [isVisible, setIsVisible] = useState(false);
         const mainSourceMetadata = downloadMetadatas[0];
-        // tslint:disable-next-line: ts-expect-error
-        // @ts-expect-error: Property 'config' is protected and only accessible within class 'BasePlugin' and its subclasses
-        const downloadConfig = downloadPluginManager.downloadPlugin.config;
+        const downloadConfig = downloadPluginManager.config;
         useEffect(() => {
           eventManager?.listen(downloadPluginManager, DownloadEvent.SHOW_OVERLAY, () => {
             setIsVisible(true);

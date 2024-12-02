@@ -5,9 +5,8 @@ import {FakeEvent} from '@playkit-js/playkit-js';
 import {OnClickEvent} from '@playkit-js/common';
 
 import {DownloadConfig, DownloadMetadata} from './types';
-import {DownloadOverlayButton} from './components';
+import {DownloadOverlayButton, DownloadOverlay} from './components';
 import {DOWNLOAD} from './icons';
-import {DownloadOverlay} from './components/download-overlay';
 import {DownloadPluginManager} from './download-plugin-manager';
 import {DownloadEvent} from './event';
 

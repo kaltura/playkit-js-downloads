@@ -7,7 +7,8 @@ class DownloadService {
 
   private async getDualScreenPlayers() {
     const dualScreenService = this.player.getService('dualScreen');
-    if (!dualScreenService) {
+    if (!dualScreenService || !dualScreenService.ready) {
+      this.logger.debug('dualScreen service is not available or has outdated version');
       return Promise.resolve(null);
     }
     return dualScreenService.ready.then(() => dualScreenService.getDualScreenPlayers('video'));
