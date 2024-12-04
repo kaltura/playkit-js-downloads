@@ -22,7 +22,7 @@ export const ExpandableContainer = (props: ExpandableContainerProps) => {
       {props.defaultItem}
       {isExpanded && props.restOfItems}
       <A11yWrapper onClick={_onClick}>
-        <div className={styles.expandableLabel} tabIndex={0}>
+        <div className={styles.expandableLabel} tabIndex={0} aria-expanded={isExpanded}>
           {isExpanded ? props.showLessLabel : props.showMoreLabel}
         </div>
       </A11yWrapper>
