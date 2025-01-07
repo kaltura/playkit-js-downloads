@@ -1,0 +1,20 @@
+{
+  "ca": {
+    "download": {
+      "download": "Descarregar",
+      "downloads": "Descàrregues",
+      "download_has_started": "La descàrrega ha començat",
+      "download_has_failed": "La descàrrega ha fallat",
+      "attachments": "Adjunts",
+      "download_button_label_video": "Fes clic per descarregar el vídeo",
+      "download_button_label_captions": "Fes clic per descarregar els subtítols",
+      "download_button_label_attachment": "Fes clic per descarregar l'adjunt",
+      "select_quality_label": "Selecciona la qualitat",
+      "hide_label": "Amagar",
+      "source_label": "Font",
+      "more_captions_label": "Més subtítols",
+      "less_captions_label": "Menys subtítols",
+      "attachments_label": "Adjunts"
+    }
+  }
+}
