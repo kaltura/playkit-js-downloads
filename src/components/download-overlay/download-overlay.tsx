@@ -136,6 +136,7 @@ const DownloadOverlay = withText({
             <FocusTrap active>
               <Overlay
                 open
+                closeAriaLabel="Close Download"
                 onClose={() => {
                   updateOverlay(false);
                   downloadPluginManager.setShowOverlay(false);
