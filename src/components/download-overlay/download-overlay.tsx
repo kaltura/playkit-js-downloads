@@ -32,6 +32,7 @@ interface DownloadOverlayProps extends AssetsListProps {
   additionalStreams?: string;
   captionsLabel?: string;
   closeLabel?: string;
+  closeDownloadLabel?: string;
   setFocus: () => void;
   downloadMetadatas: DownloadMetadata[];
   updateOverlay: (isOpen: boolean) => void;
@@ -42,7 +43,8 @@ const DownloadOverlay = withText({
   closeLabel: 'overlay.close',
   mainStream: 'download.main_stream',
   additionalStreams: 'download.additional_streams',
-  captionsLabel: 'download.captions'
+  captionsLabel: 'download.captions',
+  closeDownloadLabel: 'download.close'
 })(
   connect(
     null,
@@ -57,7 +59,8 @@ const DownloadOverlay = withText({
         additionalStreams,
         captionsLabel,
         downloadMetadatas,
-        updateOverlay
+        updateOverlay,
+        closeDownloadLabel
       }: DownloadOverlayProps) => {
         const [isVisible, setIsVisible] = useState(false);
         const mainSourceMetadata = downloadMetadatas[0];
@@ -136,7 +139,7 @@ const DownloadOverlay = withText({
             <FocusTrap active>
               <Overlay
                 open
-                closeAriaLabel="Close Download"
+                closeAriaLabel={closeDownloadLabel}
                 onClose={() => {
                   updateOverlay(false);
                   downloadPluginManager.setShowOverlay(false);

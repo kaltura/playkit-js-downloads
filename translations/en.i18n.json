@@ -17,7 +17,8 @@
       "attachments_label": "Attachments",
       "main_stream": "Main stream",
       "additional_streams": "Additional streams",
-      "captions": "Captions"
+      "captions": "Captions",
+      "close": "Close Download"
     }
   }
 }
