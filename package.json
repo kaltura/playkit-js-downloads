@@ -79,6 +79,7 @@
     "extends @playkit-js/browserslist-config"
   ],
   "dependencies": {
+    "@playkit-js/webpack-common": "^1.0.1-canary.0-dfd24a9",
     "copyfiles": "^2.4.1",
     "rimraf": "^5.0.5"
   }
