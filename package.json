@@ -7,7 +7,7 @@
     "clean": "rimraf ./dist",
     "prebuild": "npm run clean",
     "build": "webpack --mode production",
-    "dev": "webpack serve --mode development",
+    "dev": "webpack serve --open --mode development",
     "docs:generate": "documentation build src/** -f md -o docs/api.md",
     "watch": "webpack --progress --watch --mode development",
     "pushTaggedRelease": "git push --follow-tags --no-verify origin master",
