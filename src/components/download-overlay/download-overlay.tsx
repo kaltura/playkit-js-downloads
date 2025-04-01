@@ -99,6 +99,7 @@ const DownloadOverlay = withText({
                   fileName={downloadMetadata!.fileName}
                   displayFlavors={downloadConfig.displayFlavors}
                   title={getTitle(index)}
+                  isMainSource={index < 1}
                 />
               );
             });

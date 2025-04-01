@@ -25,6 +25,7 @@ interface SourcesListProps extends AssetsListProps {
   hideLabel?: string;
   sourceLabel?: string;
   title?: string;
+  isMainSource?: boolean;
 }
 
 const HeightResolution = {
@@ -52,7 +53,8 @@ export const SourcesList = withText({
     ariaLabel,
     hideLabel,
     sourceLabel,
-    title
+    title,
+    isMainSource
   }: SourcesListProps) => {
     const flavors = files;
     let defaultFlavor: KalturaFlavorAsset | undefined;
@@ -125,6 +127,7 @@ export const SourcesList = withText({
           isDefault={isDefault}
           ariaLabel={ariaLabel}
           shouldFocus={shouldFocus}
+          isMainSource={isMainSource}
         />
       );
     };
