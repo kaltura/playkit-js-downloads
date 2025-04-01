@@ -26,6 +26,7 @@ interface DownloadItemProps {
   isDefault?: boolean;
   player: KalturaPlayer;
   shouldFocus?: boolean;
+  isMainSource?: boolean;
 }
 
 export const DownloadItem = withText({
@@ -48,7 +49,8 @@ export const DownloadItem = withText({
       iconFileType,
       isDefault,
       player,
-      shouldFocus
+      shouldFocus,
+      isMainSource
     }: DownloadItemProps) => {
       const downloadItemRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +68,14 @@ export const DownloadItem = withText({
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
 
               const fileType = fileName.match(/\.(.*?)$/)![1];
-              player.dispatchEvent(new FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {fileType, description, assetType, isDefault}));
+              player.dispatchEvent(
+                new FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {
+                  fileType,
+                  description,
+                  assetType,
+                  isDefault: isDefault && isMainSource
+                })
+              );
             } else {
               downloadPluginManager.notifyDownloadFailed(downloadLabel!, downloadFailedLabel!);
             }
