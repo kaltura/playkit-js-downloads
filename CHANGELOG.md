@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.4.2 (2025-04-02)
+
+
+### Bug Fixes
+
+* **FEC-13966:** fix event for additional streams ([#89](https://github.com/kaltura/playkit-js-downloads/issues/89)) ([3848188](https://github.com/kaltura/playkit-js-downloads/commit/38481883d11aacd9d929d46a4614039e1adb9157))
+
 ### 1.4.1 (2025-03-06)
 
 ## 1.4.0 (2025-03-06)
