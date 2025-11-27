@@ -1,10 +1,10 @@
 {
   "name": "@playkit-js/playkit-js-downloads",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "main": "dist/playkit-downloads.js",
   "homepage": "https://github.com/kaltura/playkit-js-downloads#readme",
   "scripts": {
-    "preinstall": "npx --yes --prefer-online --registry=https://npm.pkg.github.com --package @kaltura/kaltura-tools@latest kaltura-tools check --root=.",
+    "disabled-preinstall": "npx --yes --prefer-online --registry=https://npm.pkg.github.com --package @kaltura/kaltura-tools@latest kaltura-tools check --root=.",
     "clean": "rimraf ./dist",
     "prebuild": "npm run clean",
     "build": "webpack --mode production",
