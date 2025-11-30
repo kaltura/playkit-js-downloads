@@ -135,7 +135,7 @@ We also use [.editorconfig](.editorconfig) to maintain consistent coding styles 
 
 ## Compatibility
 
-TBD test test
+TBD test
 
 ## Contributing
 
