@@ -1,6 +1,6 @@
 {
   "name": "@playkit-js/playkit-js-downloads",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "main": "dist/playkit-downloads.js",
   "homepage": "https://github.com/kaltura/playkit-js-downloads#readme",
   "scripts": {
@@ -11,7 +11,7 @@
     "dev": "webpack serve --open --mode development",
     "docs:generate": "documentation build src/** -f md -o docs/api.md",
     "watch": "webpack --progress --watch --mode development",
-    "pushTaggedRelease": "git push --follow-tags --no-verify origin master",
+    "pushTaggedRelease": "git push --follow-tags --no-verify origin test-canary-security-fix",
     "release": "standard-version",
     "eslint": "eslint . --color",
     "eslint:fix": "eslint . --color --fix",
