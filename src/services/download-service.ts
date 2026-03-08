@@ -115,7 +115,8 @@ class DownloadService {
     if (data && data.has(DownloadUrlLoader.id)) {
       const urlsLoader = data.get(DownloadUrlLoader.id);
       urls = urlsLoader?.response?.urls;
-      urls = new Map([...urls].filter(([, value]) => value));
+      //filter out empty urls
+      urls = new Map([...urls].filter(([, url]) => !!url));
     }
 
     return urls;
