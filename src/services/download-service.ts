@@ -109,11 +109,14 @@ class DownloadService {
       // @ts-expect-error - Type 'typeof DownloadUrlLoader' is missing the following properties from type 'ILoader': requests, response, isValid
       [{loader: DownloadUrlLoader, params: {flavors: metadata?.flavors, captions: metadata?.captions, attachments: metadata?.attachments}}],
       ks,
+      false,
       false
     );
     if (data && data.has(DownloadUrlLoader.id)) {
       const urlsLoader = data.get(DownloadUrlLoader.id);
       urls = urlsLoader?.response?.urls;
+      //filter out empty urls
+      urls = new Map([...urls].filter(([, url]) => !!url));
     }
 
     return urls;
