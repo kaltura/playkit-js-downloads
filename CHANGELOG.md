@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.4.11 (2026-03-26)
+
+
+### Bug Fixes
+
+* **SUP-51658:** Player downloads not opening ([#91](https://github.com/kaltura/playkit-js-downloads/issues/91)) ([2d75a45](https://github.com/kaltura/playkit-js-downloads/commit/2d75a45bfa16cc0381ef0eb0dc558bac2cc245f9))
+
 ### 1.4.10 (2025-12-08)
 
 ### 1.4.7 (2025-11-27)
