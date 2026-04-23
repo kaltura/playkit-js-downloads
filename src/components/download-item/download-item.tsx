@@ -64,10 +64,10 @@ export const DownloadItem = withText({
         <A11yWrapper
           onClick={() => {
             if (downloadUrl) {
-              downloadPluginManager.downloadFile(downloadUrl, fileName);
+              downloadPluginManager.downloadFile(downloadUrl, fileName || 'download');
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
 
-              const fileType = fileName.match(/\.(.*?)$/)![1];
+              const fileType = fileName?.match(/\.(.*?)$/)?.[1] || '';
               player.dispatchEvent(
                 new FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {
                   fileType,
