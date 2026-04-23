@@ -64,7 +64,7 @@ export const DownloadItem = withText({
         <A11yWrapper
           onClick={() => {
             if (downloadUrl) {
-              downloadPluginManager.downloadFile(downloadUrl, fileName);
+              downloadPluginManager.downloadFile(downloadUrl, fileName || 'download');
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
 
               const fileType = fileName?.match(/\.(.*?)$/)?.[1] || '';
