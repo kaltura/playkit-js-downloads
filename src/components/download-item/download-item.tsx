@@ -67,7 +67,7 @@ export const DownloadItem = withText({
               downloadPluginManager.downloadFile(downloadUrl, fileName);
               downloadPluginManager.notifyDownloadStarted(downloadLabel!, downloadStartedLabel!);
 
-              const fileTypeMatch = fileName?.match(/\.([^.]+)$/);
+              const fileTypeMatch = fileName?.match(/\.(.*?)$/);
               const fileType = fileTypeMatch ? fileTypeMatch[1] : '';
               player.dispatchEvent(
                 new FakeEvent(DownloadEvent.DOWNLOAD_ITEM_CLICKED, {
