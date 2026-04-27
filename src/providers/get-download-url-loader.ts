@@ -56,11 +56,18 @@ export class DownloadUrlLoader implements ILoader {
   set response(response: any) {
     const urls: Map<string, string> = new Map();
     for (let index = 0; index < this._requests.length; index++) {
+      const responseData = response[index]?.data;
+      // Skip if response is not a valid URL string (e.g., API error object)
+      if (typeof responseData !== 'string') {
+        continue;
+      }
       if (this._requests[index].service === 'caption_captionAsset') {
-        const id = response[index]?.data.match(/captionAssetId\/([^\/]+)/)[1];
-        urls.set(id, response[index]?.data);
+        const match = responseData.match(/captionAssetId\/([^/]+)/);
+        if (match && match[1]) {
+          urls.set(match[1], responseData);
+        }
       } else {
-        urls.set(this._requests[index].params.id, response[index]?.data);
+        urls.set(this._requests[index].params.id, responseData);
       }
     }
     this._response.urls = urls;
