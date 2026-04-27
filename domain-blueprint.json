@@ -1,0 +1,182 @@
+{
+  "repository": "playkit-js-downloads",
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-23",
+
+  "coreResponsibility": {
+    "summary": "A Kaltura Player plugin that provides download functionality for media entries, enabling users to download video flavors, captions, images, and attachments from Kaltura-hosted content.",
+    "type": "plugin",
+    "category": "Media Download UI Plugin"
+  },
+
+  "domainAndLogicOwnership": {
+    "featureOwnership": [
+      "Download overlay UI component with expandable sections",
+      "Video flavor/quality selection and download",
+      "Caption/subtitle file download",
+      "Attachment file download",
+      "Image entry download support",
+      "Dual-screen/multi-entry download support",
+      "Pre-download hook callback mechanism",
+      "Download success/failure toast notifications",
+      "Upper bar download button integration",
+      "Audio player download button integration"
+    ],
+    "dataHandling": [
+      "KalturaFlavorAsset - Video quality/flavor metadata and download URLs",
+      "KalturaCaptionAsset - Caption file metadata and download URLs",
+      "KalturaAttachmentAsset - Attachment file metadata and download URLs",
+      "DownloadMetadata - Aggregated download information per entry",
+      "Download URL resolution via Kaltura API",
+      "Overlay visibility state management",
+      "Plugin configuration state (flavorId, flavorParamId, display flags)"
+    ]
+  },
+
+  "integrationPoints": {
+    "upstream": [
+      {
+        "name": "@playkit-js/kaltura-player-js",
+        "relationship": "Core player framework - provides BasePlugin, player API, UI components, and media source information"
+      },
+      {
+        "name": "@playkit-js/ui-managers",
+        "relationship": "UI service layer - provides UpperBarManager, ToastManager for button injection and notifications"
+      },
+      {
+        "name": "@playkit-js/common",
+        "relationship": "Shared UI utilities - provides OverlayPortal, FocusTrap components"
+      },
+      {
+        "name": "@playkit-js/playkit-js-providers",
+        "relationship": "API provider layer - provides RequestBuilder and ILoader for Kaltura API calls"
+      }
+    ],
+    "downstream": [
+      {
+        "name": "Kaltura Player embed pages",
+        "relationship": "End-user facing - plugin renders download UI within player interface"
+      },
+      {
+        "name": "Custom player integrations",
+        "relationship": "Third-party - developers can use plugin events and configuration"
+      }
+    ],
+    "externalApis": [
+      {
+        "name": "Kaltura flavorasset.list",
+        "description": "Retrieves available video flavors/qualities for an entry"
+      },
+      {
+        "name": "Kaltura flavorasset.getUrl",
+        "description": "Gets download URL for a specific flavor"
+      },
+      {
+        "name": "Kaltura caption_captionAsset.list",
+        "description": "Retrieves available captions for an entry"
+      },
+      {
+        "name": "Kaltura caption_captionAsset.getUrl",
+        "description": "Gets download URL for a specific caption file"
+      },
+      {
+        "name": "Kaltura attachment_attachmentAsset.list",
+        "description": "Retrieves available attachments for an entry"
+      },
+      {
+        "name": "Kaltura attachment_attachmentAsset.getUrl",
+        "description": "Gets download URL for a specific attachment"
+      }
+    ]
+  },
+
+  "technicalStack": {
+    "primaryLanguages": ["TypeScript", "SCSS"],
+    "frameworks": ["Preact", "Webpack"],
+    "buildTools": ["Webpack", "Babel", "TypeScript Compiler"],
+    "testingTools": ["Cypress"],
+    "entryPoints": [
+      {
+        "file": "src/index.ts",
+        "description": "Plugin registration and exports - registers 'download' plugin with Kaltura Player"
+      },
+      {
+        "file": "src/download.tsx",
+        "description": "Main Download plugin class - extends BasePlugin, manages lifecycle and UI injection"
+      },
+      {
+        "file": "src/download-plugin-manager.tsx",
+        "description": "Core business logic - handles download metadata fetching, file downloads, and overlay state"
+      },
+      {
+        "file": "src/services/download-service.ts",
+        "description": "Download service layer - coordinates API calls and file download execution"
+      },
+      {
+        "file": "src/providers/",
+        "description": "Kaltura API loaders - FlavorsLoader, CaptionsLoader, AttachmentsLoader, DownloadUrlLoader"
+      },
+      {
+        "file": "src/components/download-overlay/download-overlay.tsx",
+        "description": "Main UI component - renders download overlay with sources, captions, and attachments"
+      }
+    ]
+  },
+
+  "triageKeywords": [
+    "download plugin",
+    "playkit-downloads",
+    "playkit-js-downloads",
+    "download overlay",
+    "download button",
+    "flavor download",
+    "caption download",
+    "attachment download",
+    "flavorasset",
+    "flavorParamId",
+    "flavorId",
+    "preDownloadHook",
+    "download has started",
+    "download has failed",
+    "displayFlavors",
+    "displayCaptions",
+    "displayAttachments",
+    "displaySources",
+    "KalturaFlavorAsset",
+    "KalturaCaptionAsset",
+    "KalturaAttachmentAsset",
+    "download URL",
+    "getUrl API",
+    "download not working",
+    "cannot download video",
+    "download quality",
+    "upper bar download"
+  ],
+
+  "excludedPlatforms": [
+    "Tizen (Samsung Smart TV)",
+    "WebOS (LG Smart TV)"
+  ],
+
+  "excludedEntryTypes": [
+    "Live streams (isLive)",
+    "DRM-protected content (mediaKeys)"
+  ],
+
+  "configurationOptions": {
+    "flavorId": "Specific video flavor ID to download",
+    "flavorParamId": "Flavor type/quality preference (default: '0' for source)",
+    "preDownloadHook": "Callback function executed before download starts",
+    "displayFlavors": "Show/hide flavor quality options (default: true)",
+    "displayCaptions": "Show/hide caption files (default: true)",
+    "displayAttachments": "Show/hide attachments (default: true)",
+    "displaySources": "Show/hide media sources (default: true)",
+    "undisplayedAttachments": "Array of attachment types to hide (default: ['KalturaTranscriptAsset'])"
+  },
+
+  "events": {
+    "SHOW_OVERLAY": "Fired when download overlay is displayed",
+    "HIDE_OVERLAY": "Fired when download overlay is closed",
+    "DOWNLOAD_ITEM_CLICKED": "Fired when a download item is selected"
+  }
+}
