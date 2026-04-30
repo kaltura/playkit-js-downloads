@@ -160,8 +160,8 @@ export const SourcesList = withText({
           <ExpandableContainer
             defaultItem={_renderFlavor(defaultFlavor!, true)}
             restOfItems={_renderFlavors(flavors)}
-            showMoreLabel={selectQualityLabel!}
-            showLessLabel={hideLabel!}
+            showMoreLabel={selectQualityLabel || 'Select quality'}
+            showLessLabel={hideLabel || 'Hide'}
           />
         );
       }

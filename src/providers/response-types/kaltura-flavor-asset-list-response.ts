@@ -37,7 +37,7 @@ export class KalturaFlavorAssetListResponse extends BaseServiceResult {
     const updatedFlavors = flavors.map((flavor: any) => {
       return {
         ...flavor,
-        uniqKey: `${flavor.height}_${flavor.width}_${flavor.language}_${flavor.frameRate}`,
+        uniqKey: `${flavor.height}_${flavor.width}_${flavor.language}_${flavor.frameRate}_${flavor.fileExt}`,
         isAudio: flavor.height === 0 && flavor.width === 0 && flavor.frameRate === 0
       };
     });
