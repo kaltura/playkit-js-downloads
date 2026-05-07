@@ -21,6 +21,7 @@ import * as styles from './download-overlay.scss';
 import {SourcesList} from '../sources-list';
 import {CaptionsList} from '../captions-list';
 import {AttachmentsList} from '../attachments-list';
+import {SummaryChaptersList} from '../summary-chapters-list';
 import {DownloadEvent} from '../../event';
 import {AssetsListProps} from '../../types/assets-list-props';
 
@@ -127,6 +128,16 @@ const DownloadOverlay = withText({
           );
         };
 
+        const renderSummaryAndChapters = () => {
+          return (
+            <SummaryChaptersList
+              downloadPluginManager={downloadPluginManager}
+              fileName={mainSourceMetadata!.fileName}
+              shouldFocus={!shouldRenderSources && !shouldRenderCaptions && !shouldRenderAttachments}
+            />
+          );
+        };
+
         const getShouldRenderSources = (sourceMetadata: DownloadMetadata) => {
           return sourceMetadata!.flavors.length || sourceMetadata!.imageDownloadUrl;
         };
@@ -134,6 +145,7 @@ const DownloadOverlay = withText({
         const shouldRenderSources = downloadConfig.displaySources && getShouldRenderSources(mainSourceMetadata);
         const shouldRenderCaptions = downloadConfig.displayCaptions && mainSourceMetadata!.captions.length;
         const shouldRenderAttachments = downloadConfig.displayAttachments && mainSourceMetadata!.attachments.length;
+        const showSummaryAndChapters = downloadPluginManager.showSummaryAndChapters;
 
         return isVisible ? (
           <OverlayPortal>
@@ -155,6 +167,7 @@ const DownloadOverlay = withText({
                         {shouldRenderCaptions && renderCaptions()}
                       </div>
                     ) : null}
+                    {showSummaryAndChapters && renderSummaryAndChapters()}
                     {shouldRenderAttachments && renderAttachments()}
                   </div>
                 </div>

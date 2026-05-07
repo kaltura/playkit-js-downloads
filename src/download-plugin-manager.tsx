@@ -13,6 +13,7 @@ const {FakeEvent} = core;
 
 class DownloadPluginManager extends core.FakeEventTarget {
   private _showOverlay = false;
+  private _showSummaryAndChapters = false;
   private downloadService: DownloadService;
   private downloadMetadatas: DownloadMetadata[] = [null];
   private playOnClose = false;
@@ -20,6 +21,14 @@ class DownloadPluginManager extends core.FakeEventTarget {
   constructor(public downloadPlugin: Download, private _config: DownloadConfig, private _logger: any, private _eventManager: core.EventManager) {
     super();
     this.downloadService = new DownloadService(this.downloadPlugin.player, this._logger, this._eventManager);
+  }
+
+  public get showSummaryAndChapters(): boolean {
+    return this._showSummaryAndChapters;
+  }
+
+  public set showSummaryAndChapters(value: boolean) {
+    this._showSummaryAndChapters = value;
   }
 
   get config(): DownloadConfig {
