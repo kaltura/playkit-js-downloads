@@ -8,7 +8,6 @@ import {core, KalturaPlayer, ui} from '@playkit-js/kaltura-player-js';
 import {DownloadEvent} from '../../event';
 import {assetType as asset} from '../../consts/asset-type';
 
-
 const {withText} = ui.preacti18n;
 const {FakeEvent} = core;
 const {withPlayer} = ui.Components;
@@ -82,7 +81,7 @@ export const DownloadItem = withText({
               player.dispatchEvent(
                 new FakeEvent(DownloadEvent.DOWNLOAD_SUMMARY_AND_CHAPTERS_DOWNLOAD, {
                   description,
-                  assetType,
+                  assetType
                 })
               );
             } else {
