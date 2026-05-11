@@ -6,6 +6,7 @@ import {DownloadPluginManager} from '../../download-plugin-manager';
 import {useEffect, useRef} from 'preact/hooks';
 import {core, KalturaPlayer, ui} from '@playkit-js/kaltura-player-js';
 import {DownloadEvent} from '../../event';
+import {assetType as asset} from '../../consts/asset-type';
 
 const {withText} = ui.preacti18n;
 const {FakeEvent} = core;
@@ -74,6 +75,13 @@ export const DownloadItem = withText({
                   description,
                   assetType,
                   isDefault: isDefault && isMainSource
+                })
+              );
+            } else if (assetType === asset.SummaryAndChapters) {
+              player.dispatchEvent(
+                new FakeEvent(DownloadEvent.DOWNLOAD_SUMMARY_AND_CHAPTERS_DOWNLOAD, {
+                  description,
+                  assetType
                 })
               );
             } else {

@@ -1,0 +1,15 @@
+@import '~@playkit-js/playkit-js-ui';
+@import '../../theme.scss';
+
+.summary-chapters-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  overflow: hidden;
+  padding: 4px;
+
+  .summary-chapters-label {
+    @include label;
+  }
+}

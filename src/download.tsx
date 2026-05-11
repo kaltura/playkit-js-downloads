@@ -178,6 +178,9 @@ class Download extends BasePlugin {
     this.eventManager?.listen(this.downloadPluginManager, DownloadEvent.HIDE_OVERLAY, (e: FakeEvent) =>
       this.dispatchEvent(DownloadEvent.HIDE_OVERLAY, e.payload)
     );
+    this.eventManager.listen(this.player, 'unisphere.event.player.upper-bar-icon.show', () => {
+      this.downloadPluginManager.showSummaryAndChapters = true;
+    });
   }
 
   reset() {
@@ -187,6 +190,7 @@ class Download extends BasePlugin {
     this.audioPlayerIconId = -1;
     this._pluginButtonRef = null;
     this.triggeredByKeyboard = false;
+    this.downloadPluginManager.showSummaryAndChapters = false;
 
     for (const componentDisposer of this.componentDisposers) {
       componentDisposer();
