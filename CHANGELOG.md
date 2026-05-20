@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.5.0 (2026-05-20)
+
+
+### Features
+
+* **CR-616:** Download S&C PDF from download plugin ([#98](https://github.com/kaltura/playkit-js-downloads/issues/98)) ([eb0e80d](https://github.com/kaltura/playkit-js-downloads/commit/eb0e80dd7710da500afab1b5647eb0f0c9731789)), closes [kaltura/playkit-js-unisphere#31](https://github.com/kaltura/playkit-js-unisphere/issues/31) [kaltura/unisphere-video-summary#110](https://github.com/kaltura/unisphere-video-summary/issues/110)
+
 ### 1.4.12 (2026-05-07)
 
 ### 1.4.11 (2026-03-26)
