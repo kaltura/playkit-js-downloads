@@ -32,6 +32,7 @@ export class FlavorsLoader implements ILoader {
     flavorsListRequest.params = {
       filter: {
         entryIdEqual: this._entryId,
+        statusEqual: 2,
         objectType: 'KalturaFlavorAssetFilter'
       }
     };
