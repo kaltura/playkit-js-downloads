@@ -66,7 +66,7 @@ export const SourcesList = withText({
           return flavor.id === flavorId || flavor.flavorParamsId.toString() === flavorParamId;
         });
         if (!defaultFlavor) {
-          flavors.find(flavor => {
+          defaultFlavor = flavors.find(flavor => {
             return flavor.isOriginal || flavor.flavorParamsId === 0;
           });
         }
