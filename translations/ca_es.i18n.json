@@ -14,7 +14,9 @@
       "source_label": "Font",
       "more_captions_label": "Més subtítols",
       "less_captions_label": "Menys subtítols",
-      "attachments_label": "Adjunts"
+      "attachments_label": "Adjunts",
+      "summary_chapters_label": "Resum i capítols",
+      "download_button_label_summary_chapters": "Cliqueu per descarregar el resum i els capítols"
     }
   }
 }

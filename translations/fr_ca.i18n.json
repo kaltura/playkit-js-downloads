@@ -5,7 +5,9 @@
       "downloads": "Téléchargements",
       "download_has_started": "Le téléversement a débuté",
       "download_has_failed": "Le téléversement a échoué",
-      "attachments": "Pièces jointes"
+      "attachments": "Pièces jointes",
+      "summary_chapters_label": "Résumé et chapitres",
+      "download_button_label_summary_chapters": "Cliquez pour télécharger le résumé et les chapitres"
     }
   }
 }

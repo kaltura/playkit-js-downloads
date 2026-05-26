@@ -5,7 +5,9 @@
       "downloads": "下載",
       "download_has_started": "下載已開始",
       "download_has_failed": "下載失敗",
-      "attachments": "附件"
+      "attachments": "附件",
+      "summary_chapters_label": "摘要與章節",
+      "download_button_label_summary_chapters": "點擊下載摘要與章節"
     }
   }
 }

@@ -5,7 +5,9 @@
       "downloads": "Загрузки",
       "download_has_started": "Скачивание началось",
       "download_has_failed": "Скачивание не удалось",
-      "attachments": "Вложения"
+      "attachments": "Вложения",
+      "summary_chapters_label": "Сводка и разделы",
+      "download_button_label_summary_chapters": "Нажмите, чтобы загрузить сводку и разделы"
     }
   }
 }
