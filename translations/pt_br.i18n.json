@@ -5,7 +5,9 @@
       "downloads": "Downloads",
       "download_has_started": "O download foi iniciado",
       "download_has_failed": "Falha no download",
-      "attachments": "Anexos"
+      "attachments": "Anexos",
+      "summary_chapters_label": "Resumo e capítulos",
+      "download_button_label_summary_chapters": "Clique para baixar o resumo e os capítulos"
     }
   }
 }

@@ -5,7 +5,9 @@
       "downloads": "Downloads",
       "download_has_started": "Download hat begonnen",
       "download_has_failed": "Download fehlgeschlagen",
-      "attachments": "Anlagen"       
+      "attachments": "Anlagen",
+      "summary_chapters_label": "Zusammenfassung & Kapitel",
+      "download_button_label_summary_chapters": "Klicken Sie hier, um die Zusammenfassung und Kapitel herunterzuladen."
     }
   }
 }

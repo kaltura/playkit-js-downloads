@@ -5,7 +5,9 @@
       "downloads": "Downloads",
       "download_has_started": "Downloaden is gestart",
       "download_has_failed": "Downloaden is mislukt",
-      "attachments": "Bijlagen"
+      "attachments": "Bijlagen",
+      "summary_chapters_label": "Samenvatting & hoofdstukken",
+      "download_button_label_summary_chapters": "Klik om de samenvatting en hoofdstukken te downloaden"
     }
   }
 }

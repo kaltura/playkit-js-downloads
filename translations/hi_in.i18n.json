@@ -1,7 +1,8 @@
 {
   "hi_in": {
     "download": {
-      
+      "summary_chapters_label": "सारांश और अध्याय",
+      "download_button_label_summary_chapters": "सारांश और अध्याय डाउनलोड करनेकेलिए क्लिक करें"
     }
   }
 }

@@ -1,7 +1,8 @@
 {
   "ar": {
     "download": {
-     
+      "summary_chapters_label": "الملخصوالفصول",
+      "download_button_label_summary_chapters": "انقر لتنزيل الملخص والفصول"
     }
   }
 }

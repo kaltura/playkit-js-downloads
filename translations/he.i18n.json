@@ -1,7 +1,8 @@
 {
   "he": {
     "download": {
-     
+     "summary_chapters_label": "סיכום ופרקים",
+      "download_button_label_summary_chapters": "לחץ כאן להורדת הסיכום והפרקים"
     }
   }
 }

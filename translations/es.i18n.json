@@ -5,7 +5,9 @@
       "downloads": "Descargas",
       "download_has_started": "La descarga ha comenzado",
       "download_has_failed": "Error al descargar",
-      "attachments": "Archivos adjuntos"
+      "attachments": "Archivos adjuntos",
+      "summary_chapters_label": "Resumen y capítulos",
+      "download_button_label_summary_chapters": "Haga clic para descargar el resumen y los capítulos"
     }
   }
 }

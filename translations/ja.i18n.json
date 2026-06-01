@@ -5,7 +5,9 @@
       "downloads": "ダウンロード",
       "download_has_started": "ダウンロードが開始しました",
       "download_has_failed": "アップロードに失敗しました",
-      "attachments": "添付ファイル"
+      "attachments": "添付ファイル",
+      "summary_chapters_label": "概要とチャプター",
+      "download_button_label_summary_chapters": "クリックして概要とチャプターをダウンロード"
     }
   }
 }

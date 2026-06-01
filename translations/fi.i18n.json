@@ -5,7 +5,9 @@
       "downloads": "Lataukset",
       "download_has_started": "Lataus alkoi",
       "download_has_failed": "Lataus epäonnistui",
-      "attachments": "Liitteet"
+      "attachments": "Liitteet",
+      "summary_chapters_label": "Yhteenveto ja kappaleet",
+      "download_button_label_summary_chapters": "Lataa yhteenveto ja kappaleet klikkaamalla"
     }
   }
 }

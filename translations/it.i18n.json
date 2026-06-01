@@ -5,7 +5,9 @@
       "downloads": "Download",
       "download_has_started": "Il download è iniziato",
       "download_has_failed": "Il download non è riuscito",
-      "attachments": "Allegati"
+      "attachments": "Allegati",
+      "summary_chapters_label": "Riepilogo e capitoli",
+      "download_button_label_summary_chapters": "Clicca per scaricare il riepilogo e i capitoli"
     }
   }
 }
