@@ -37,7 +37,7 @@
     "@playkit-js/browserslist-config": "1.0.8",
     "@playkit-js/common": "1.5.19",
     "@playkit-js/kaltura-player-js": "3.17.24",
-    "@playkit-js/ui-managers": "1.6.0",
+    "@playkit-js/ui-managers": "1.9.2",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
     "babel-loader": "^9.1.3",
