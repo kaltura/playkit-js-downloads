@@ -160,7 +160,9 @@ const DownloadOverlay = withText({
                 }}
                 type="playkit-download">
                 <div data-testid="download-overlay" className={styles.downloadOverlay}>
-                  <h2 id="download-overlay-title" className={styles.header}> {downloadsLabel} </h2>
+                  <h2 id="download-overlay-title" className={styles.header}>
+                    {downloadsLabel}
+                  </h2>
                   <div className={styles.fileInfoList}>
                     {shouldRenderSources || shouldRenderCaptions ? (
                       <div className={styles.sourcesCaptionsContainer}>
