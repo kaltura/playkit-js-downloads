@@ -1,5 +1,5 @@
 import {h} from 'preact';
-import {core, ui} from '@playkit-js/kaltura-player-js';
+import {core, ui, KalturaPlayer} from '@playkit-js/kaltura-player-js';
 
 import {Download} from './download';
 import {KalturaAttachmentAsset} from './providers';
@@ -33,6 +33,10 @@ class DownloadPluginManager extends core.FakeEventTarget {
 
   get config(): DownloadConfig {
     return this._config;
+  }
+
+  get player(): KalturaPlayer {
+    return this.downloadPlugin.player;
   }
 
   isMetadataEmpty(metadata: DownloadMetadata): boolean {

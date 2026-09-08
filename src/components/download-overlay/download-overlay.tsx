@@ -66,6 +66,7 @@ const DownloadOverlay = withText({
         const [isVisible, setIsVisible] = useState(false);
         const mainSourceMetadata = downloadMetadatas[0];
         const downloadConfig = downloadPluginManager.config;
+        const titleId = `download-overlay-title-${downloadPluginManager.player.config.targetId}`;
         useEffect(() => {
           eventManager?.listen(downloadPluginManager, DownloadEvent.SHOW_OVERLAY, () => {
             setIsVisible(true);
@@ -153,13 +154,16 @@ const DownloadOverlay = withText({
               <Overlay
                 open
                 closeAriaLabel={closeDownloadLabel}
+                ariaLabelledBy={titleId}
                 onClose={() => {
                   updateOverlay(false);
                   downloadPluginManager.setShowOverlay(false);
                 }}
                 type="playkit-download">
                 <div data-testid="download-overlay" className={styles.downloadOverlay}>
-                  <h2 className={styles.header}>{downloadsLabel}</h2>
+                  <h2 id={titleId} className={styles.header}>
+                    {downloadsLabel}
+                  </h2>
                   <div className={styles.fileInfoList}>
                     {shouldRenderSources || shouldRenderCaptions ? (
                       <div className={styles.sourcesCaptionsContainer}>
